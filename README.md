@@ -68,22 +68,44 @@
             font-weight: 800;
         }
 
-        /* АНИМАЦИЯ МОЛНИИ */
-        @keyframes lightningFlash {
+        /* АНИМАЦИЯ УДАРА МОЛНИИ О ЗЕМЛЮ */
+        @keyframes lightningStrike {
             0% {
-                stroke: #ffffff;
-                filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px #38bdf8);
-                transform: scale(1);
+                transform: translateY(-25px) scaleY(0.2);
+                opacity: 0;
+                filter: drop-shadow(0 0 0px transparent);
             }
-            50% {
-                stroke: #e0f2fe;
-                filter: drop-shadow(0 0 12px #38bdf8) drop-shadow(0 0 20px #c084fc);
-                transform: scale(1.15) rotate(-3deg);
+            10% {
+                transform: translateY(2px) scaleY(1.1);
+                opacity: 1;
+                filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 25px #38bdf8);
+            }
+            15% {
+                transform: translateY(-1px) scaleY(0.95);
+                opacity: 0.4;
+            }
+            20% {
+                transform: translateY(1px) scaleY(1.05);
+                opacity: 1;
+                filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #c084fc);
+            }
+            25% {
+                transform: translateY(0) scaleY(1);
+                opacity: 0.8;
+            }
+            30% {
+                opacity: 1;
+                filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #38bdf8);
+            }
+            70% {
+                transform: translateY(0) scaleY(1);
+                opacity: 1;
+                filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #38bdf8);
             }
             100% {
-                stroke: #ffffff;
-                filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px #38bdf8);
-                transform: scale(1);
+                transform: translateY(-25px) scaleY(0.2);
+                opacity: 0;
+                filter: drop-shadow(0 0 0px transparent);
             }
         }
 
@@ -97,7 +119,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-            animation: pulseGlow 3s infinite alternate;
+            animation: pulseGlow 2.5s infinite alternate;
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -117,9 +139,9 @@
             stroke-width: 2.2;
             stroke-linecap: round;
             stroke-linejoin: round;
-            /* Включаем анимацию для самой молнии */
-            animation: lightningFlash 1.8s ease-in-out infinite;
-            transform-origin: center;
+            /* Включаем анимацию удара молнии */
+            animation: lightningStrike 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+            transform-origin: bottom center;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
