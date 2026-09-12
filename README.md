@@ -36,7 +36,7 @@
             background: #38bdf8;
         }
 
-        /* АНИМАЦИЯ НАЗВАНИЯ */
+        /* АНИМАЦИИ НАЗВАНИЯ И МОЛНИИ */
         @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -44,18 +44,9 @@
         }
 
         @keyframes titlePulse {
-            0% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4));
-            }
-            50% {
-                transform: scale(1.03);
-                filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8));
-            }
-            100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4));
-            }
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
         }
 
         .animated-site-title {
@@ -68,45 +59,15 @@
             font-weight: 800;
         }
 
-        /* АНИМАЦИЯ УДАРА МОЛНИИ О ЗЕМЛЮ */
         @keyframes lightningStrike {
-            0% {
-                transform: translateY(-25px) scaleY(0.2);
-                opacity: 0;
-                filter: drop-shadow(0 0 0px transparent);
-            }
-            10% {
-                transform: translateY(2px) scaleY(1.1);
-                opacity: 1;
-                filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 25px #38bdf8);
-            }
-            15% {
-                transform: translateY(-1px) scaleY(0.95);
-                opacity: 0.4;
-            }
-            20% {
-                transform: translateY(1px) scaleY(1.05);
-                opacity: 1;
-                filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #c084fc);
-            }
-            25% {
-                transform: translateY(0) scaleY(1);
-                opacity: 0.8;
-            }
-            30% {
-                opacity: 1;
-                filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #38bdf8);
-            }
-            70% {
-                transform: translateY(0) scaleY(1);
-                opacity: 1;
-                filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #38bdf8);
-            }
-            100% {
-                transform: translateY(-25px) scaleY(0.2);
-                opacity: 0;
-                filter: drop-shadow(0 0 0px transparent);
-            }
+            0% { transform: translateY(-25px) scaleY(0.2); opacity: 0; filter: drop-shadow(0 0 0px transparent); }
+            10% { transform: translateY(2px) scaleY(1.1); opacity: 1; filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 25px #38bdf8); }
+            15% { transform: translateY(-1px) scaleY(0.95); opacity: 0.4; }
+            20% { transform: translateY(1px) scaleY(1.05); opacity: 1; filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #c084fc); }
+            25% { transform: translateY(0) scaleY(1); opacity: 0.8; }
+            30% { opacity: 1; filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #38bdf8); }
+            70% { transform: translateY(0) scaleY(1); opacity: 1; filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #38bdf8); }
+            100% { transform: translateY(-25px) scaleY(0.2); opacity: 0; filter: drop-shadow(0 0 0px transparent); }
         }
 
         .brand-icon {
@@ -139,11 +100,11 @@
             stroke-width: 2.2;
             stroke-linecap: round;
             stroke-linejoin: round;
-            /* Включаем анимацию удара молнии */
             animation: lightningStrike 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
             transform-origin: bottom center;
         }
 
+        /* ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ И HOVER ЭФФЕКТЫ */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
@@ -154,6 +115,11 @@
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
 
+        .hover-zoom { transition: transform 0.3s ease; }
+        .hover-zoom:hover { transform: scale(1.04); }
+        .hover-glow { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .hover-glow:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); transform: translateY(-3px); }
+
         /* Верхняя панель (Header) */
         .top-bar {
             height: 65px;
@@ -163,22 +129,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 25px;
+            padding: 0 20px;
             position: sticky;
             top: 0;
             z-index: 100;
+            gap: 15px;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 14px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: 0.5px;
         }
 
-        .view-toggle {
+        .view-toggle, .device-toggle {
             display: flex;
             background-color: #0f172a;
             padding: 4px;
@@ -188,7 +154,7 @@
         }
 
         .toggle-btn {
-            padding: 7px 18px;
+            padding: 6px 14px;
             border: none;
             background: transparent;
             color: #94a3b8;
@@ -203,6 +169,11 @@
             background: linear-gradient(135deg, #38bdf8, #3b82f6);
             color: #0f172a;
             box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
         }
 
         /* Главный контейнер */
@@ -220,7 +191,7 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            gap: 12px;
+            gap: 10px;
             max-height: calc(100vh - 65px);
             position: sticky;
             top: 65px;
@@ -234,21 +205,19 @@
         }
 
         .sidebar h2 {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             color: #38bdf8;
             margin-top: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 700;
         }
 
-        .sidebar h2:first-child {
-            margin-top: 0;
-        }
+        .sidebar h2:first-child { margin-top: 0; }
 
         .btn-element {
-            padding: 10px 14px;
+            padding: 9px 12px;
             background: #1e293b;
             border: 1px solid #334155;
             color: #f8fafc;
@@ -268,7 +237,6 @@
             border-color: #38bdf8;
             color: #38bdf8;
             transform: translateX(3px);
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
         }
 
         .btn-danger {
@@ -281,8 +249,6 @@
         .btn-danger:hover {
             background: #ef4444;
             color: #ffffff;
-            border-color: #ef4444;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
             transform: none;
         }
 
@@ -296,24 +262,35 @@
             background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
             min-height: calc(100vh - 65px);
             overflow-y: visible;
+            transition: all 0.3s ease;
         }
 
         .canvas {
             width: 100%;
-            max-width: 850px;
+            max-width: 1200px;
             min-height: 600px;
             background-color: #ffffff;
             color: #1e293b;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.2);
-            transition: all 0.2s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
             margin-bottom: 100px;
+            position: relative;
         }
+
+        /* Тема оформления холста */
+        .canvas.dark-theme {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .canvas.tablet-mode { max-width: 768px; }
+        .canvas.mobile-mode { max-width: 375px; padding: 15px; }
 
         .code-editor-container {
             width: 100%;
-            max-width: 850px;
+            max-width: 1200px;
             display: none;
             flex-direction: column;
             gap: 10px;
@@ -333,23 +310,19 @@
             line-height: 1.5;
             resize: vertical;
             outline: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
         .canvas-item {
             position: relative;
             margin-bottom: 15px;
-            padding: 8px;
+            padding: 6px;
             border: 1px dashed transparent;
             border-radius: 6px;
             cursor: pointer;
             transition: border-color 0.2s;
         }
 
-        .canvas-item:hover {
-            border-color: #38bdf8;
-        }
-
+        .canvas-item:hover { border-color: #38bdf8; }
         .canvas-item.selected {
             border-color: #818cf8;
             outline: 2px solid #818cf8;
@@ -375,9 +348,7 @@
             z-index: 10;
         }
 
-        .canvas-item:hover .delete-btn {
-            display: flex;
-        }
+        .canvas-item:hover .delete-btn { display: flex; }
 
         .control-group {
             display: flex;
@@ -386,11 +357,7 @@
             margin-bottom: 12px;
         }
 
-        .control-group label {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
+        .control-group label { font-size: 12px; color: #94a3b8; }
         .control-group input, .control-group select {
             padding: 9px 12px;
             background-color: #0f172a;
@@ -401,14 +368,10 @@
             outline: none;
         }
 
-        .control-group input[type="color"] {
-            height: 38px;
-            cursor: pointer;
-            padding: 4px;
-        }
+        .control-group input[type="color"] { height: 38px; cursor: pointer; padding: 4px; }
 
         .action-btn {
-            padding: 10px 22px;
+            padding: 8px 18px;
             background: linear-gradient(135deg, #0284c7, #38bdf8);
             color: #0f172a;
             border: none;
@@ -417,12 +380,47 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            font-size: 13px;
         }
 
-        .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 0 22px rgba(56, 189, 248, 0.6);
+        .action-btn:hover { transform: translateY(-1px); box-shadow: 0 0 22px rgba(56, 189, 248, 0.6); }
+
+        .btn-preview {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            color: #ffffff;
         }
+
+        /* РЕЖИМ ПРЕДПРОСМОТРА PREVIEW */
+        body.preview-mode .top-bar, body.preview-mode .sidebar { display: none !important; }
+        body.preview-mode .main-container { min-height: 100vh; }
+        body.preview-mode .workspace { padding: 0; background: #ffffff; }
+        body.preview-mode .canvas {
+            max-width: 100% !important;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 0;
+            padding: 40px;
+        }
+        body.preview-mode .canvas-item { border: none !important; outline: none !important; }
+        body.preview-mode .delete-btn { display: none !important; }
+
+        #exit-preview-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: none;
+            background: #ef4444;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        body.preview-mode #exit-preview-btn { display: block; }
     </style>
 </head>
 <body>
@@ -437,11 +435,23 @@
             </div>
             <span class="animated-site-title">Programist-studio</span>
         </div>
+
+        <!-- Адаптивные режимы -->
+        <div class="device-toggle">
+            <button class="toggle-btn active" id="btn-device-desktop" onclick="setDeviceMode('desktop')">🖥️ Desktop</button>
+            <button class="toggle-btn" id="btn-device-tablet" onclick="setDeviceMode('tablet')">📱 Tablet</button>
+            <button class="toggle-btn" id="btn-device-mobile" onclick="setDeviceMode('mobile')">📱 Mobile</button>
+        </div>
+
         <div class="view-toggle">
             <button class="toggle-btn active" id="btn-view-visual" onclick="switchView('visual')">Визуальный редактор</button>
-            <button class="toggle-btn" id="btn-view-code" onclick="switchView('code')">Редактор кода (HTML)</button>
+            <button class="toggle-btn" id="btn-view-code" onclick="switchView('code')">Код (HTML)</button>
         </div>
-        <button class="action-btn" onclick="exportHTML()">Скачать HTML</button>
+
+        <div class="top-actions">
+            <button class="action-btn btn-preview" onclick="togglePreviewMode()">👁️ Предпросмотр</button>
+            <button class="action-btn" onclick="exportHTML()">Скачать HTML</button>
+        </div>
     </div>
 
     <!-- Основное пространство -->
@@ -451,6 +461,7 @@
         <div class="sidebar">
             <h2>Анимированные блоки</h2>
             <button class="btn-element" onclick="addElement('site-title')">Анимированное Название <span>+</span></button>
+            <button class="btn-element" onclick="addElement('countdown')">Счетчик обратного отсчета <span>+</span></button>
 
             <h2>Базовые блоки</h2>
             <button class="btn-element" onclick="addElement('navbar')">Шапка (Nav) <span>+</span></button>
@@ -462,6 +473,9 @@
             <button class="btn-element" onclick="addElement('footer')">Подвал (Footer) <span>+</span></button>
 
             <h2>Сложные блоки</h2>
+            <button class="btn-element" onclick="addElement('pricing')">Таблица цен (3 тарифa) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('testimonials')">Блок отзывов <span>+</span></button>
+            <button class="btn-element" onclick="addElement('floating-messengers')">Мессенджеры (Плавающие) <span>+</span></button>
             <button class="btn-element" onclick="addElement('card')">Карточка <span>+</span></button>
             <button class="btn-element" onclick="addElement('grid3')">Сетка (3 карточки) <span>+</span></button>
             <button class="btn-element" onclick="addElement('gallery2')">Галерея (2 фото) <span>+</span></button>
@@ -469,6 +483,13 @@
             <button class="btn-element" onclick="addElement('faq')">Блок FAQ <span>+</span></button>
 
             <h2>Настройки страницы</h2>
+            <div class="control-group">
+                <label>Тема оформления:</label>
+                <select id="page-theme" onchange="changeCanvasTheme(this.value)">
+                    <option value="light">Светлая тема</option>
+                    <option value="dark">Тёмная тема</option>
+                </select>
+            </div>
             <div class="control-group">
                 <label>Фон холста:</label>
                 <input type="color" id="page-bg-color" value="#ffffff" onchange="changeCanvasBg(this.value)">
@@ -513,6 +534,9 @@
 
     </div>
 
+    <!-- Кнопка выхода из предпросмотра -->
+    <button id="exit-preview-btn" onclick="togglePreviewMode()">✕ Выйти из предпросмотра</button>
+
     <script>
         const canvas = document.getElementById('canvas');
         const emptyMsg = document.getElementById('empty-msg');
@@ -537,6 +561,32 @@
             } else {
                 canvas.style.display = 'block';
                 codeContainer.style.display = 'none';
+            }
+        }
+
+        function setDeviceMode(mode) {
+            document.getElementById('btn-device-desktop').classList.toggle('active', mode === 'desktop');
+            document.getElementById('btn-device-tablet').classList.toggle('active', mode === 'tablet');
+            document.getElementById('btn-device-mobile').classList.toggle('active', mode === 'mobile');
+
+            canvas.classList.remove('tablet-mode', 'mobile-mode');
+            if (mode === 'tablet') canvas.classList.add('tablet-mode');
+            if (mode === 'mobile') canvas.classList.add('mobile-mode');
+        }
+
+        function togglePreviewMode() {
+            document.body.classList.toggle('preview-mode');
+        }
+
+        function changeCanvasTheme(theme) {
+            if (theme === 'dark') {
+                canvas.classList.add('dark-theme');
+                canvas.style.backgroundColor = '#0f172a';
+                document.getElementById('page-bg-color').value = '#0f172a';
+            } else {
+                canvas.classList.remove('dark-theme');
+                canvas.style.backgroundColor = '#ffffff';
+                document.getElementById('page-bg-color').value = '#ffffff';
             }
         }
 
@@ -571,6 +621,72 @@
                 el.style.fontSize = '36px';
                 el.style.textAlign = 'center';
                 el.style.width = '100%';
+            } else if (type === 'countdown') {
+                el = document.createElement('div');
+                el.style.padding = '20px';
+                el.style.backgroundColor = '#1e293b';
+                el.style.color = '#38bdf8';
+                el.style.borderRadius = '10px';
+                el.style.textAlign = 'center';
+                el.innerHTML = `
+                    <h3 style="color:#ffffff; margin-bottom:10px;">🔥 До конца акции осталось:</h3>
+                    <div style="display:flex; justify-content:center; gap:15px; font-size:22px; font-weight:bold;">
+                        <div><span id="timer-hours">05</span><small style="display:block; font-size:10px; color:#94a3b8;">часов</small></div>:
+                        <div><span id="timer-minutes">42</span><small style="display:block; font-size:10px; color:#94a3b8;">минут</small></div>:
+                        <div><span id="timer-seconds">18</span><small style="display:block; font-size:10px; color:#94a3b8;">секунд</small></div>
+                    </div>
+                `;
+            } else if (type === 'pricing') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+                el.style.gap = '15px';
+                el.innerHTML = `
+                    <div style="border:1px solid #e2e8f0; padding:20px; border-radius:10px; text-align:center; background:#f8fafc;">
+                        <h3>Базовый</h3>
+                        <p style="font-size:24px; font-weight:bold; color:#0284c7; margin:10px 0;">3 000 ₽</p>
+                        <p style="font-size:12px; color:#64748b;">1 Страница<br>Базовый дизайн<br>Поддержка 24/7</p>
+                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:#white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
+                    </div>
+                    <div style="border:2px solid #38bdf8; padding:20px; border-radius:10px; text-align:center; background:#f0f9ff;">
+                        <h3>Стандарт</h3>
+                        <p style="font-size:24px; font-weight:bold; color:#0284c7; margin:10px 0;">5 000 ₽</p>
+                        <p style="font-size:12px; color:#64748b;">До 5 Страниц<br>Индивидуальный дизайн<br>SEO оптимизация</p>
+                        <button style="margin-top:15px; padding:8px 16px; background:#38bdf8; color:#0f172a; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Заказать</button>
+                    </div>
+                    <div style="border:1px solid #e2e8f0; padding:20px; border-radius:10px; text-align:center; background:#f8fafc;">
+                        <h3>Премиум</h3>
+                        <p style="font-size:24px; font-weight:bold; color:#0284c7; margin:10px 0;">10 000 ₽</p>
+                        <p style="font-size:12px; color:#64748b;">Безлимит страниц<br>Интернет-магазин<br>Маркетинг поддержка</p>
+                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:#white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
+                    </div>
+                `;
+            } else if (type === 'testimonials') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+                el.style.gap = '15px';
+                el.innerHTML = `
+                    <div style="border:1px solid #cbd5e1; padding:15px; border-radius:8px; background:#f8fafc; display:flex; gap:12px; align-items:center;">
+                        <img src="https://via.placeholder.com/50" style="border-radius:50%; width:50px; height:50px;">
+                        <div>
+                            <strong>Алексей Иванов</strong>
+                            <p style="font-size:11px; color:#64748b;">Предприниматель</p>
+                            <p style="font-size:12px; margin-top:5px;">«Отличная работа! Сайт сделали быстро и качественно.»</p>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'floating-messengers') {
+                el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.gap = '10px';
+                el.style.justifyContent = 'center';
+                el.style.padding = '10px';
+                el.innerHTML = `
+                    <a href="https://t.me" target="_blank" style="padding:8px 15px; background:#229ED9; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">Telegram</a>
+                    <a href="https://whatsapp.com" target="_blank" style="padding:8px 15px; background:#25D366; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">WhatsApp</a>
+                    <a href="https://vk.com" target="_blank" style="padding:8px 15px; background:#0077FF; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">VKontakte</a>
+                `;
             } else if (type === 'navbar') {
                 el = document.createElement('nav');
                 el.style.display = 'flex';
@@ -618,7 +734,7 @@
             } else if (type === 'grid3') {
                 el = document.createElement('div');
                 el.style.display = 'grid';
-                el.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
                 el.style.gap = '15px';
                 el.innerHTML = `
                     <div style="border:1px solid #e2e8f0; padding:15px; border-radius:6px; background:#f8fafc;">
@@ -736,6 +852,14 @@
                         <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Увеличение (Zoom)</option>
                     </select>
                 </div>
+                <div class="control-group">
+                    <label>Эффект при наведении (Hover):</label>
+                    <select id="prop-hover">
+                        <option value="">Без эффекта</option>
+                        <option value="hover-zoom" ${wrapper.classList.contains('hover-zoom') ? 'selected' : ''}>Увеличение (Hover Zoom)</option>
+                        <option value="hover-glow" ${wrapper.classList.contains('hover-glow') ? 'selected' : ''}>Свечение (Hover Glow)</option>
+                    </select>
+                </div>
             `;
 
             if (type === 'button') {
@@ -760,7 +884,7 @@
                 `;
             }
 
-            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq') {
+            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown') {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -799,9 +923,15 @@
             if (propAnim) {
                 propAnim.onchange = (e) => {
                     wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom');
-                    if (e.target.value) {
-                        wrapper.classList.add(e.target.value);
-                    }
+                    if (e.target.value) wrapper.classList.add(e.target.value);
+                };
+            }
+
+            const propHover = document.getElementById('prop-hover');
+            if (propHover) {
+                propHover.onchange = (e) => {
+                    wrapper.classList.remove('hover-zoom', 'hover-glow');
+                    if (e.target.value) wrapper.classList.add(e.target.value);
                 };
             }
 
@@ -882,9 +1012,7 @@
         }
 
         function exportHTML() {
-            if (currentMode === 'code') {
-                applyCodeChanges();
-            }
+            if (currentMode === 'code') applyCodeChanges();
 
             const cloneCanvas = canvas.cloneNode(true);
             cloneCanvas.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
@@ -909,7 +1037,7 @@
         body { 
             font-family: ${fontFamily}; 
             padding: ${padding}; 
-            max-width: 850px; 
+            max-width: 1200px; 
             margin: 0 auto; 
             background-color: ${bgColor};
             min-height: 100vh;
@@ -947,6 +1075,11 @@
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
+
+        .hover-zoom { transition: transform 0.3s ease; }
+        .hover-zoom:hover { transform: scale(1.04); }
+        .hover-glow { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .hover-glow:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); transform: translateY(-3px); }
     </style>
 </head>
 <body>
