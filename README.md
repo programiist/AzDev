@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Programist-studio — Конструктор Сайтов с AI</title>
     <!-- Динамическое подключение Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * {
             box-sizing: border-box;
@@ -153,13 +153,24 @@
             gap: 4px;
         }
 
-        .view-toggle, .device-toggle, .history-toggle {
+        .view-toggle, .device-toggle, .history-toggle, .page-manager, .zoom-controls {
             display: flex;
             background-color: #0f172a;
             padding: 3px;
             border-radius: 8px;
             gap: 2px;
             border: 1px solid rgba(255, 255, 255, 0.08);
+            align-items: center;
+        }
+
+        .page-select {
+            background: transparent;
+            color: #38bdf8;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            outline: none;
         }
 
         .toggle-btn {
@@ -306,10 +317,18 @@
             overflow-x: auto;
         }
 
+        .canvas-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            transform-origin: top center;
+        }
+
         .canvas {
             width: 100%;
-            max-width: 1000px;
-            min-height: 500px;
+            max-width: 1200px;
+            min-height: 700px;
             background-color: #ffffff;
             color: #1e293b;
             border-radius: 10px;
@@ -330,7 +349,7 @@
 
         .code-editor-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
             display: none;
             flex-direction: column;
             gap: 10px;
@@ -339,7 +358,7 @@
 
         .code-editor {
             width: 100%;
-            min-height: 400px;
+            min-height: 450px;
             background-color: #0f172a;
             color: #38bdf8;
             border: 1px solid #334155;
@@ -360,6 +379,13 @@
             border-radius: 6px;
             cursor: pointer;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .canvas-item.is-draggable {
+            position: absolute;
+            z-index: 100;
+            cursor: move;
+            user-select: none;
         }
 
         .canvas-item.selected {
@@ -455,6 +481,7 @@
         body.preview-mode .mobile-tabs { display: none !important; }
         body.preview-mode .main-container { min-height: 100vh; }
         body.preview-mode .workspace { padding: 0; background: #ffffff; }
+        body.preview-mode .canvas-wrapper { transform: scale(1) !important; }
         body.preview-mode .canvas {
             max-width: 100% !important;
             border-radius: 0;
@@ -484,6 +511,17 @@
 
         body.preview-mode #exit-preview-btn { display: block; }
 
+        /* Modal element style */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+        }
+
         @media (max-width: 1024px) {
             .main-container { flex-direction: column; }
             .mobile-tabs { display: flex; }
@@ -491,7 +529,7 @@
             .sidebar.active-tab { display: flex; }
             .workspace { display: flex; width: 100%; padding: 10px; }
             .workspace.hidden-tab { display: none; }
-            .device-toggle { display: none; }
+            .device-toggle, .zoom-controls { display: none; }
             .top-bar { justify-content: space-between; }
         }
 
@@ -520,6 +558,24 @@
         <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
             🚀 <span>Telegram</span>
         </a>
+
+        <div class="page-manager">
+            <span style="font-size:11px; color:#94a3b8; padding-left:5px;">📄</span>
+            <select id="pages-select" class="page-select" onchange="switchPage(this.value)">
+                <option value="index">Главная (index)</option>
+                <option value="about">О нас (about)</option>
+                <option value="services">Услуги (services)</option>
+                <option value="contact">Контакты (contact)</option>
+            </select>
+            <button class="toggle-btn" onclick="addNewPage()" title="Добавить страницу">+</button>
+        </div>
+
+        <div class="zoom-controls">
+            <button class="toggle-btn" onclick="setZoom(0.5)">50%</button>
+            <button class="toggle-btn" onclick="setZoom(0.75)">75%</button>
+            <button class="toggle-btn active" id="zoom-100" onclick="setZoom(1)">100%</button>
+            <button class="toggle-btn" onclick="setZoom(1.25)">125%</button>
+        </div>
 
         <div class="save-badge">
             <span>💾</span> <span id="save-status-text">Сохранено</span>
@@ -568,6 +624,9 @@
             <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
             <button class="btn-element" onclick="addElement('site-title')">Анимированное Название <span>+</span></button>
             <button class="btn-element" onclick="addElement('countdown')">Счетчик отсчета <span>+</span></button>
+            <button class="btn-element" onclick="addElement('draggable-icon')">✋ Перетаскиваемая Иконка <span>+</span></button>
+            <button class="btn-element" onclick="addElement('image-slider')">🖼️ Слайдер Картинок <span>+</span></button>
+            <button class="btn-element" onclick="addElement('popup-btn')">🪟 Всплывающее Окно (Popup) <span>+</span></button>
 
             <h2>Базовые блоки</h2>
             <button class="btn-element" onclick="addElement('navbar')">Шапка (Nav) <span>+</span></button>
@@ -575,31 +634,55 @@
             <button class="btn-element" onclick="addElement('text')">Текст <span>+</span></button>
             <button class="btn-element" onclick="addElement('button')">Кнопка <span>+</span></button>
             <button class="btn-element" onclick="addElement('image')">Изображение <span>+</span></button>
+            <button class="btn-element" onclick="addElement('video')">🎬 Видео плеер <span>+</span></button>
             <button class="btn-element" onclick="addElement('divider')">Разделитель <span>+</span></button>
             <button class="btn-element" onclick="addElement('footer')">Подвал (Footer) <span>+</span></button>
 
-            <h2>Сложные блоки & Соцсети</h2>
+            <h2>Сложные блоки & Маркетинг</h2>
+            <button class="btn-element" onclick="addElement('promo-banner')">🏷️ Баннер Акции <span>+</span></button>
+            <button class="btn-element" onclick="addElement('pricing')">Тарифы (2-3 млн сум) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('form')">Форма заявки <span>+</span></button>
             <button class="btn-element" onclick="addElement('star-reviews')">Отзывы со звездами (5★) <span>+</span></button>
             <button class="btn-element" onclick="addElement('social-share')">Соцсети & Поделиться <span>+</span></button>
-            <button class="btn-element" onclick="addElement('pricing')">Тарифы (3 цена) <span>+</span></button>
             <button class="btn-element" onclick="addElement('testimonials')">Простой отзыв <span>+</span></button>
             <button class="btn-element" onclick="addElement('floating-messengers')">Мессенджеры <span>+</span></button>
             <button class="btn-element" onclick="addElement('card')">Карточка <span>+</span></button>
             <button class="btn-element" onclick="addElement('grid3')">Сетка (3 блока) <span>+</span></button>
             <button class="btn-element" onclick="addElement('gallery2')">Галерея (2 фото) <span>+</span></button>
-            <button class="btn-element" onclick="addElement('form')">Форма заявки <span>+</span></button>
             <button class="btn-element" onclick="addElement('faq')">Блок FAQ <span>+</span></button>
+            <button class="btn-element" onclick="addElement('map')">📍 Карта / Геолокация <span>+</span></button>
 
             <h2>Настройки страницы</h2>
+            <div class="control-group">
+                <label>Размер холста (Ширина):</label>
+                <select id="canvas-width-select" onchange="changeCanvasWidth(this.value)">
+                    <option value="1200px">1200px (Стандарт)</option>
+                    <option value="1400px">1400px (Широкий)</option>
+                    <option value="100%">100% (Во весь экран)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Мин. высота холста:</label>
+                <select id="canvas-height-select" onchange="changeCanvasHeight(this.value)">
+                    <option value="700px">700px (Авто)</option>
+                    <option value="1000px">1000px</option>
+                    <option value="1500px">1500px (Длинный лендинг)</option>
+                    <option value="2000px">2000px</option>
+                </select>
+            </div>
             <div class="control-group">
                 <label>Шрифт сайта:</label>
                 <select id="global-font" onchange="changeGlobalFont(this.value)">
                     <option value="Inter">Inter</option>
                     <option value="Montserrat">Montserrat</option>
+                    <option value="Poppins">Poppins</option>
                     <option value="Roboto">Roboto</option>
                     <option value="Open Sans">Open Sans</option>
                     <option value="Oswald">Oswald</option>
                     <option value="Playfair Display">Playfair Display</option>
+                    <option value="Lora">Lora</option>
+                    <option value="Caveat">Caveat (Рукописный)</option>
+                    <option value="Pacifico">Pacifico (Декоративный)</option>
                 </select>
             </div>
             <div class="control-group">
@@ -622,10 +705,12 @@
         </div>
 
         <div class="workspace" id="workspace-area">
-            <div class="canvas" id="canvas">
-                <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 150px; font-size: 14px;">
-                    Выберите блоки во вкладке «Блоки»
-                </p>
+            <div class="canvas-wrapper" id="canvas-wrapper">
+                <div class="canvas" id="canvas">
+                    <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 150px; font-size: 14px;">
+                        Выберите блоки во вкладке «Блоки»
+                    </p>
+                </div>
             </div>
 
             <div class="code-editor-container" id="code-container">
@@ -647,6 +732,7 @@
 
     <script>
         const canvas = document.getElementById('canvas');
+        const canvasWrapper = document.getElementById('canvas-wrapper');
         const emptyMsg = document.getElementById('empty-msg');
         const editorControls = document.getElementById('editor-controls');
         const codeEditor = document.getElementById('code-editor');
@@ -656,12 +742,20 @@
         let selectedWrapper = null;
         let elementCount = 0;
         let currentMode = 'visual';
+        let currentPage = 'index';
+
+        let pagesData = {
+            'index': { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' },
+            'about': { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' },
+            'services': { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' },
+            'contact': { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' }
+        };
 
         let historyStack = [];
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        const LOCAL_STORAGE_KEY = 'programist_studio_site_data';
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v2';
 
         const aiTextDatabase = {
             it: {
@@ -683,7 +777,7 @@
                 cards: ["Курс Веб-Дизайн\nОсвойте Figma и основы интерфейсов за 2 месяца.", "Курс Python-Разработчик\nИзучите самый популярный язык программирования."]
             },
             shop: {
-                headers: ["Распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
+                headers: ["Рас распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
                 texts: ["Быстрая доставка по всей стране. Гарантия качества на всю продукцию.", "Оформите заказ сегодня и получите подарок в каждом комплекте.", "Удобная оплата при получении или картой на сайте."],
                 buttons: ["В каталог", "Купить со скидкой", "Оформить заказ", "Перейти в магазин"],
                 cards: ["Беспроводные наушники\nЧистый звук и мощный бас. До 24 часов работы.", "Смарт-часы 2026\nСпортивные функции и мониторинг здоровья."]
@@ -699,13 +793,127 @@
             { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }
         ];
 
+        function setZoom(scale) {
+            canvasWrapper.style.transform = `scale(${scale})`;
+            document.querySelectorAll('.zoom-controls .toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function changeCanvasWidth(val) {
+            canvas.style.maxWidth = val;
+        }
+
+        function changeCanvasHeight(val) {
+            canvas.style.minHeight = val;
+        }
+
+        function switchPage(pageKey) {
+            pagesData[currentPage] = {
+                html: canvas.innerHTML,
+                bg: canvas.style.backgroundColor || '#ffffff',
+                padding: canvas.style.padding || '20px',
+                font: canvas.style.fontFamily || 'Inter',
+                theme: document.getElementById('page-theme').value || 'light'
+            };
+
+            currentPage = pageKey;
+            const p = pagesData[currentPage] || { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' };
+
+            canvas.innerHTML = p.html || '';
+            canvas.style.backgroundColor = p.bg;
+            canvas.style.padding = p.padding;
+            canvas.style.fontFamily = p.font;
+            document.getElementById('page-bg-color').value = rgbToHex(p.bg);
+            document.getElementById('global-font').value = p.font;
+            document.getElementById('page-theme').value = p.theme;
+
+            rebindCanvasEvents();
+            saveHistoryState();
+        }
+
+        function addNewPage() {
+            const name = prompt("Введите имя новой страницы (например, blog):");
+            if (name) {
+                const key = name.toLowerCase().replace(/[^a-z0-0]/g, '');
+                if (key && !pagesData[key]) {
+                    pagesData[key] = { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' };
+                    const select = document.getElementById('pages-select');
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.innerText = name + ' (' + key + ')';
+                    select.appendChild(opt);
+                    select.value = key;
+                    switchPage(key);
+                }
+            }
+        }
+
+        function makeDraggable(el) {
+            let posX = 0, posY = 0, mouseX = 0, mouseY = 0;
+            el.onmousedown = dragMouseDown;
+            el.ontouchstart = dragTouchStart;
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                posX = mouseX - e.clientX;
+                posY = mouseY - e.clientY;
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                el.style.top = (el.offsetTop - posY) + "px";
+                el.style.left = (el.offsetLeft - posX) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                saveHistoryState();
+            }
+
+            function dragTouchStart(e) {
+                const touch = e.touches[0];
+                mouseX = touch.clientX;
+                mouseY = touch.clientY;
+                document.ontouchend = closeTouchDrag;
+                document.ontouchmove = touchDrag;
+            }
+
+            function touchDrag(e) {
+                const touch = e.touches[0];
+                posX = mouseX - touch.clientX;
+                posY = mouseY - touch.clientY;
+                mouseX = touch.clientX;
+                mouseY = touch.clientY;
+                el.style.top = (el.offsetTop - posY) + "px";
+                el.style.left = (el.offsetLeft - posX) + "px";
+            }
+
+            function closeTouchDrag() {
+                document.ontouchend = null;
+                document.ontouchmove = null;
+                saveHistoryState();
+            }
+        }
+
         function saveToLocalStorage() {
+            pagesData[currentPage] = {
+                html: canvas.innerHTML,
+                bg: canvas.style.backgroundColor || '#ffffff',
+                padding: canvas.style.padding || '20px',
+                font: canvas.style.fontFamily || 'Inter',
+                theme: document.getElementById('page-theme').value || 'light'
+            };
+
             const dataToSave = {
-                canvasHTML: canvas.innerHTML,
-                canvasBg: canvas.style.backgroundColor || '#ffffff',
-                canvasPadding: canvas.style.padding || '20px',
-                canvasFont: canvas.style.fontFamily || 'Inter',
-                theme: document.getElementById('page-theme').value || 'light',
+                pagesData: pagesData,
+                currentPage: currentPage,
                 elementCount: elementCount
             };
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
@@ -722,24 +930,37 @@
             if (savedData) {
                 try {
                     const parsed = JSON.parse(savedData);
-                    if (parsed.canvasHTML && parsed.canvasHTML.trim() !== '') {
-                        canvas.innerHTML = parsed.canvasHTML;
-                        canvas.style.backgroundColor = parsed.canvasBg || '#ffffff';
-                        canvas.style.padding = parsed.canvasPadding || '20px';
-                        canvas.style.fontFamily = parsed.canvasFont || 'Inter';
-
-                        document.getElementById('page-bg-color').value = rgbToHex(parsed.canvasBg) || '#ffffff';
-                        document.getElementById('page-padding').value = parseInt(parsed.canvasPadding) || 20;
-                        document.getElementById('global-font').value = parsed.canvasFont || 'Inter';
-                        document.getElementById('page-theme').value = parsed.theme || 'light';
-
+                    if (parsed.pagesData) {
+                        pagesData = parsed.pagesData;
+                        currentPage = parsed.currentPage || 'index';
                         elementCount = parsed.elementCount || 0;
+
+                        const select = document.getElementById('pages-select');
+                        select.innerHTML = '';
+                        Object.keys(pagesData).forEach(pKey => {
+                            const opt = document.createElement('option');
+                            opt.value = pKey;
+                            opt.innerText = pKey;
+                            select.appendChild(opt);
+                        });
+                        select.value = currentPage;
+
+                        const p = pagesData[currentPage];
+                        canvas.innerHTML = p.html || '';
+                        canvas.style.backgroundColor = p.bg || '#ffffff';
+                        canvas.style.padding = p.padding || '20px';
+                        canvas.style.fontFamily = p.font || 'Inter';
+
+                        document.getElementById('page-bg-color').value = rgbToHex(p.bg) || '#ffffff';
+                        document.getElementById('page-padding').value = parseInt(p.padding) || 20;
+                        document.getElementById('global-font').value = p.font || 'Inter';
+                        document.getElementById('page-theme').value = p.theme || 'light';
 
                         rebindCanvasEvents();
                         return true;
                     }
                 } catch (e) {
-                    console.error("Ошибка при загрузке сохраненных данных:", e);
+                    console.error("Ошибка при загрузке данных:", e);
                 }
             }
             return false;
@@ -882,6 +1103,10 @@
                 const targetEl = wrapper.firstElementChild;
                 const deleteBtn = wrapper.querySelector('.delete-btn');
 
+                if (wrapper.classList.contains('is-draggable')) {
+                    makeDraggable(wrapper);
+                }
+
                 if (deleteBtn) {
                     deleteBtn.onclick = (e) => {
                         e.stopPropagation();
@@ -896,7 +1121,10 @@
 
                 wrapper.onclick = (e) => {
                     e.stopPropagation();
-                    selectElement(wrapper, targetEl, targetEl.tagName.toLowerCase());
+                    let type = 'block';
+                    if (wrapper.classList.contains('is-draggable')) type = 'draggable-icon';
+                    else if (targetEl) type = targetEl.tagName.toLowerCase();
+                    selectElement(wrapper, targetEl, type);
                 };
             });
         }
@@ -917,10 +1145,10 @@
 
             if (mode === 'code') {
                 updateCodeEditorFromCanvas();
-                canvas.style.display = 'none';
+                canvasWrapper.style.display = 'none';
                 codeContainer.style.display = 'flex';
             } else {
-                canvas.style.display = 'block';
+                canvasWrapper.style.display = 'flex';
                 codeContainer.style.display = 'none';
             }
         }
@@ -968,7 +1196,7 @@
         }
 
         function clearCanvas() {
-            if (confirm("Очистить весь холст?")) {
+            if (confirm("Очистить весь холст текущей страницы?")) {
                 canvas.innerHTML = '';
                 if (emptyMsg) {
                     emptyMsg.style.display = 'block';
@@ -984,9 +1212,11 @@
             if (emptyMsg) emptyMsg.style.display = 'none';
 
             if (presetName === 'landing') {
+                addElement('promo-banner');
                 addElement('site-theme-toggle');
                 addElement('navbar');
                 addElement('site-title');
+                addElement('image-slider');
                 addElement('countdown');
                 addElement('pricing');
                 addElement('star-reviews');
@@ -1003,6 +1233,7 @@
                 addElement('floating-messengers');
                 addElement('footer');
             } else if (presetName === 'shop') {
+                addElement('promo-banner');
                 addElement('site-theme-toggle');
                 addElement('navbar');
                 addElement('header');
@@ -1027,7 +1258,70 @@
             wrapper.id = 'item-' + elementCount;
 
             let el;
-            if (type === 'site-theme-toggle') {
+            if (type === 'draggable-icon') {
+                wrapper.classList.add('is-draggable');
+                wrapper.style.top = '50px';
+                wrapper.style.left = '50px';
+                el = document.createElement('div');
+                el.className = 'icon-container';
+                el.style.fontSize = '32px';
+                el.style.cursor = 'grab';
+                el.innerText = '🚀';
+                makeDraggable(wrapper);
+            } else if (type === 'promo-banner') {
+                el = document.createElement('div');
+                el.style.background = 'linear-gradient(90deg, #38bdf8, #818cf8)';
+                el.style.color = '#0f172a';
+                el.style.padding = '8px 15px';
+                el.style.textAlign = 'center';
+                el.style.fontWeight = 'bold';
+                el.style.borderRadius = '6px';
+                el.style.fontSize = '12px';
+                el.innerText = '🔥 Скидка 20% на все тарифы до конца недели! Оставьте заявку прямо сейчас.';
+            } else if (type === 'image-slider') {
+                el = document.createElement('div');
+                el.style.position = 'relative';
+                el.style.borderRadius = '8px';
+                el.style.overflow = 'hidden';
+                el.style.backgroundColor = '#000';
+                el.innerHTML = `
+                    <div style="display:flex; transition:transform 0.5s ease;">
+                        <img src="https://via.placeholder.com/800x300/38bdf8/ffffff?text=Слайд+1" style="width:100%; flex-shrink:0;">
+                    </div>
+                    <div style="position:absolute; bottom:10px; width:100%; text-align:center;">
+                        <span style="display:inline-block; width:8px; height:8px; background:white; border-radius:50%; margin:0 3px;"></span>
+                        <span style="display:inline-block; width:8px; height:8px; background:rgba(255,255,255,0.5); border-radius:50%; margin:0 3px;"></span>
+                    </div>
+                `;
+            } else if (type === 'popup-btn') {
+                el = document.createElement('div');
+                el.style.textAlign = 'center';
+                el.innerHTML = `
+                    <button onclick="alert('Это пример работы всплывающего окна!')" style="padding:10px 20px; background:#a855f7; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                        🪟 Открыть всплывающее окно
+                    </button>
+                `;
+            } else if (type === 'map') {
+                el = document.createElement('div');
+                el.style.width = '100%';
+                el.style.height = '200px';
+                el.style.backgroundColor = '#e2e8f0';
+                el.style.borderRadius = '8px';
+                el.style.display = 'flex';
+                el.style.alignItems = 'center';
+                el.style.justifyContent = 'center';
+                el.style.color = '#64748b';
+                el.style.fontWeight = 'bold';
+                el.innerText = '📍 Интерактивная Карта (Google / Яндекс Maps)';
+            } else if (type === 'video') {
+                el = document.createElement('div');
+                el.style.position = 'relative';
+                el.style.paddingBottom = '56.25%';
+                el.style.height = '0';
+                el.style.overflow = 'hidden';
+                el.style.borderRadius = '8px';
+                el.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>`;
+            } else if (type === 'site-theme-toggle') {
                 el = document.createElement('div');
                 el.style.display = 'flex';
                 el.style.justifyContent = 'flex-end';
@@ -1101,16 +1395,22 @@
                 el.style.gap = '10px';
                 el.innerHTML = `
                     <div style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
-                        <h3 style="font-size:16px;">Базовый</h3>
-                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">3 000 ₽</p>
+                        <h3 style="font-size:16px;">Старт</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 000 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">1 Страница<br>Поддержка 24/7</p>
                         <button style="margin-top:10px; padding:6px 12px; background:#0284c7; color:white; border:none; border-radius:4px; font-size:12px;">Заказать</button>
                     </div>
                     <div style="border:2px solid #38bdf8; padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
-                        <h3 style="font-size:16px;">Стандарт</h3>
-                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">5 000 ₽</p>
+                        <h3 style="font-size:16px;">Бизнес</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 500 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">До 5 Страниц<br>SEO оптимизация</p>
                         <button style="margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; border:none; border-radius:4px; font-weight:bold; font-size:12px;">Заказать</button>
+                    </div>
+                    <div style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
+                        <h3 style="font-size:16px;">Премиум</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">3 000 000 сум</p>
+                        <p style="font-size:11px; color:#64748b;">Индивидуальный дизайн<br>Интеграция с ИИ</p>
+                        <button style="margin-top:10px; padding:6px 12px; background:#0284c7; color:white; border:none; border-radius:4px; font-size:12px;">Заказать</button>
                     </div>
                 `;
             } else if (type === 'testimonials') {
@@ -1147,7 +1447,7 @@
                 el.style.padding = '10px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Меню</a></div>';
+                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -1155,7 +1455,7 @@
                 el.style.color = '#0f172a';
             } else if (type === 'text') {
                 el = document.createElement('p');
-                el.innerText = 'Это пример текстового блока для мобильных устройств.';
+                el.innerText = 'Это пример текстового блока для вашего нового сайта.';
                 el.style.fontSize = '14px';
                 el.style.color = '#334155';
             } else if (type === 'button') {
@@ -1195,6 +1495,9 @@
                     <div style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
                         <h4 style="font-size:13px;">Услуга 2</h4>
                     </div>
+                    <div style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
+                        <h4 style="font-size:13px;">Услуга 3</h4>
+                    </div>
                 `;
             } else if (type === 'gallery2') {
                 el = document.createElement('div');
@@ -1214,8 +1517,9 @@
                 el.onsubmit = (e) => e.preventDefault();
                 el.innerHTML = `
                     <h3 style="margin-bottom:8px; color:#0f172a; font-size:15px;">Оставить заявку</h3>
-                    <input type="text" placeholder="Имя" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
-                    <button style="width:100%; padding:8px; background:#38bdf8; border:none; border-radius:4px; font-weight:bold; font-size:13px;">Отправить</button>
+                    <input type="text" placeholder="Ваше Имя" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
+                    <input type="text" placeholder="Телефон / Telegram" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
+                    <button style="width:100%; padding:8px; background:#38bdf8; border:none; border-radius:4px; font-weight:bold; font-size:13px; cursor:pointer;">Отправить заявку</button>
                 `;
             } else if (type === 'faq') {
                 el = document.createElement('div');
@@ -1223,8 +1527,8 @@
                 el.style.borderLeft = '3px solid #38bdf8';
                 el.style.backgroundColor = '#f1f5f9';
                 el.innerHTML = `
-                    <h4 style="color:#0f172a; font-size:13px;">Вопрос: Как сделать заказ?</h4>
-                    <p style="margin-top:3px; font-size:12px; color:#475569;">Заполните форму выше.</p>
+                    <h4 style="color:#0f172a; font-size:13px;">Вопрос: Как быстро готовится сайт?</h4>
+                    <p style="margin-top:3px; font-size:12px; color:#475569;">Сроки изготовления от 1 до 3 дней в зависимости от сложности.</p>
                 `;
             } else if (type === 'divider') {
                 el = document.createElement('hr');
@@ -1237,7 +1541,7 @@
                 el.style.padding = '10px 0';
                 el.style.color = '#94a3b8';
                 el.style.fontSize = '11px';
-                el.innerText = '© 2026 Все права защищены.';
+                el.innerText = '© 2026 Programist-studio. Все права защищены.';
             }
 
             wrapper.appendChild(el);
@@ -1281,7 +1585,38 @@
 
             let html = '';
 
-            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'card') {
+            if (type === 'draggable-icon') {
+                html += `
+                    <div class="control-group">
+                        <label>Выберите иконку (Emoji):</label>
+                        <select id="prop-icon-select">
+                            <option value="🚀">🚀 Ракета</option>
+                            <option value="⭐">⭐ Звезда</option>
+                            <option value="🔥">🔥 Огонь</option>
+                            <option value="💡">💡 Лампочка</option>
+                            <option value="⚡">⚡ Молния</option>
+                            <option value="💎">💎 Бриллиант</option>
+                            <option value="🛒">🛒 Корзина</option>
+                            <option value="❤️">❤️ Сердце</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Размер иконки (px):</label>
+                        <input type="number" id="prop-icon-size" value="${parseInt(targetEl.style.fontSize) || 32}" min="12" max="120">
+                    </div>
+                `;
+            } else if (type === 'video') {
+                const iframe = targetEl.querySelector('iframe');
+                const src = iframe ? iframe.src : '';
+                html += `
+                    <div class="control-group">
+                        <label>Ссылка на YouTube (Embed URL):</label>
+                        <input type="text" id="prop-video-src" value="${src}">
+                    </div>
+                `;
+            }
+
+            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'card' || type === 'promo-banner') {
                 html += `
                     <div class="control-group">
                         <label>Тематика для AI-генерации:</label>
@@ -1296,7 +1631,7 @@
                 `;
             }
 
-            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer') {
+            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'promo-banner') {
                 html += `
                     <div class="control-group">
                         <label>Текст блока:</label>
@@ -1312,10 +1647,14 @@
                         <option value="inherit">По умолчанию (как у сайта)</option>
                         <option value="Inter" ${targetEl.style.fontFamily.includes('Inter') ? 'selected' : ''}>Inter</option>
                         <option value="Montserrat" ${targetEl.style.fontFamily.includes('Montserrat') ? 'selected' : ''}>Montserrat</option>
+                        <option value="Poppins" ${targetEl.style.fontFamily.includes('Poppins') ? 'selected' : ''}>Poppins</option>
                         <option value="Roboto" ${targetEl.style.fontFamily.includes('Roboto') ? 'selected' : ''}>Roboto</option>
                         <option value="Open Sans" ${targetEl.style.fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
                         <option value="Oswald" ${targetEl.style.fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
                         <option value="Playfair Display" ${targetEl.style.fontFamily.includes('Playfair Display') ? 'selected' : ''}>Playfair Display</option>
+                        <option value="Lora" ${targetEl.style.fontFamily.includes('Lora') ? 'selected' : ''}>Lora</option>
+                        <option value="Caveat" ${targetEl.style.fontFamily.includes('Caveat') ? 'selected' : ''}>Caveat</option>
+                        <option value="Pacifico" ${targetEl.style.fontFamily.includes('Pacifico') ? 'selected' : ''}>Pacifico</option>
                     </select>
                 </div>
             `;
@@ -1370,7 +1709,7 @@
                 `;
             }
 
-            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share') {
+            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share' || type === 'promo-banner') {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -1380,6 +1719,21 @@
             }
 
             editorControls.innerHTML = html;
+
+            const propIconSelect = document.getElementById('prop-icon-select');
+            if (propIconSelect) propIconSelect.onchange = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
+
+            const propIconSize = document.getElementById('prop-icon-size');
+            if (propIconSize) propIconSize.oninput = (e) => { targetEl.style.fontSize = e.target.value + 'px'; saveHistoryState(); };
+
+            const propVideoSrc = document.getElementById('prop-video-src');
+            if (propVideoSrc) {
+                propVideoSrc.oninput = (e) => {
+                    const iframe = targetEl.querySelector('iframe');
+                    if (iframe) iframe.src = e.target.value;
+                    saveHistoryState();
+                };
+            }
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
@@ -1504,7 +1858,7 @@
 
             let cleanContent = '';
             cloneCanvas.querySelectorAll('.canvas-item').forEach(item => {
-                cleanContent += `  <div class="${item.className}" style="margin-bottom: 12px;">\n    ${item.firstElementChild.outerHTML}\n  </div>\n`;
+                cleanContent += `  <div class="${item.className}" style="margin-bottom: 12px; ${item.style.cssText}">\n    ${item.firstElementChild.outerHTML}\n  </div>\n`;
             });
 
             const bgColor = canvas.style.backgroundColor || '#ffffff';
@@ -1517,18 +1871,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Сайт</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: '${fontFamily}', sans-serif; 
             padding: ${padding}; 
-            max-width: 1000px; 
+            max-width: 1200px; 
             margin: 0 auto; 
             background-color: ${bgColor};
             color: #1e293b;
             min-height: 100vh;
+            position: relative;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .canvas-item.is-draggable {
+            position: absolute;
+            z-index: 100;
         }
 
         body.dark-mode {
@@ -1596,7 +1956,7 @@ ${cleanContent}
             const blob = new Blob([fullPageCode], { type: 'text/html' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'index.html';
+            a.download = `${currentPage}.html`;
             a.click();
         }
     </script>
