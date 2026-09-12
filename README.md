@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -37,45 +36,35 @@
             background: #38bdf8;
         }
 
-        /* АНИМАЦИИ ДЛЯ ЭЛЕМЕНТОВ */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Анимация переливающегося текста для Названия сайта */
-        @keyframes gradientTitle {
+        /* АНИМАЦИИ НАЗВАНИЯ И ЭЛЕМЕНТОВ */
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes titleFloat {
+            0% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+            50% { transform: translateY(-3px); filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.8)); }
+            100% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+        }
+
+        /* Класс анимированного заголовка */
         .animated-site-title {
             background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientTitle 5s ease infinite;
+            animation: gradientMove 4s ease infinite, titleFloat 3s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
         }
 
-        /* Применение анимаций */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
@@ -100,7 +89,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: 0.5px;
         }
@@ -409,8 +398,8 @@
         
         <!-- Левая панель -->
         <div class="sidebar">
-            <h2>Специальные блоки</h2>
-            <button class="btn-element" onclick="addElement('site-title')">Анимированный заголовок <span>+</span></button>
+            <h2>Анимированные блоки</h2>
+            <button class="btn-element" onclick="addElement('site-title')">Анимированное Название <span>+</span></button>
 
             <h2>Базовые блоки</h2>
             <button class="btn-element" onclick="addElement('navbar')">Шапка (Nav) <span>+</span></button>
@@ -539,7 +528,7 @@
                 el.style.padding = '12px 15px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:18px; color:#0f172a;" class="animated-site-title">Название Сайта</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:18px;" class="animated-site-title">Название Сайта</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -685,13 +674,12 @@
                 `;
             }
 
-            /* Выбор анимации для выбранного блока */
             html += `
                 <div class="control-group">
                     <label>Анимация появления:</label>
                     <select id="prop-animation">
                         <option value="">Без анимации</option>
-                        <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавный проявление</option>
+                        <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавное проявление</option>
                         <option value="anim-slide-up" ${wrapper.classList.contains('anim-slide-up') ? 'selected' : ''}>Появление снизу</option>
                         <option value="anim-slide-left" ${wrapper.classList.contains('anim-slide-left') ? 'selected' : ''}>Появление слева</option>
                         <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Увеличение (Zoom)</option>
@@ -865,7 +853,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Экспортированный Сайт</title>
+    <title>Мой Сайт</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -878,15 +866,16 @@
             overflow-y: auto;
         }
 
-        /* АНИМАЦИИ */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        @keyframes gradientTitle {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        @keyframes titleFloat {
+            0% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+            50% { transform: translateY(-3px); filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.8)); }
+            100% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
         }
 
         .animated-site-title {
@@ -894,10 +883,15 @@
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientTitle 5s ease infinite;
+            animation: gradientMove 4s ease infinite, titleFloat 3s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
         }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
