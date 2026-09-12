@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Programist-studio — Конструктор Сайтов с AI</title>
+    <title>Programist-studio — Конструктор Сайтов с AI & RGB</title>
     <!-- Динамическое подключение Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
@@ -34,6 +34,31 @@
             border-radius: 3px;
         }
 
+        /* --- RGB АНИМАЦИИ И ЭФФЕКТЫ --- */
+        @keyframes rgbBorder {
+            0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
+            33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
+            66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); }
+            100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
+        }
+
+        @keyframes rgbGlowText {
+            0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
+            33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; }
+            66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; }
+            100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
+        }
+
+        .rgb-card {
+            border: 2px solid #ff0055 !important;
+            animation: rgbBorder 4s linear infinite !important;
+        }
+
+        .rgb-text-glow {
+            animation: rgbGlowText 3s linear infinite !important;
+        }
+
+        /* --- ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ --- */
         @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -44,6 +69,23 @@
             0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
             50% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
             100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        }
+
+        @keyframes flipIn {
+            0% { transform: rotateY(-90deg); opacity: 0; }
+            100% { transform: rotateY(0deg); opacity: 1; }
         }
 
         .animated-site-title {
@@ -101,6 +143,9 @@
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
+        .anim-float { animation: floatAnim 3s ease-in-out infinite; }
+        .anim-pulse { animation: pulseGlow 2s infinite; }
+        .anim-flip { animation: flipIn 0.8s ease forwards; }
 
         .top-bar {
             min-height: 60px;
@@ -207,22 +252,26 @@
             width: 100%;
             background: #111827;
             border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
         }
 
         .mobile-tab-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: transparent;
             border: none;
             color: #94a3b8;
             font-size: 13px;
             font-weight: bold;
             cursor: pointer;
+            text-align: center;
         }
 
         .mobile-tab-btn.active {
             color: #38bdf8;
-            border-bottom: 2px solid #38bdf8;
+            border-bottom: 3px solid #38bdf8;
             background: rgba(56, 189, 248, 0.05);
         }
 
@@ -297,6 +346,15 @@
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
             border-color: #38bdf8;
             color: #38bdf8;
+        }
+
+        .btn-rgb-effect {
+            background: linear-gradient(90deg, #ff0055, #00ffcc, #9900ff);
+            background-size: 200% 200%;
+            animation: textGradient 3s linear infinite;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
         }
 
         .btn-danger {
@@ -511,35 +569,33 @@
 
         body.preview-mode #exit-preview-btn { display: block; }
 
-        /* Modal element style */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9000;
-            align-items: center;
-            justify-content: center;
-        }
-
+        /* Полная адаптация */
         @media (max-width: 1024px) {
             .main-container { flex-direction: column; }
             .mobile-tabs { display: flex; }
-            .sidebar { width: 100%; max-height: none; position: relative; top: 0; display: none; border: none; }
+            .sidebar { 
+                width: 100%; 
+                max-height: none; 
+                position: relative; 
+                top: 0; 
+                display: none; 
+                border: none; 
+            }
             .sidebar.active-tab { display: flex; }
             .workspace { display: flex; width: 100%; padding: 10px; }
             .workspace.hidden-tab { display: none; }
             .device-toggle, .zoom-controls { display: none; }
-            .top-bar { justify-content: space-between; }
+            .top-bar { justify-content: space-between; gap: 5px; }
         }
 
         @media (max-width: 600px) {
-            .brand span { font-size: 15px; }
+            .brand span { font-size: 14px; }
             .tg-banner-link span { display: none; }
             .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
             .action-btn { flex: 1; text-align: center; }
             .canvas { padding: 10px; }
             .save-badge { display: none; }
+            .page-manager { max-width: 140px; }
         }
     </style>
 </head>
@@ -614,11 +670,14 @@
         <div class="sidebar" id="sidebar-left">
             <h2>AI Дизайн & Цвета</h2>
             <button class="btn-element btn-ai" onclick="generateAIPalette()">🎨 Сгенерировать AI-палитру <span>★</span></button>
+            <button class="btn-element btn-rgb-effect" onclick="applyRGBEffectToSelected()">🌈 RGB Подсветка (Выделенное)</button>
 
             <h2>Готовые Шаблоны</h2>
             <button class="btn-element btn-preset" onclick="loadPreset('landing')">🚀 Лендинг услуг <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('portfolio')">🎨 Портфолио <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('shop')">🛒 Интернет-магазин <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('saas')">⚡ SaaS Продукт <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('blog')">📰 Блог / Медиа <span>★</span></button>
 
             <h2>Анимированные и Интерактивные</h2>
             <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
@@ -755,7 +814,7 @@
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v2';
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v3';
 
         const aiTextDatabase = {
             it: {
@@ -777,7 +836,7 @@
                 cards: ["Курс Веб-Дизайн\nОсвойте Figma и основы интерфейсов за 2 месяца.", "Курс Python-Разработчик\nИзучите самый популярный язык программирования."]
             },
             shop: {
-                headers: ["Рас распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
+                headers: ["Распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
                 texts: ["Быстрая доставка по всей стране. Гарантия качества на всю продукцию.", "Оформите заказ сегодня и получите подарок в каждом комплекте.", "Удобная оплата при получении или картой на сайте."],
                 buttons: ["В каталог", "Купить со скидкой", "Оформить заказ", "Перейти в магазин"],
                 cards: ["Беспроводные наушники\nЧистый звук и мощный бас. До 24 часов работы.", "Смарт-часы 2026\nСпортивные функции и мониторинг здоровья."]
@@ -796,7 +855,7 @@
         function setZoom(scale) {
             canvasWrapper.style.transform = `scale(${scale})`;
             document.querySelectorAll('.zoom-controls .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event) event.target.classList.add('active');
         }
 
         function changeCanvasWidth(val) {
@@ -834,7 +893,7 @@
         function addNewPage() {
             const name = prompt("Введите имя новой страницы (например, blog):");
             if (name) {
-                const key = name.toLowerCase().replace(/[^a-z0-0]/g, '');
+                const key = name.toLowerCase().replace(/[^a-z0-9]/g, '');
                 if (key && !pagesData[key]) {
                     pagesData[key] = { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' };
                     const select = document.getElementById('pages-select');
@@ -986,7 +1045,7 @@
 
                 const tag = el.tagName.toLowerCase();
                 if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'p' || tag === 'strong' || tag === 'span') {
-                    if (!el.classList.contains('animated-site-title')) {
+                    if (!el.classList.contains('animated-site-title') && !el.classList.contains('rgb-text-glow')) {
                         el.style.color = randomPalette.text;
                     }
                 } else if (tag === 'a' || tag === 'button') {
@@ -1000,6 +1059,20 @@
                 }
             });
 
+            saveHistoryState();
+        }
+
+        function applyRGBEffectToSelected() {
+            if (!selectedElement) {
+                alert("Сначала выберите элемент на холсте!");
+                return;
+            }
+            const isText = ['h1', 'h2', 'h3', 'p', 'span', 'strong'].includes(selectedElement.tagName.toLowerCase());
+            if (isText) {
+                selectedElement.classList.toggle('rgb-text-glow');
+            } else {
+                selectedElement.classList.toggle('rgb-card');
+            }
             saveHistoryState();
         }
 
@@ -1243,6 +1316,24 @@
                 addElement('faq');
                 addElement('form');
                 addElement('footer');
+            } else if (presetName === 'saas') {
+                addElement('promo-banner');
+                addElement('navbar');
+                addElement('header');
+                addElement('text');
+                addElement('button');
+                addElement('video');
+                addElement('pricing');
+                addElement('faq');
+                addElement('footer');
+            } else if (presetName === 'blog') {
+                addElement('navbar');
+                addElement('header');
+                addElement('grid3');
+                addElement('divider');
+                addElement('star-reviews');
+                addElement('social-share');
+                addElement('footer');
             }
 
             if (window.innerWidth <= 1024) switchMobileTab('canvas');
@@ -1270,6 +1361,7 @@
                 makeDraggable(wrapper);
             } else if (type === 'promo-banner') {
                 el = document.createElement('div');
+                el.className = 'rgb-card';
                 el.style.background = 'linear-gradient(90deg, #38bdf8, #818cf8)';
                 el.style.color = '#0f172a';
                 el.style.padding = '8px 15px';
@@ -1277,7 +1369,7 @@
                 el.style.fontWeight = 'bold';
                 el.style.borderRadius = '6px';
                 el.style.fontSize = '12px';
-                el.innerText = '🔥 Скидка 20% на все тарифы до конца недели! Оставьте заявку прямо сейчас.';
+                el.innerText = '🔥 RGB АКЦИЯ! Скидка 20% на все услуги до конца недели!';
             } else if (type === 'image-slider') {
                 el = document.createElement('div');
                 el.style.position = 'relative';
@@ -1297,7 +1389,7 @@
                 el = document.createElement('div');
                 el.style.textAlign = 'center';
                 el.innerHTML = `
-                    <button onclick="alert('Это пример работы всплывающего окна!')" style="padding:10px 20px; background:#a855f7; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+                    <button class="anim-pulse" onclick="alert('Пример работы интерактива!')" style="padding:10px 20px; background:#a855f7; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
                         🪟 Открыть всплывающее окно
                     </button>
                 `;
@@ -1400,7 +1492,7 @@
                         <p style="font-size:11px; color:#64748b;">1 Страница<br>Поддержка 24/7</p>
                         <button style="margin-top:10px; padding:6px 12px; background:#0284c7; color:white; border:none; border-radius:4px; font-size:12px;">Заказать</button>
                     </div>
-                    <div style="border:2px solid #38bdf8; padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
+                    <div class="rgb-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
                         <h3 style="font-size:16px;">Бизнес</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 500 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">До 5 Страниц<br>SEO оптимизация</p>
@@ -1676,13 +1768,16 @@
 
             html += `
                 <div class="control-group">
-                    <label>Анимация появления:</label>
+                    <label>Анимация появления & эффекты:</label>
                     <select id="prop-animation">
                         <option value="">Без анимации</option>
-                        <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавная</option>
-                        <option value="anim-slide-up" ${wrapper.classList.contains('anim-slide-up') ? 'selected' : ''}>Снизу</option>
-                        <option value="anim-slide-left" ${wrapper.classList.contains('anim-slide-left') ? 'selected' : ''}>Слева</option>
+                        <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавная (Fade)</option>
+                        <option value="anim-slide-up" ${wrapper.classList.contains('anim-slide-up') ? 'selected' : ''}>Снизу (Slide Up)</option>
+                        <option value="anim-slide-left" ${wrapper.classList.contains('anim-slide-left') ? 'selected' : ''}>Слева (Slide Left)</option>
                         <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Zoom</option>
+                        <option value="anim-float" ${wrapper.classList.contains('anim-float') ? 'selected' : ''}>Парение (Floating)</option>
+                        <option value="anim-pulse" ${wrapper.classList.contains('anim-pulse') ? 'selected' : ''}>Пульсация (Pulse Glow)</option>
+                        <option value="anim-flip" ${wrapper.classList.contains('anim-flip') ? 'selected' : ''}>Переворот (3D Flip)</option>
                     </select>
                 </div>
             `;
@@ -1769,7 +1864,7 @@
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
                 propAnim.onchange = (e) => {
-                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom');
+                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom', 'anim-float', 'anim-pulse', 'anim-flip');
                     if (e.target.value) wrapper.classList.add(e.target.value);
                     saveHistoryState();
                 };
@@ -1886,55 +1981,49 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .canvas-item.is-draggable {
-            position: absolute;
-            z-index: 100;
-        }
+        .canvas-item.is-draggable { position: absolute; z-index: 100; }
 
         body.dark-mode {
             background-color: #0f172a !important;
             color: #f8fafc !important;
         }
 
-        body.dark-mode div, 
-        body.dark-mode form, 
-        body.dark-mode nav, 
-        body.dark-mode footer {
+        body.dark-mode div, body.dark-mode form, body.dark-mode nav, body.dark-mode footer {
             background-color: #1e293b !important;
             color: #f8fafc !important;
             border-color: #334155 !important;
         }
 
-        body.dark-mode p, 
-        body.dark-mode h1, 
-        body.dark-mode h2, 
-        body.dark-mode h3, 
-        body.dark-mode h4, 
-        body.dark-mode strong {
+        body.dark-mode p, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode strong {
             color: #f8fafc !important;
         }
 
-        @keyframes textGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes rgbBorder {
+            0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
+            33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
+            66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); }
+            100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
         }
 
-        .animated-site-title {
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textGradient 3s linear infinite;
-            display: inline-block;
-            font-weight: 800;
+        @keyframes rgbGlowText {
+            0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
+            33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; }
+            66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; }
+            100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .rgb-card { border: 2px solid #ff0055 !important; animation: rgbBorder 4s linear infinite !important; }
+        .rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
+
+        @keyframes floatAnim { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); } }
+        @keyframes flipIn { 0% { transform: rotateY(-90deg); opacity: 0; } 100% { transform: rotateY(0deg); opacity: 1; } }
 
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
+        .anim-float { animation: floatAnim 3s ease-in-out infinite; }
+        .anim-pulse { animation: pulseGlow 2s infinite; }
+        .anim-flip { animation: flipIn 0.8s ease forwards; }
     </style>
 </head>
 <body>
