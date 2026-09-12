@@ -12,13 +12,13 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+        html, body {
+            width: 100%;
+            min-height: 100vh;
             background-color: #0b0f19;
             color: #f8fafc;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* Кастомный скроллбар */
@@ -40,15 +40,16 @@
         /* Верхняя панель (Header) */
         .top-bar {
             height: 65px;
-            background: rgba(30, 41, 59, 0.75);
+            background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 25px;
+            position: sticky;
+            top: 0;
             z-index: 100;
-            flex-shrink: 0;
         }
 
         .brand {
@@ -63,7 +64,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* АНИМИРОВАННАЯ ИКОНКА С МОЛНИЕЙ */
+        /* Анимированная иконка */
         .brand-icon {
             position: relative;
             width: 42px;
@@ -119,24 +120,10 @@
         }
 
         @keyframes lightningStrike {
-            0% {
-                stroke-dashoffset: 60;
-                opacity: 0.3;
-            }
-            40% {
-                stroke-dashoffset: 0;
-                opacity: 1;
-                filter: drop-shadow(0 0 12px #38bdf8);
-            }
-            60% {
-                stroke-dashoffset: 0;
-                opacity: 1;
-                filter: drop-shadow(0 0 15px #ffffff);
-            }
-            100% {
-                stroke-dashoffset: -60;
-                opacity: 0.3;
-            }
+            0% { stroke-dashoffset: 60; opacity: 0.3; }
+            40% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 12px #38bdf8); }
+            60% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 15px #ffffff); }
+            100% { stroke-dashoffset: -60; opacity: 0.3; }
         }
 
         .view-toggle {
@@ -169,8 +156,8 @@
         /* Главный контейнер */
         .main-container {
             display: flex;
-            flex: 1;
-            overflow: hidden;
+            min-height: calc(100vh - 65px);
+            position: relative;
         }
 
         /* Боковые панели */
@@ -182,6 +169,9 @@
             flex-direction: column;
             padding: 20px;
             gap: 12px;
+            max-height: calc(100vh - 65px);
+            position: sticky;
+            top: 65px;
             overflow-y: auto;
             flex-shrink: 0;
         }
@@ -244,44 +234,44 @@
             transform: none;
         }
 
-        /* РАБОЧАЯ ОБЛАСТЬ (ИСПРАВЛЕНА ПРОКРУТКА) */
+        /* РАБОЧАЯ ОБЛАСТЬ (Свободный скролл) */
         .workspace {
             flex: 1;
             padding: 25px;
-            overflow-y: scroll; /* Принудительно включаем скролл вниз */
             display: flex;
             flex-direction: column;
             align-items: center;
             background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
-            height: 100%;
+            min-height: calc(100vh - 65px);
+            overflow-y: visible;
         }
 
         .canvas {
             width: 100%;
             max-width: 850px;
-            min-height: 550px;
+            min-height: 600px;
             background-color: #ffffff;
             color: #1e293b;
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.2);
             transition: all 0.2s;
-            margin-bottom: 50px; /* Отступ снизу для комфортного скролла */
+            margin-bottom: 100px; /* Большой отступ снизу для комфортной прокрутки */
         }
 
-        /* Текстовый редактор кода */
+        /* Редактор кода */
         .code-editor-container {
             width: 100%;
             max-width: 850px;
-            height: 100%;
             display: none;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 100px;
         }
 
         .code-editor {
             width: 100%;
-            height: 500px;
+            min-height: 550px;
             background-color: #0f172a;
             color: #38bdf8;
             border: 1px solid #334155;
@@ -293,11 +283,6 @@
             resize: vertical;
             outline: none;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .code-editor:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
         /* Элементы на холсте */
@@ -338,11 +323,6 @@
             justify-content: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             z-index: 10;
-            transition: transform 0.2s;
-        }
-
-        .canvas-item .delete-btn:hover {
-            transform: scale(1.15);
         }
 
         .canvas-item:hover .delete-btn {
@@ -370,11 +350,6 @@
             border-radius: 6px;
             font-size: 13px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .control-group input:focus, .control-group select:focus {
-            border-color: #38bdf8;
         }
 
         .control-group input[type="color"] {
@@ -420,7 +395,7 @@
         <button class="action-btn" onclick="exportHTML()">Скачать HTML</button>
     </div>
 
-    <!-- Основное рабочее пространство -->
+    <!-- Основное пространство -->
     <div class="main-container">
         
         <!-- Левая панель -->
@@ -462,10 +437,10 @@
             <button class="btn-element btn-danger" onclick="clearCanvas()">Очистить холст 🗑</button>
         </div>
 
-        <!-- Центральная панель с рабочей областью -->
+        <!-- Центральная панель -->
         <div class="workspace">
             <div class="canvas" id="canvas">
-                <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 220px;">
+                <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 250px;">
                     Выберите блоки на левой панели для добавления
                 </p>
             </div>
@@ -476,7 +451,7 @@
             </div>
         </div>
 
-        <!-- Правая панель: Свойства -->
+        <!-- Правая панель -->
         <div class="sidebar sidebar-right">
             <h2>Свойства</h2>
             <div id="editor-controls">
@@ -517,7 +492,7 @@
         function changeCanvasFont(font) { canvas.style.fontFamily = font; }
 
         function clearCanvas() {
-            if (confirm("Вы уверены, что хотите полностью очистить сайт?")) {
+            if (confirm("Очистить холст?")) {
                 canvas.innerHTML = '';
                 if (emptyMsg) {
                     emptyMsg.style.display = 'block';
@@ -818,7 +793,6 @@
             return "#" + ((1 << 24) + (parseInt(res[0]) << 16) + (parseInt(res[1]) << 8) + parseInt(res[2])).toString(16).slice(1);
         }
 
-        // ЭКСПОРТ (ИСПРАВЛЕН СКРОЛЛ ДЛЯ ИТОГОВОЙ СТРАНИЦЫ)
         function exportHTML() {
             if (currentMode === 'code') {
                 applyCodeChanges();
