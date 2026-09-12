@@ -144,7 +144,27 @@
             font-weight: 800;
         }
 
-        .view-toggle, .device-toggle {
+        .tg-banner-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #0088cc, #229ed9);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 0 12px rgba(34, 158, 217, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .tg-banner-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(34, 158, 217, 0.8);
+        }
+
+        .view-toggle, .device-toggle, .history-toggle {
             display: flex;
             background-color: #0f172a;
             padding: 4px;
@@ -163,6 +183,11 @@
             font-weight: 600;
             font-size: 13px;
             transition: all 0.3s ease;
+        }
+
+        .toggle-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
         .toggle-btn.active {
@@ -237,6 +262,17 @@
             border-color: #38bdf8;
             color: #38bdf8;
             transform: translateX(3px);
+        }
+
+        .btn-preset {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2));
+            border-color: #a855f7;
+            color: #c084fc;
+        }
+
+        .btn-preset:hover {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: #ffffff;
         }
 
         .btn-danger {
@@ -436,6 +472,17 @@
             <span class="animated-site-title">Programist-studio</span>
         </div>
 
+        <!-- Ссылка на Telegram-канал -->
+        <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
+            🚀 Telegram Канал
+        </a>
+
+        <!-- Undo / Redo -->
+        <div class="history-toggle">
+            <button class="toggle-btn" id="btn-undo" onclick="undo()" title="Отменить (Ctrl+Z)" disabled>↩️ Назад</button>
+            <button class="toggle-btn" id="btn-redo" onclick="redo()" title="Повторить (Ctrl+Y)" disabled>↪️ Вперед</button>
+        </div>
+
         <!-- Адаптивные режимы -->
         <div class="device-toggle">
             <button class="toggle-btn active" id="btn-device-desktop" onclick="setDeviceMode('desktop')">🖥️ Desktop</button>
@@ -459,6 +506,11 @@
         
         <!-- Левая панель -->
         <div class="sidebar">
+            <h2>Готовые Шаблоны</h2>
+            <button class="btn-element btn-preset" onclick="loadPreset('landing')">🚀 Лендинг услуг <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('portfolio')">🎨 Портфолио <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('shop')">🛒 Интернет-магазин <span>★</span></button>
+
             <h2>Анимированные блоки</h2>
             <button class="btn-element" onclick="addElement('site-title')">Анимированное Название <span>+</span></button>
             <button class="btn-element" onclick="addElement('countdown')">Счетчик обратного отсчета <span>+</span></button>
@@ -514,7 +566,7 @@
         <div class="workspace">
             <div class="canvas" id="canvas">
                 <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 250px;">
-                    Выберите блоки на левой панели для добавления
+                    Выберите блоки или готовый шаблон на левой панели
                 </p>
             </div>
 
@@ -548,6 +600,101 @@
         let selectedWrapper = null;
         let elementCount = 0;
         let currentMode = 'visual';
+
+        // ИСТОРИЯ ДЛЯ UNDO / REDO
+        let historyStack = [];
+        let historyIndex = -1;
+        let isUndoRedoAction = false;
+
+        function saveHistoryState() {
+            if (isUndoRedoAction) return;
+            
+            // Если делали действие после отмен, обрезаем будущую историю
+            if (historyIndex < historyStack.length - 1) {
+                historyStack = historyStack.slice(0, historyIndex + 1);
+            }
+
+            historyStack.push(canvas.innerHTML);
+            historyIndex++;
+
+            updateHistoryButtons();
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('btn-undo').disabled = (historyIndex <= 0);
+            document.getElementById('btn-redo').disabled = (historyIndex >= historyStack.length - 1);
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                isUndoRedoAction = true;
+                historyIndex--;
+                canvas.innerHTML = historyStack[historyIndex];
+                rebindCanvasEvents();
+                updateHistoryButtons();
+                isUndoRedoAction = false;
+            }
+        }
+
+        function redo() {
+            if (historyIndex < historyStack.length - 1) {
+                isUndoRedoAction = true;
+                historyIndex++;
+                canvas.innerHTML = historyStack[historyIndex];
+                rebindCanvasEvents();
+                updateHistoryButtons();
+                isUndoRedoAction = false;
+            }
+        }
+
+        // Горячие клавиши Ctrl+Z и Ctrl+Y
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                if (e.shiftKey) {
+                    redo();
+                } else {
+                    undo();
+                }
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+                redo();
+            }
+        });
+
+        function rebindCanvasEvents() {
+            const items = canvas.querySelectorAll('.canvas-item');
+            if (items.length === 0 && emptyMsg) {
+                emptyMsg.style.display = 'block';
+            } else if (emptyMsg) {
+                emptyMsg.style.display = 'none';
+            }
+
+            items.forEach(wrapper => {
+                const targetEl = wrapper.firstElementChild;
+                const deleteBtn = wrapper.querySelector('.delete-btn');
+
+                if (deleteBtn) {
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        wrapper.remove();
+                        if (canvas.querySelectorAll('.canvas-item').length === 0 && emptyMsg) {
+                            emptyMsg.style.display = 'block';
+                        }
+                        editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                        saveHistoryState();
+                    };
+                }
+
+                wrapper.onclick = (e) => {
+                    e.stopPropagation();
+                    selectElement(wrapper, targetEl, targetEl.tagName.toLowerCase());
+                };
+            });
+        }
+
+        // Загрузка стартового состояния в историю
+        window.onload = () => {
+            saveHistoryState();
+        };
 
         function switchView(mode) {
             currentMode = mode;
@@ -602,7 +749,45 @@
                     canvas.appendChild(emptyMsg);
                 }
                 editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                saveHistoryState();
             }
+        }
+
+        // ШАБЛОНЫ САЙТОВ
+        function loadPreset(presetName) {
+            if (canvas.children.length > 1 && !confirm("Загрузка шаблона заменит существующие блоки. Продолжить?")) {
+                return;
+            }
+
+            canvas.innerHTML = '';
+            if (emptyMsg) emptyMsg.style.display = 'none';
+
+            if (presetName === 'landing') {
+                addElement('navbar');
+                addElement('site-title');
+                addElement('countdown');
+                addElement('pricing');
+                addElement('form');
+                addElement('footer');
+            } else if (presetName === 'portfolio') {
+                addElement('navbar');
+                addElement('header');
+                addElement('text');
+                addElement('gallery2');
+                addElement('testimonials');
+                addElement('floating-messengers');
+                addElement('footer');
+            } else if (presetName === 'shop') {
+                addElement('navbar');
+                addElement('header');
+                addElement('grid3');
+                addElement('pricing');
+                addElement('faq');
+                addElement('form');
+                addElement('footer');
+            }
+
+            saveHistoryState();
         }
 
         function addElement(type) {
@@ -646,7 +831,7 @@
                         <h3>Базовый</h3>
                         <p style="font-size:24px; font-weight:bold; color:#0284c7; margin:10px 0;">3 000 ₽</p>
                         <p style="font-size:12px; color:#64748b;">1 Страница<br>Базовый дизайн<br>Поддержка 24/7</p>
-                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:#white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
+                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
                     </div>
                     <div style="border:2px solid #38bdf8; padding:20px; border-radius:10px; text-align:center; background:#f0f9ff;">
                         <h3>Стандарт</h3>
@@ -658,7 +843,7 @@
                         <h3>Премиум</h3>
                         <p style="font-size:24px; font-weight:bold; color:#0284c7; margin:10px 0;">10 000 ₽</p>
                         <p style="font-size:12px; color:#64748b;">Безлимит страниц<br>Интернет-магазин<br>Маркетинг поддержка</p>
-                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:#white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
+                        <button style="margin-top:15px; padding:8px 16px; background:#0284c7; color:white; border:none; border-radius:6px; cursor:pointer;">Заказать</button>
                     </div>
                 `;
             } else if (type === 'testimonials') {
@@ -683,7 +868,7 @@
                 el.style.justifyContent = 'center';
                 el.style.padding = '10px';
                 el.innerHTML = `
-                    <a href="https://t.me" target="_blank" style="padding:8px 15px; background:#229ED9; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">Telegram</a>
+                    <a href="https://t.me/programisstuz" target="_blank" style="padding:8px 15px; background:#229ED9; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">Telegram</a>
                     <a href="https://whatsapp.com" target="_blank" style="padding:8px 15px; background:#25D366; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">WhatsApp</a>
                     <a href="https://vk.com" target="_blank" style="padding:8px 15px; background:#0077FF; color:white; text-decoration:none; border-radius:20px; font-size:12px; font-weight:bold;">VKontakte</a>
                 `;
@@ -705,7 +890,7 @@
                 el.innerText = 'Это пример текстового блока. Введите сюда любой ваш текст...';
                 el.style.color = '#334155';
             } else if (type === 'button') {
-                let targetUrl = prompt("Введите ссылку для кнопки (URL):", "https://example.com");
+                let targetUrl = prompt("Введите ссылку для кнопки (URL):", "https://t.me/programisstuz");
                 if (!targetUrl) targetUrl = "#";
 
                 el = document.createElement('a');
@@ -808,6 +993,7 @@
                     emptyMsg.style.display = 'block';
                 }
                 editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                saveHistoryState();
             };
             wrapper.appendChild(deleteBtn);
 
@@ -822,6 +1008,8 @@
             if (currentMode === 'code') {
                 updateCodeEditorFromCanvas();
             }
+
+            saveHistoryState();
         }
 
         function selectElement(wrapper, targetEl, type) {
@@ -917,13 +1105,14 @@
             editorControls.innerHTML = html;
 
             const propText = document.getElementById('prop-text');
-            if (propText) propText.oninput = (e) => targetEl.innerText = e.target.value;
+            if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
 
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
                 propAnim.onchange = (e) => {
                     wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom');
                     if (e.target.value) wrapper.classList.add(e.target.value);
+                    saveHistoryState();
                 };
             }
 
@@ -932,23 +1121,24 @@
                 propHover.onchange = (e) => {
                     wrapper.classList.remove('hover-zoom', 'hover-glow');
                     if (e.target.value) wrapper.classList.add(e.target.value);
+                    saveHistoryState();
                 };
             }
 
             const propHref = document.getElementById('prop-href');
-            if (propHref) propHref.oninput = (e) => targetEl.setAttribute('href', e.target.value);
+            if (propHref) propHref.oninput = (e) => { targetEl.setAttribute('href', e.target.value); saveHistoryState(); };
 
             const propBg = document.getElementById('prop-bg');
-            if (propBg) propBg.oninput = (e) => targetEl.style.backgroundColor = e.target.value;
+            if (propBg) propBg.oninput = (e) => { targetEl.style.backgroundColor = e.target.value; saveHistoryState(); };
 
             const propSrc = document.getElementById('prop-src');
-            if (propSrc) propSrc.oninput = (e) => targetEl.src = e.target.value;
+            if (propSrc) propSrc.oninput = (e) => { targetEl.src = e.target.value; saveHistoryState(); };
 
             const propColor = document.getElementById('prop-color');
-            if (propColor) propColor.oninput = (e) => targetEl.style.color = e.target.value;
+            if (propColor) propColor.oninput = (e) => { targetEl.style.color = e.target.value; saveHistoryState(); };
 
             const propAlign = document.getElementById('prop-align');
-            if (propAlign) propAlign.onchange = (e) => targetEl.style.textAlign = e.target.value;
+            if (propAlign) propAlign.onchange = (e) => { targetEl.style.textAlign = e.target.value; saveHistoryState(); };
         }
 
         function updateCodeEditorFromCanvas() {
@@ -976,6 +1166,7 @@
                     emptyMsg.style.display = 'block';
                     canvas.appendChild(emptyMsg);
                 }
+                saveHistoryState();
                 return;
             }
 
@@ -992,6 +1183,7 @@
                 deleteBtn.onclick = (e) => {
                     e.stopPropagation();
                     wrapper.remove();
+                    saveHistoryState();
                 };
                 wrapper.appendChild(deleteBtn);
 
@@ -1002,6 +1194,8 @@
 
                 canvas.appendChild(wrapper);
             });
+
+            saveHistoryState();
         }
 
         function rgbToHex(rgb) {
