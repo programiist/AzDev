@@ -2,13 +2,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Programist-studio — Конструктор Сайтов</title>
+    <title>Programist-studio — Конструктор Сайтов с AI</title>
+    <!-- Динамическое подключение Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -20,7 +22,6 @@
             overflow-x: hidden;
         }
 
-        /* Кастомный скроллбар */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -33,7 +34,6 @@
             border-radius: 3px;
         }
 
-        /* АНИМАЦИИ НАЗВАНИЯ И МОЛНИИ */
         @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -92,7 +92,6 @@
             animation: lightningStrike 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
         }
 
-        /* ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ И HOVER ЭФФЕКТЫ */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
@@ -103,12 +102,6 @@
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
 
-        .hover-zoom { transition: transform 0.3s ease; }
-        .hover-zoom:hover { transform: scale(1.04); }
-        .hover-glow { transition: box-shadow 0.3s ease, transform 0.3s ease; }
-        .hover-glow:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); transform: translateY(-3px); }
-
-        /* Верхняя панель (Header) */
         .top-bar {
             min-height: 60px;
             background: rgba(30, 41, 59, 0.95);
@@ -146,6 +139,18 @@
             font-weight: 700;
             box-shadow: 0 0 10px rgba(34, 158, 217, 0.4);
             white-space: nowrap;
+        }
+
+        .save-badge {
+            font-size: 11px;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .view-toggle, .device-toggle, .history-toggle {
@@ -186,7 +191,6 @@
             gap: 8px;
         }
 
-        /* Мобильное переключение панелей (Вкладки) */
         .mobile-tabs {
             display: none;
             width: 100%;
@@ -211,14 +215,12 @@
             background: rgba(56, 189, 248, 0.05);
         }
 
-        /* Главный контейнер */
         .main-container {
             display: flex;
             min-height: calc(100vh - 60px);
             position: relative;
         }
 
-        /* Боковые панели */
         .sidebar {
             width: 280px;
             background-color: #111827;
@@ -273,10 +275,17 @@
             transform: scale(0.98);
         }
 
-        .btn-preset {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2));
+        .btn-ai {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3));
             border-color: #a855f7;
-            color: #c084fc;
+            color: #e879f9;
+            font-weight: 700;
+        }
+
+        .btn-preset {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
+            border-color: #38bdf8;
+            color: #38bdf8;
         }
 
         .btn-danger {
@@ -286,7 +295,6 @@
             margin-top: 10px;
         }
 
-        /* РАБОЧАЯ ОБЛАСТЬ */
         .workspace {
             flex: 1;
             padding: 15px;
@@ -351,6 +359,7 @@
             border: 1px dashed transparent;
             border-radius: 6px;
             cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .canvas-item.selected {
@@ -385,8 +394,14 @@
             margin-bottom: 10px;
         }
 
-        .control-group label { font-size: 12px; color: #94a3b8; }
-        .control-group input, .control-group select {
+        .control-group label { 
+            font-size: 12px; 
+            color: #94a3b8; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
+        .control-group input, .control-group select, .control-group textarea {
             padding: 8px 10px;
             background-color: #0f172a;
             border: 1px solid #334155;
@@ -394,6 +409,13 @@
             border-radius: 6px;
             font-size: 13px;
             outline: none;
+        }
+
+        .control-group input[type="range"] {
+            padding: 0;
+            height: 6px;
+            accent-color: #38bdf8;
+            cursor: pointer;
         }
 
         .control-group input[type="color"] { height: 38px; cursor: pointer; padding: 2px; }
@@ -411,12 +433,23 @@
             white-space: nowrap;
         }
 
+        .btn-gen-ai {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: #ffffff;
+            margin-top: 4px;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         .btn-preview {
             background: linear-gradient(135deg, #a855f7, #c084fc);
             color: #ffffff;
         }
 
-        /* РЕЖИМ ПРЕДПРОСМОТРА PREVIEW */
         body.preview-mode .top-bar, 
         body.preview-mode .sidebar,
         body.preview-mode .mobile-tabs { display: none !important; }
@@ -451,77 +484,29 @@
 
         body.preview-mode #exit-preview-btn { display: block; }
 
-        /* МЕДИA-ЗАПРОСЫ (АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ И СМАРТФОНОВ) */
         @media (max-width: 1024px) {
-            .main-container {
-                flex-direction: column;
-            }
-
-            .mobile-tabs {
-                display: flex;
-            }
-
-            .sidebar {
-                width: 100%;
-                max-height: none;
-                position: relative;
-                top: 0;
-                display: none; /* Переключение через вкладки */
-                border: none;
-            }
-
-            .sidebar.active-tab {
-                display: flex;
-            }
-
-            .workspace {
-                display: flex;
-                width: 100%;
-                padding: 10px;
-            }
-
-            .workspace.hidden-tab {
-                display: none;
-            }
-
-            .device-toggle {
-                display: none; /* Скрываем переключатель устройств на мобильных */
-            }
-
-            .top-bar {
-                justify-content: space-between;
-            }
+            .main-container { flex-direction: column; }
+            .mobile-tabs { display: flex; }
+            .sidebar { width: 100%; max-height: none; position: relative; top: 0; display: none; border: none; }
+            .sidebar.active-tab { display: flex; }
+            .workspace { display: flex; width: 100%; padding: 10px; }
+            .workspace.hidden-tab { display: none; }
+            .device-toggle { display: none; }
+            .top-bar { justify-content: space-between; }
         }
 
         @media (max-width: 600px) {
-            .brand span {
-                font-size: 15px;
-            }
-
-            .tg-banner-link span {
-                display: none; /* Скрываем текст, оставляем иконку на очень узких экранах */
-            }
-
-            .top-actions {
-                width: 100%;
-                justify-content: space-between;
-                margin-top: 5px;
-            }
-
-            .action-btn {
-                flex: 1;
-                text-align: center;
-            }
-
-            .canvas {
-                padding: 10px;
-            }
+            .brand span { font-size: 15px; }
+            .tg-banner-link span { display: none; }
+            .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
+            .action-btn { flex: 1; text-align: center; }
+            .canvas { padding: 10px; }
+            .save-badge { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка конструктора -->
     <div class="top-bar">
         <div class="brand">
             <div class="brand-icon">
@@ -532,18 +517,19 @@
             <span class="animated-site-title">Programist-studio</span>
         </div>
 
-        <!-- Ссылка на Telegram-канал -->
         <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
             🚀 <span>Telegram</span>
         </a>
 
-        <!-- Undo / Redo -->
+        <div class="save-badge">
+            <span>💾</span> <span id="save-status-text">Сохранено</span>
+        </div>
+
         <div class="history-toggle">
             <button class="toggle-btn" id="btn-undo" onclick="undo()" title="Отменить" disabled>↩️</button>
             <button class="toggle-btn" id="btn-redo" onclick="redo()" title="Повторить" disabled>↪️</button>
         </div>
 
-        <!-- Адаптивные режимы для ПК -->
         <div class="device-toggle">
             <button class="toggle-btn active" id="btn-device-desktop" onclick="setDeviceMode('desktop')">🖥️</button>
             <button class="toggle-btn" id="btn-device-tablet" onclick="setDeviceMode('tablet')">📱 Tablet</button>
@@ -561,18 +547,18 @@
         </div>
     </div>
 
-    <!-- Табы переключения для Мобильных устройств -->
     <div class="mobile-tabs">
         <button class="mobile-tab-btn" id="mtab-elements" onclick="switchMobileTab('elements')">📦 Блоки</button>
         <button class="mobile-tab-btn active" id="mtab-canvas" onclick="switchMobileTab('canvas')">🎨 Холст</button>
         <button class="mobile-tab-btn" id="mtab-props" onclick="switchMobileTab('props')">⚙️ Свойства</button>
     </div>
 
-    <!-- Основное пространство -->
     <div class="main-container">
         
-        <!-- Левая панель (Элементы) -->
         <div class="sidebar" id="sidebar-left">
+            <h2>AI Дизайн & Цвета</h2>
+            <button class="btn-element btn-ai" onclick="generateAIPalette()">🎨 Сгенерировать AI-палитру <span>★</span></button>
+
             <h2>Готовые Шаблоны</h2>
             <button class="btn-element btn-preset" onclick="loadPreset('landing')">🚀 Лендинг услуг <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('portfolio')">🎨 Портфолио <span>★</span></button>
@@ -603,6 +589,17 @@
 
             <h2>Настройки страницы</h2>
             <div class="control-group">
+                <label>Шрифт сайта:</label>
+                <select id="global-font" onchange="changeGlobalFont(this.value)">
+                    <option value="Inter">Inter</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Playfair Display">Playfair Display</option>
+                </select>
+            </div>
+            <div class="control-group">
                 <label>Тема оформления:</label>
                 <select id="page-theme" onchange="changeCanvasTheme(this.value)">
                     <option value="light">Светлая тема</option>
@@ -618,9 +615,9 @@
                 <input type="number" id="page-padding" value="20" min="0" max="100" onchange="changeCanvasPadding(this.value)">
             </div>
             <button class="btn-element btn-danger" onclick="clearCanvas()">Очистить холст 🗑</button>
+            <button class="btn-element btn-danger" style="background: rgba(239,68,68,0.2); color:#fca5a5;" onclick="resetLocalStorage()">💾 Сбросить сохранение</button>
         </div>
 
-        <!-- Центральная панель (Рабочая область) -->
         <div class="workspace" id="workspace-area">
             <div class="canvas" id="canvas">
                 <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 150px; font-size: 14px;">
@@ -634,7 +631,6 @@
             </div>
         </div>
 
-        <!-- Правая панель (Свойства) -->
         <div class="sidebar sidebar-right" id="sidebar-right">
             <h2>Свойства элемента</h2>
             <div id="editor-controls">
@@ -644,7 +640,6 @@
 
     </div>
 
-    <!-- Кнопка выхода из предпросмотра -->
     <button id="exit-preview-btn" onclick="togglePreviewMode()">✕ Выйти</button>
 
     <script>
@@ -659,10 +654,157 @@
         let elementCount = 0;
         let currentMode = 'visual';
 
-        // ИСТОРИЯ ДЛЯ UNDO / REDO
         let historyStack = [];
         let historyIndex = -1;
         let isUndoRedoAction = false;
+
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data';
+
+        // БАЗА ДАННЫХ ДЛЯ AI ГЕНЕРАЦИИ ТЕКСТА ПО ТЕМАТИКАМ
+        const aiTextDatabase = {
+            it: {
+                headers: ["Разработка сайтов и ПО под ключ", "Инновационные решения для вашего бизнеса", "Увеличьте продажи с помощью IT", "Премиум веб-дизайн и веб-разработка"],
+                texts: ["Создаем современные веб-решения, мобильные приложения и Telegram-боты любой сложности.", "Помогаем компаниям цифровизировать процессы и привлекать клиентов из интернета.", "Высокая скорость работы, современные технологии и гарантия качества."],
+                buttons: ["Заказать проект", "Обсудить задачу", "Рассчитать стоимость", "Связаться с нами"],
+                cards: ["Веб-разработка\nСоздание сайтов любой сложности от лендингов до маркетплейсов.", "Мобильные приложения\nРазработка UI/UX дизайна и сборка приложений на iOS и Android."]
+            },
+            restaurant: {
+                headers: ["Вкуснейшие блюда авторской кухни", "Уютная атмосфера и лучшая кулинария", "Гастрономическое удовольствие каждый день", "Доставка горячей еды за 30 минут"],
+                texts: ["Свежие ингредиенты, профессиональные шеф-повара и незабываемый вкус в каждом блюде.", "Забронируйте столик прямо сейчас и получите фирменный десерт в подарок!", "Быстрая доставка еды домой или в офис."],
+                buttons: ["Забронировать стол", "Заказать доставку", "Посмотреть меню", "Заказать еду"],
+                cards: ["Пицца Пепперони\nСочная пицца с пикантными колбасками и сыром моцарелла.", "Стейк Рибай\nНежнейшая мраморная говядина со специями."]
+            },
+            courses: {
+                headers: ["Освойте профессию мечты с нуля", "Практические курсы от экспертов", "Получите навыки, которые приносят доход", "Станьте востребованным специалистом"],
+                texts: ["80% практики, персональный ментор и помощь с трудоустройством после обучения.", "Обучение в удобном темпе без отрыва от основной работы.", "Присоединяйтесь к сообществу выпускников и начните зарабатывать уже через 3 месяца."],
+                buttons: ["Записаться на курс", "Начать бесплатно", "Получить программу", "Учиться сейчас"],
+                cards: ["Курс Веб-Дизайн\nОсвойте Figma и основы интерфейсов за 2 месяца.", "Курс Python-Разработчик\nИзучите самый популярный язык программирования."]
+            },
+            shop: {
+                headers: ["Рас распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
+                texts: ["Быстрая доставка по всей стране. Гарантия качества на всю продукцию.", "Оформите заказ сегодня и получите подарок в каждом комплекте.", "Удобная оплата при получении или картой на сайте."],
+                buttons: ["В каталог", "Купить со скидкой", "Оформить заказ", "Перейти в магазин"],
+                cards: ["Беспроводные наушники\nЧистый звук и мощный бас. До 24 часов работы.", "Смарт-часы 2026\nСпортивные функции и мониторинг здоровья."]
+            }
+        };
+
+        // БАЗА ДАННЫХ AI-ПАЛИТР
+        const aiPalettes = [
+            { bg: '#0f172a', cardBg: '#1e293b', text: '#f8fafc', accent: '#38bdf8', btnText: '#0f172a' },
+            { bg: '#ffffff', cardBg: '#f8fafc', text: '#0f172a', accent: '#0284c7', btnText: '#ffffff' },
+            { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' },
+            { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' },
+            { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' },
+            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }
+        ];
+
+        // --- СОХРАНЕНИЕ В LOCAL STORAGE ---
+        function saveToLocalStorage() {
+            const dataToSave = {
+                canvasHTML: canvas.innerHTML,
+                canvasBg: canvas.style.backgroundColor || '#ffffff',
+                canvasPadding: canvas.style.padding || '20px',
+                canvasFont: canvas.style.fontFamily || 'Inter',
+                theme: document.getElementById('page-theme').value || 'light',
+                elementCount: elementCount
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+            
+            const statusText = document.getElementById('save-status-text');
+            if (statusText) {
+                statusText.innerText = 'Сохранено';
+                setTimeout(() => { statusText.innerText = 'Автосохранение'; }, 1500);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    if (parsed.canvasHTML && parsed.canvasHTML.trim() !== '') {
+                        canvas.innerHTML = parsed.canvasHTML;
+                        canvas.style.backgroundColor = parsed.canvasBg || '#ffffff';
+                        canvas.style.padding = parsed.canvasPadding || '20px';
+                        canvas.style.fontFamily = parsed.canvasFont || 'Inter';
+
+                        document.getElementById('page-bg-color').value = rgbToHex(parsed.canvasBg) || '#ffffff';
+                        document.getElementById('page-padding').value = parseInt(parsed.canvasPadding) || 20;
+                        document.getElementById('global-font').value = parsed.canvasFont || 'Inter';
+                        document.getElementById('page-theme').value = parsed.theme || 'light';
+
+                        elementCount = parsed.elementCount || 0;
+
+                        rebindCanvasEvents();
+                        return true;
+                    }
+                } catch (e) {
+                    console.error("Ошибка при загрузке сохраненных данных:", e);
+                }
+            }
+            return false;
+        }
+
+        function resetLocalStorage() {
+            if (confirm("Вы уверены, что хотите сбросить сохраненный проект? Вся работа будет удалена.")) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                clearCanvas();
+            }
+        }
+
+        function generateAIPalette() {
+            const randomPalette = aiPalettes[Math.floor(Math.random() * aiPalettes.length)];
+            
+            canvas.style.backgroundColor = randomPalette.bg;
+            document.getElementById('page-bg-color').value = randomPalette.bg;
+
+            const wrappers = canvas.querySelectorAll('.canvas-item');
+            wrappers.forEach(w => {
+                const el = w.firstElementChild;
+                if (!el) return;
+
+                const tag = el.tagName.toLowerCase();
+                if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'p' || tag === 'strong' || tag === 'span') {
+                    if (!el.classList.contains('animated-site-title')) {
+                        el.style.color = randomPalette.text;
+                    }
+                } else if (tag === 'a' || tag === 'button') {
+                    el.style.backgroundColor = randomPalette.accent;
+                    el.style.color = randomPalette.btnText;
+                } else if (tag === 'div' || tag === 'form' || tag === 'nav' || tag === 'footer') {
+                    el.style.backgroundColor = randomPalette.cardBg;
+                    el.style.color = randomPalette.text;
+                }
+            });
+
+            saveHistoryState();
+        }
+
+        function generateAIText(topic, elType) {
+            const category = aiTextDatabase[topic] || aiTextDatabase.it;
+            let options = category.headers;
+
+            if (elType === 'button') options = category.buttons;
+            else if (elType === 'text') options = category.texts;
+            else if (elType === 'card') options = category.cards;
+
+            const randomText = options[Math.floor(Math.random() * options.length)];
+
+            if (selectedElement) {
+                if (elType === 'card') {
+                    const h3 = selectedElement.querySelector('h3');
+                    const p = selectedElement.querySelector('p');
+                    const parts = randomText.split('\n');
+                    if (h3) h3.innerText = parts[0];
+                    if (p) p.innerText = parts[1];
+                } else {
+                    selectedElement.innerText = randomText;
+                }
+                const propInput = document.getElementById('prop-text');
+                if (propInput) propInput.value = randomText;
+                saveHistoryState();
+            }
+        }
 
         function saveHistoryState() {
             if (isUndoRedoAction) return;
@@ -672,6 +814,7 @@
             historyStack.push(canvas.innerHTML);
             historyIndex++;
             updateHistoryButtons();
+            saveToLocalStorage();
         }
 
         function updateHistoryButtons() {
@@ -686,6 +829,7 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
+                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
@@ -697,11 +841,11 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
+                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
 
-        // МОБИЛЬНЫЕ ТАБЫ ПЕРЕКЛЮЧЕНИЯ
         function switchMobileTab(tab) {
             document.getElementById('mtab-elements').classList.toggle('active', tab === 'elements');
             document.getElementById('mtab-canvas').classList.toggle('active', tab === 'canvas');
@@ -756,7 +900,12 @@
         }
 
         window.onload = () => {
-            saveHistoryState();
+            const loaded = loadFromLocalStorage();
+            if (!loaded) {
+                saveHistoryState();
+            } else {
+                updateHistoryButtons();
+            }
         };
 
         function switchView(mode) {
@@ -788,6 +937,11 @@
             document.body.classList.toggle('preview-mode');
         }
 
+        function changeGlobalFont(fontFamily) {
+            canvas.style.fontFamily = fontFamily;
+            saveHistoryState();
+        }
+
         function changeCanvasTheme(theme) {
             if (theme === 'dark') {
                 canvas.classList.add('dark-theme');
@@ -798,10 +952,18 @@
                 canvas.style.backgroundColor = '#ffffff';
                 document.getElementById('page-bg-color').value = '#ffffff';
             }
+            saveHistoryState();
         }
 
-        function changeCanvasBg(color) { canvas.style.backgroundColor = color; }
-        function changeCanvasPadding(val) { canvas.style.padding = val + 'px'; }
+        function changeCanvasBg(color) { 
+            canvas.style.backgroundColor = color; 
+            saveHistoryState();
+        }
+
+        function changeCanvasPadding(val) { 
+            canvas.style.padding = val + 'px'; 
+            saveHistoryState();
+        }
 
         function clearCanvas() {
             if (confirm("Очистить весь холст?")) {
@@ -815,7 +977,6 @@
             }
         }
 
-        // ШАБЛОНЫ САЙТОВ
         function loadPreset(presetName) {
             canvas.innerHTML = '';
             if (emptyMsg) emptyMsg.style.display = 'none';
@@ -845,7 +1006,6 @@
                 addElement('footer');
             }
 
-            // Переключаем на холст при выборе шаблона на телефоне
             if (window.innerWidth <= 1024) switchMobileTab('canvas');
             saveHistoryState();
         }
@@ -1055,7 +1215,6 @@
                 updateCodeEditorFromCanvas();
             }
 
-            // Переключение на холст на смартфонах при добавлении
             if (window.innerWidth <= 1024) switchMobileTab('canvas');
 
             saveHistoryState();
@@ -1069,6 +1228,21 @@
 
             let html = '';
 
+            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'card') {
+                html += `
+                    <div class="control-group">
+                        <label>Тематика для AI-генерации:</label>
+                        <select id="ai-topic-select">
+                            <option value="it">💻 IT-Студия / Разработка</option>
+                            <option value="restaurant">🍕 Ресторан / Доставка</option>
+                            <option value="courses">🎓 Курсы / Обучение</option>
+                            <option value="shop">🛒 Магазин / Товары</option>
+                        </select>
+                        <button class="btn-gen-ai" onclick="generateAIText(document.getElementById('ai-topic-select').value, '${type}')">✨ Сгенерировать текст (AI)</button>
+                    </div>
+                `;
+            }
+
             if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer') {
                 html += `
                     <div class="control-group">
@@ -1077,6 +1251,38 @@
                     </div>
                 `;
             }
+
+            // --- ИНДИВИДУАЛЬНЫЙ ШРИФТ ЭЛЕМЕНТА ---
+            html += `
+                <div class="control-group">
+                    <label>Шрифт элемента:</label>
+                    <select id="prop-font">
+                        <option value="inherit">По умолчанию (как у сайта)</option>
+                        <option value="Inter" ${targetEl.style.fontFamily.includes('Inter') ? 'selected' : ''}>Inter</option>
+                        <option value="Montserrat" ${targetEl.style.fontFamily.includes('Montserrat') ? 'selected' : ''}>Montserrat</option>
+                        <option value="Roboto" ${targetEl.style.fontFamily.includes('Roboto') ? 'selected' : ''}>Roboto</option>
+                        <option value="Open Sans" ${targetEl.style.fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
+                        <option value="Oswald" ${targetEl.style.fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
+                        <option value="Playfair Display" ${targetEl.style.fontFamily.includes('Playfair Display') ? 'selected' : ''}>Playfair Display</option>
+                    </select>
+                </div>
+            `;
+
+            // --- СЛАЙДЕРЫ СКРУГЛЕНИЯ И ТЕНИ ---
+            const currentRadius = parseInt(targetEl.style.borderRadius) || 0;
+            const hasShadow = targetEl.style.boxShadow && targetEl.style.boxShadow !== 'none';
+            const shadowVal = hasShadow ? 15 : 0;
+
+            html += `
+                <div class="control-group">
+                    <label>Скругление углов: <span id="val-radius">${currentRadius}px</span></label>
+                    <input type="range" id="prop-radius" min="0" max="50" value="${currentRadius}">
+                </div>
+                <div class="control-group">
+                    <label>Глубина тени: <span id="val-shadow">${shadowVal}px</span></label>
+                    <input type="range" id="prop-shadow" min="0" max="40" value="${shadowVal}">
+                </div>
+            `;
 
             html += `
                 <div class="control-group">
@@ -1126,6 +1332,34 @@
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
+
+            const propFont = document.getElementById('prop-font');
+            if (propFont) {
+                propFont.onchange = (e) => {
+                    targetEl.style.fontFamily = e.target.value === 'inherit' ? 'inherit' : e.target.value;
+                    saveHistoryState();
+                };
+            }
+
+            const propRadius = document.getElementById('prop-radius');
+            if (propRadius) {
+                propRadius.oninput = (e) => {
+                    const val = e.target.value;
+                    targetEl.style.borderRadius = val + 'px';
+                    document.getElementById('val-radius').innerText = val + 'px';
+                    saveHistoryState();
+                };
+            }
+
+            const propShadow = document.getElementById('prop-shadow');
+            if (propShadow) {
+                propShadow.oninput = (e) => {
+                    const val = e.target.value;
+                    targetEl.style.boxShadow = val > 0 ? `0 ${val / 2}px ${val}px rgba(0, 0, 0, 0.15)` : 'none';
+                    document.getElementById('val-shadow').innerText = val + 'px';
+                    saveHistoryState();
+                };
+            }
 
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
@@ -1224,6 +1458,7 @@
 
             const bgColor = canvas.style.backgroundColor || '#ffffff';
             const padding = canvas.style.padding || '20px';
+            const fontFamily = canvas.style.fontFamily || 'Inter';
 
             const fullPageCode = `<!DOCTYPE html>
 <html lang="ru">
@@ -1231,10 +1466,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Сайт</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: '${fontFamily}', sans-serif; 
             padding: ${padding}; 
             max-width: 1000px; 
             margin: 0 auto; 
