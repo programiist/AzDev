@@ -1,16 +1,15 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Programist-studio — Конструктор Сайтов с AI</title>
-    <!-- Динамическое подключение Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -139,18 +138,6 @@
             font-weight: 700;
             box-shadow: 0 0 10px rgba(34, 158, 217, 0.4);
             white-space: nowrap;
-        }
-
-        .save-badge {
-            font-size: 11px;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 4px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .view-toggle, .device-toggle, .history-toggle {
@@ -359,7 +346,6 @@
             border: 1px dashed transparent;
             border-radius: 6px;
             cursor: pointer;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .canvas-item.selected {
@@ -394,13 +380,7 @@
             margin-bottom: 10px;
         }
 
-        .control-group label { 
-            font-size: 12px; 
-            color: #94a3b8; 
-            display: flex; 
-            justify-content: space-between; 
-        }
-
+        .control-group label { font-size: 12px; color: #94a3b8; }
         .control-group input, .control-group select, .control-group textarea {
             padding: 8px 10px;
             background-color: #0f172a;
@@ -409,13 +389,6 @@
             border-radius: 6px;
             font-size: 13px;
             outline: none;
-        }
-
-        .control-group input[type="range"] {
-            padding: 0;
-            height: 6px;
-            accent-color: #38bdf8;
-            cursor: pointer;
         }
 
         .control-group input[type="color"] { height: 38px; cursor: pointer; padding: 2px; }
@@ -501,7 +474,6 @@
             .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
             .action-btn { flex: 1; text-align: center; }
             .canvas { padding: 10px; }
-            .save-badge { display: none; }
         }
     </style>
 </head>
@@ -520,10 +492,6 @@
         <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
             🚀 <span>Telegram</span>
         </a>
-
-        <div class="save-badge">
-            <span>💾</span> <span id="save-status-text">Сохранено</span>
-        </div>
 
         <div class="history-toggle">
             <button class="toggle-btn" id="btn-undo" onclick="undo()" title="Отменить" disabled>↩️</button>
@@ -589,17 +557,6 @@
 
             <h2>Настройки страницы</h2>
             <div class="control-group">
-                <label>Шрифт сайта:</label>
-                <select id="global-font" onchange="changeGlobalFont(this.value)">
-                    <option value="Inter">Inter</option>
-                    <option value="Montserrat">Montserrat</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Open Sans">Open Sans</option>
-                    <option value="Oswald">Oswald</option>
-                    <option value="Playfair Display">Playfair Display</option>
-                </select>
-            </div>
-            <div class="control-group">
                 <label>Тема оформления:</label>
                 <select id="page-theme" onchange="changeCanvasTheme(this.value)">
                     <option value="light">Светлая тема</option>
@@ -615,7 +572,6 @@
                 <input type="number" id="page-padding" value="20" min="0" max="100" onchange="changeCanvasPadding(this.value)">
             </div>
             <button class="btn-element btn-danger" onclick="clearCanvas()">Очистить холст 🗑</button>
-            <button class="btn-element btn-danger" style="background: rgba(239,68,68,0.2); color:#fca5a5;" onclick="resetLocalStorage()">💾 Сбросить сохранение</button>
         </div>
 
         <div class="workspace" id="workspace-area">
@@ -658,8 +614,6 @@
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        const LOCAL_STORAGE_KEY = 'programist_studio_site_data';
-
         // БАЗА ДАННЫХ ДЛЯ AI ГЕНЕРАЦИИ ТЕКСТА ПО ТЕМАТИКАМ
         const aiTextDatabase = {
             it: {
@@ -681,7 +635,7 @@
                 cards: ["Курс Веб-Дизайн\nОсвойте Figma и основы интерфейсов за 2 месяца.", "Курс Python-Разработчик\nИзучите самый популярный язык программирования."]
             },
             shop: {
-                headers: ["Рас распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
+                headers: ["Распродажа сезона — Скидки до 50%", "Премиум качество по лучшим ценам", "Новая коллекция уже в продаже", "Все необходимое в одном месте"],
                 texts: ["Быстрая доставка по всей стране. Гарантия качества на всю продукцию.", "Оформите заказ сегодня и получите подарок в каждом комплекте.", "Удобная оплата при получении или картой на сайте."],
                 buttons: ["В каталог", "Купить со скидкой", "Оформить заказ", "Перейти в магазин"],
                 cards: ["Беспроводные наушники\nЧистый звук и мощный бас. До 24 часов работы.", "Смарт-часы 2026\nСпортивные функции и мониторинг здоровья."]
@@ -690,67 +644,13 @@
 
         // БАЗА ДАННЫХ AI-ПАЛИТР
         const aiPalettes = [
-            { bg: '#0f172a', cardBg: '#1e293b', text: '#f8fafc', accent: '#38bdf8', btnText: '#0f172a' },
-            { bg: '#ffffff', cardBg: '#f8fafc', text: '#0f172a', accent: '#0284c7', btnText: '#ffffff' },
-            { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' },
-            { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' },
-            { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' },
-            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }
+            { bg: '#0f172a', cardBg: '#1e293b', text: '#f8fafc', accent: '#38bdf8', btnText: '#0f172a' }, // Cyber Blue
+            { bg: '#ffffff', cardBg: '#f8fafc', text: '#0f172a', accent: '#0284c7', btnText: '#ffffff' }, // Clean Light
+            { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' }, // Neon Purple
+            { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' }, // Forest Green
+            { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' }, // Dark Orange
+            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }  // Warm Cream
         ];
-
-        // --- СОХРАНЕНИЕ В LOCAL STORAGE ---
-        function saveToLocalStorage() {
-            const dataToSave = {
-                canvasHTML: canvas.innerHTML,
-                canvasBg: canvas.style.backgroundColor || '#ffffff',
-                canvasPadding: canvas.style.padding || '20px',
-                canvasFont: canvas.style.fontFamily || 'Inter',
-                theme: document.getElementById('page-theme').value || 'light',
-                elementCount: elementCount
-            };
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
-            
-            const statusText = document.getElementById('save-status-text');
-            if (statusText) {
-                statusText.innerText = 'Сохранено';
-                setTimeout(() => { statusText.innerText = 'Автосохранение'; }, 1500);
-            }
-        }
-
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-            if (savedData) {
-                try {
-                    const parsed = JSON.parse(savedData);
-                    if (parsed.canvasHTML && parsed.canvasHTML.trim() !== '') {
-                        canvas.innerHTML = parsed.canvasHTML;
-                        canvas.style.backgroundColor = parsed.canvasBg || '#ffffff';
-                        canvas.style.padding = parsed.canvasPadding || '20px';
-                        canvas.style.fontFamily = parsed.canvasFont || 'Inter';
-
-                        document.getElementById('page-bg-color').value = rgbToHex(parsed.canvasBg) || '#ffffff';
-                        document.getElementById('page-padding').value = parseInt(parsed.canvasPadding) || 20;
-                        document.getElementById('global-font').value = parsed.canvasFont || 'Inter';
-                        document.getElementById('page-theme').value = parsed.theme || 'light';
-
-                        elementCount = parsed.elementCount || 0;
-
-                        rebindCanvasEvents();
-                        return true;
-                    }
-                } catch (e) {
-                    console.error("Ошибка при загрузке сохраненных данных:", e);
-                }
-            }
-            return false;
-        }
-
-        function resetLocalStorage() {
-            if (confirm("Вы уверены, что хотите сбросить сохраненный проект? Вся работа будет удалена.")) {
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-                clearCanvas();
-            }
-        }
 
         function generateAIPalette() {
             const randomPalette = aiPalettes[Math.floor(Math.random() * aiPalettes.length)];
@@ -814,7 +714,6 @@
             historyStack.push(canvas.innerHTML);
             historyIndex++;
             updateHistoryButtons();
-            saveToLocalStorage();
         }
 
         function updateHistoryButtons() {
@@ -829,7 +728,6 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
-                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
@@ -841,7 +739,6 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
-                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
@@ -900,12 +797,7 @@
         }
 
         window.onload = () => {
-            const loaded = loadFromLocalStorage();
-            if (!loaded) {
-                saveHistoryState();
-            } else {
-                updateHistoryButtons();
-            }
+            saveHistoryState();
         };
 
         function switchView(mode) {
@@ -937,11 +829,6 @@
             document.body.classList.toggle('preview-mode');
         }
 
-        function changeGlobalFont(fontFamily) {
-            canvas.style.fontFamily = fontFamily;
-            saveHistoryState();
-        }
-
         function changeCanvasTheme(theme) {
             if (theme === 'dark') {
                 canvas.classList.add('dark-theme');
@@ -952,18 +839,10 @@
                 canvas.style.backgroundColor = '#ffffff';
                 document.getElementById('page-bg-color').value = '#ffffff';
             }
-            saveHistoryState();
         }
 
-        function changeCanvasBg(color) { 
-            canvas.style.backgroundColor = color; 
-            saveHistoryState();
-        }
-
-        function changeCanvasPadding(val) { 
-            canvas.style.padding = val + 'px'; 
-            saveHistoryState();
-        }
+        function changeCanvasBg(color) { canvas.style.backgroundColor = color; }
+        function changeCanvasPadding(val) { canvas.style.padding = val + 'px'; }
 
         function clearCanvas() {
             if (confirm("Очистить весь холст?")) {
@@ -1252,38 +1131,6 @@
                 `;
             }
 
-            // --- ИНДИВИДУАЛЬНЫЙ ШРИФТ ЭЛЕМЕНТА ---
-            html += `
-                <div class="control-group">
-                    <label>Шрифт элемента:</label>
-                    <select id="prop-font">
-                        <option value="inherit">По умолчанию (как у сайта)</option>
-                        <option value="Inter" ${targetEl.style.fontFamily.includes('Inter') ? 'selected' : ''}>Inter</option>
-                        <option value="Montserrat" ${targetEl.style.fontFamily.includes('Montserrat') ? 'selected' : ''}>Montserrat</option>
-                        <option value="Roboto" ${targetEl.style.fontFamily.includes('Roboto') ? 'selected' : ''}>Roboto</option>
-                        <option value="Open Sans" ${targetEl.style.fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
-                        <option value="Oswald" ${targetEl.style.fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
-                        <option value="Playfair Display" ${targetEl.style.fontFamily.includes('Playfair Display') ? 'selected' : ''}>Playfair Display</option>
-                    </select>
-                </div>
-            `;
-
-            // --- СЛАЙДЕРЫ СКРУГЛЕНИЯ И ТЕНИ ---
-            const currentRadius = parseInt(targetEl.style.borderRadius) || 0;
-            const hasShadow = targetEl.style.boxShadow && targetEl.style.boxShadow !== 'none';
-            const shadowVal = hasShadow ? 15 : 0;
-
-            html += `
-                <div class="control-group">
-                    <label>Скругление углов: <span id="val-radius">${currentRadius}px</span></label>
-                    <input type="range" id="prop-radius" min="0" max="50" value="${currentRadius}">
-                </div>
-                <div class="control-group">
-                    <label>Глубина тени: <span id="val-shadow">${shadowVal}px</span></label>
-                    <input type="range" id="prop-shadow" min="0" max="40" value="${shadowVal}">
-                </div>
-            `;
-
             html += `
                 <div class="control-group">
                     <label>Анимация появления:</label>
@@ -1332,34 +1179,6 @@
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
-
-            const propFont = document.getElementById('prop-font');
-            if (propFont) {
-                propFont.onchange = (e) => {
-                    targetEl.style.fontFamily = e.target.value === 'inherit' ? 'inherit' : e.target.value;
-                    saveHistoryState();
-                };
-            }
-
-            const propRadius = document.getElementById('prop-radius');
-            if (propRadius) {
-                propRadius.oninput = (e) => {
-                    const val = e.target.value;
-                    targetEl.style.borderRadius = val + 'px';
-                    document.getElementById('val-radius').innerText = val + 'px';
-                    saveHistoryState();
-                };
-            }
-
-            const propShadow = document.getElementById('prop-shadow');
-            if (propShadow) {
-                propShadow.oninput = (e) => {
-                    const val = e.target.value;
-                    targetEl.style.boxShadow = val > 0 ? `0 ${val / 2}px ${val}px rgba(0, 0, 0, 0.15)` : 'none';
-                    document.getElementById('val-shadow').innerText = val + 'px';
-                    saveHistoryState();
-                };
-            }
 
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
@@ -1458,7 +1277,6 @@
 
             const bgColor = canvas.style.backgroundColor || '#ffffff';
             const padding = canvas.style.padding || '20px';
-            const fontFamily = canvas.style.fontFamily || 'Inter';
 
             const fullPageCode = `<!DOCTYPE html>
 <html lang="ru">
@@ -1466,11 +1284,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Сайт</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: '${fontFamily}', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: ${padding}; 
             max-width: 1000px; 
             margin: 0 auto; 
