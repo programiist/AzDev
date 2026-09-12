@@ -36,7 +36,7 @@
             background: #38bdf8;
         }
 
-        /* АНИМАЦИЯ НАЗВАНИЯ И ЛОГОТИПА */
+        /* АНИМАЦИЯ НАЗВАНИЯ */
         @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -66,6 +66,60 @@
             animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
+        }
+
+        /* АНИМАЦИЯ МОЛНИИ */
+        @keyframes lightningFlash {
+            0% {
+                stroke: #ffffff;
+                filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px #38bdf8);
+                transform: scale(1);
+            }
+            50% {
+                stroke: #e0f2fe;
+                filter: drop-shadow(0 0 12px #38bdf8) drop-shadow(0 0 20px #c084fc);
+                transform: scale(1.15) rotate(-3deg);
+            }
+            100% {
+                stroke: #ffffff;
+                filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px #38bdf8);
+                transform: scale(1);
+            }
+        }
+
+        .brand-icon {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #0284c7, #6366f1, #9333ea);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            animation: pulseGlow 3s infinite alternate;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.4), 0 0 30px rgba(99, 102, 241, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 45px rgba(168, 85, 247, 0.5); }
+        }
+
+        .brand-icon svg {
+            position: relative;
+            width: 26px;
+            height: 26px;
+            z-index: 2;
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            /* Включаем анимацию для самой молнии */
+            animation: lightningFlash 1.8s ease-in-out infinite;
+            transform-origin: center;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -100,39 +154,6 @@
             font-size: 22px;
             font-weight: 800;
             letter-spacing: 0.5px;
-        }
-
-        .brand-icon {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #0284c7, #6366f1, #9333ea);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-            animation: pulseGlow 3s infinite alternate;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.4), 0 0 30px rgba(99, 102, 241, 0.2); }
-            100% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 45px rgba(168, 85, 247, 0.5); }
-        }
-
-        .brand-icon svg {
-            position: relative;
-            width: 26px;
-            height: 26px;
-            z-index: 2;
-            fill: none;
-            stroke: #ffffff;
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            filter: drop-shadow(0 0 6px #ffffff);
         }
 
         .view-toggle {
