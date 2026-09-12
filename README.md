@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programmiist Studio — Конструктор Сайтов</title>
+    <title>Programist-studio — Конструктор Сайтов</title>
     <style>
         * {
             box-sizing: border-box;
@@ -36,26 +36,34 @@
             background: #38bdf8;
         }
 
-        /* АНИМАЦИИ НАЗВАНИЯ И ЭЛЕМЕНТОВ */
-        @keyframes gradientMove {
+        /* АНИМАЦИЯ НАЗВАНИЯ И ЛОГОТИПА */
+        @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes titleFloat {
-            0% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
-            50% { transform: translateY(-3px); filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.8)); }
-            100% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+        @keyframes titlePulse {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4));
+            }
+            50% {
+                transform: scale(1.03);
+                filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8));
+            }
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4));
+            }
         }
 
-        /* Класс анимированного заголовка */
         .animated-site-title {
-            background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientMove 4s ease infinite, titleFloat 3s ease-in-out infinite;
+            animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
         }
@@ -384,7 +392,7 @@
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                 </svg>
             </div>
-            <span class="animated-site-title">Programmiist Studio</span>
+            <span class="animated-site-title">Programist-studio</span>
         </div>
         <div class="view-toggle">
             <button class="toggle-btn active" id="btn-view-visual" onclick="switchView('visual')">Визуальный редактор</button>
@@ -516,7 +524,7 @@
             if (type === 'site-title') {
                 el = document.createElement('h1');
                 el.className = 'animated-site-title';
-                el.innerText = 'Мой Супер Сайт';
+                el.innerText = 'Programist-studio';
                 el.style.fontSize = '36px';
                 el.style.textAlign = 'center';
                 el.style.width = '100%';
@@ -528,7 +536,7 @@
                 el.style.padding = '12px 15px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:18px;" class="animated-site-title">Название Сайта</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:18px;" class="animated-site-title">Programist-studio</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -848,8 +856,7 @@
             const padding = canvas.style.padding || '25px';
             const fontFamily = canvas.style.fontFamily || "'Segoe UI', sans-serif";
 
-            const fullPageCode = `<!DOCTYPE html>
-<html lang="ru">
+            const fullPageCode = `<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -866,24 +873,24 @@
             overflow-y: auto;
         }
 
-        @keyframes gradientMove {
+        @keyframes textGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes titleFloat {
-            0% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
-            50% { transform: translateY(-3px); filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.8)); }
-            100% { transform: translateY(0px); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
+        @keyframes titlePulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); }
         }
 
         .animated-site-title {
-            background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientMove 4s ease infinite, titleFloat 3s ease-in-out infinite;
+            animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
         }
