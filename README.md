@@ -3,12 +3,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Programist-studio — Конструктор Сайтов с AI</title>
+    <!-- Динамическое подключение Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -137,6 +139,18 @@
             font-weight: 700;
             box-shadow: 0 0 10px rgba(34, 158, 217, 0.4);
             white-space: nowrap;
+        }
+
+        .save-badge {
+            font-size: 11px;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .view-toggle, .device-toggle, .history-toggle {
@@ -345,6 +359,7 @@
             border: 1px dashed transparent;
             border-radius: 6px;
             cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .canvas-item.selected {
@@ -379,7 +394,13 @@
             margin-bottom: 10px;
         }
 
-        .control-group label { font-size: 12px; color: #94a3b8; }
+        .control-group label { 
+            font-size: 12px; 
+            color: #94a3b8; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
         .control-group input, .control-group select, .control-group textarea {
             padding: 8px 10px;
             background-color: #0f172a;
@@ -388,6 +409,13 @@
             border-radius: 6px;
             font-size: 13px;
             outline: none;
+        }
+
+        .control-group input[type="range"] {
+            padding: 0;
+            height: 6px;
+            accent-color: #38bdf8;
+            cursor: pointer;
         }
 
         .control-group input[type="color"] { height: 38px; cursor: pointer; padding: 2px; }
@@ -473,6 +501,7 @@
             .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
             .action-btn { flex: 1; text-align: center; }
             .canvas { padding: 10px; }
+            .save-badge { display: none; }
         }
     </style>
 </head>
@@ -491,6 +520,10 @@
         <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
             🚀 <span>Telegram</span>
         </a>
+
+        <div class="save-badge">
+            <span>💾</span> <span id="save-status-text">Сохранено</span>
+        </div>
 
         <div class="history-toggle">
             <button class="toggle-btn" id="btn-undo" onclick="undo()" title="Отменить" disabled>↩️</button>
@@ -531,7 +564,8 @@
             <button class="btn-element btn-preset" onclick="loadPreset('portfolio')">🎨 Портфолио <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('shop')">🛒 Интернет-магазин <span>★</span></button>
 
-            <h2>Анимированные блоки</h2>
+            <h2>Анимированные и Интерактивные</h2>
+            <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
             <button class="btn-element" onclick="addElement('site-title')">Анимированное Название <span>+</span></button>
             <button class="btn-element" onclick="addElement('countdown')">Счетчик отсчета <span>+</span></button>
 
@@ -544,9 +578,11 @@
             <button class="btn-element" onclick="addElement('divider')">Разделитель <span>+</span></button>
             <button class="btn-element" onclick="addElement('footer')">Подвал (Footer) <span>+</span></button>
 
-            <h2>Сложные блоки</h2>
+            <h2>Сложные блоки & Соцсети</h2>
+            <button class="btn-element" onclick="addElement('star-reviews')">Отзывы со звездами (5★) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('social-share')">Соцсети & Поделиться <span>+</span></button>
             <button class="btn-element" onclick="addElement('pricing')">Тарифы (3 цена) <span>+</span></button>
-            <button class="btn-element" onclick="addElement('testimonials')">Отзывы <span>+</span></button>
+            <button class="btn-element" onclick="addElement('testimonials')">Простой отзыв <span>+</span></button>
             <button class="btn-element" onclick="addElement('floating-messengers')">Мессенджеры <span>+</span></button>
             <button class="btn-element" onclick="addElement('card')">Карточка <span>+</span></button>
             <button class="btn-element" onclick="addElement('grid3')">Сетка (3 блока) <span>+</span></button>
@@ -556,7 +592,18 @@
 
             <h2>Настройки страницы</h2>
             <div class="control-group">
-                <label>Тема оформления:</label>
+                <label>Шрифт сайта:</label>
+                <select id="global-font" onchange="changeGlobalFont(this.value)">
+                    <option value="Inter">Inter</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Playfair Display">Playfair Display</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Тема конструктора:</label>
                 <select id="page-theme" onchange="changeCanvasTheme(this.value)">
                     <option value="light">Светлая тема</option>
                     <option value="dark">Тёмная тема</option>
@@ -571,6 +618,7 @@
                 <input type="number" id="page-padding" value="20" min="0" max="100" onchange="changeCanvasPadding(this.value)">
             </div>
             <button class="btn-element btn-danger" onclick="clearCanvas()">Очистить холст 🗑</button>
+            <button class="btn-element btn-danger" style="background: rgba(239,68,68,0.2); color:#fca5a5;" onclick="resetLocalStorage()">💾 Сбросить сохранение</button>
         </div>
 
         <div class="workspace" id="workspace-area">
@@ -613,7 +661,8 @@
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        // БАЗА ДАННЫХ ДЛЯ AI ГЕНЕРАЦИИ ТЕКСТА ПО ТЕМАТИКАМ
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data';
+
         const aiTextDatabase = {
             it: {
                 headers: ["Разработка сайтов и ПО под ключ", "Инновационные решения для вашего бизнеса", "Увеличьте продажи с помощью IT", "Премиум веб-дизайн и веб-разработка"],
@@ -641,15 +690,67 @@
             }
         };
 
-        // БАЗА ДАННЫХ AI-ПАЛИТР
         const aiPalettes = [
-            { bg: '#0f172a', cardBg: '#1e293b', text: '#f8fafc', accent: '#38bdf8', btnText: '#0f172a' }, // Cyber Blue
-            { bg: '#ffffff', cardBg: '#f8fafc', text: '#0f172a', accent: '#0284c7', btnText: '#ffffff' }, // Clean Light
-            { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' }, // Neon Purple
-            { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' }, // Forest Green
-            { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' }, // Dark Orange
-            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }  // Warm Cream
+            { bg: '#0f172a', cardBg: '#1e293b', text: '#f8fafc', accent: '#38bdf8', btnText: '#0f172a' },
+            { bg: '#ffffff', cardBg: '#f8fafc', text: '#0f172a', accent: '#0284c7', btnText: '#ffffff' },
+            { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' },
+            { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' },
+            { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' },
+            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }
         ];
+
+        function saveToLocalStorage() {
+            const dataToSave = {
+                canvasHTML: canvas.innerHTML,
+                canvasBg: canvas.style.backgroundColor || '#ffffff',
+                canvasPadding: canvas.style.padding || '20px',
+                canvasFont: canvas.style.fontFamily || 'Inter',
+                theme: document.getElementById('page-theme').value || 'light',
+                elementCount: elementCount
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+            
+            const statusText = document.getElementById('save-status-text');
+            if (statusText) {
+                statusText.innerText = 'Сохранено';
+                setTimeout(() => { statusText.innerText = 'Автосохранение'; }, 1500);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    if (parsed.canvasHTML && parsed.canvasHTML.trim() !== '') {
+                        canvas.innerHTML = parsed.canvasHTML;
+                        canvas.style.backgroundColor = parsed.canvasBg || '#ffffff';
+                        canvas.style.padding = parsed.canvasPadding || '20px';
+                        canvas.style.fontFamily = parsed.canvasFont || 'Inter';
+
+                        document.getElementById('page-bg-color').value = rgbToHex(parsed.canvasBg) || '#ffffff';
+                        document.getElementById('page-padding').value = parseInt(parsed.canvasPadding) || 20;
+                        document.getElementById('global-font').value = parsed.canvasFont || 'Inter';
+                        document.getElementById('page-theme').value = parsed.theme || 'light';
+
+                        elementCount = parsed.elementCount || 0;
+
+                        rebindCanvasEvents();
+                        return true;
+                    }
+                } catch (e) {
+                    console.error("Ошибка при загрузке сохраненных данных:", e);
+                }
+            }
+            return false;
+        }
+
+        function resetLocalStorage() {
+            if (confirm("Вы уверены, что хотите сбросить сохраненный проект? Вся работа будет удалена.")) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                clearCanvas();
+            }
+        }
 
         function generateAIPalette() {
             const randomPalette = aiPalettes[Math.floor(Math.random() * aiPalettes.length)];
@@ -668,8 +769,10 @@
                         el.style.color = randomPalette.text;
                     }
                 } else if (tag === 'a' || tag === 'button') {
-                    el.style.backgroundColor = randomPalette.accent;
-                    el.style.color = randomPalette.btnText;
+                    if (!el.classList.contains('site-theme-toggle-btn')) {
+                        el.style.backgroundColor = randomPalette.accent;
+                        el.style.color = randomPalette.btnText;
+                    }
                 } else if (tag === 'div' || tag === 'form' || tag === 'nav' || tag === 'footer') {
                     el.style.backgroundColor = randomPalette.cardBg;
                     el.style.color = randomPalette.text;
@@ -713,6 +816,7 @@
             historyStack.push(canvas.innerHTML);
             historyIndex++;
             updateHistoryButtons();
+            saveToLocalStorage();
         }
 
         function updateHistoryButtons() {
@@ -727,6 +831,7 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
+                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
@@ -738,6 +843,7 @@
                 canvas.innerHTML = historyStack[historyIndex];
                 rebindCanvasEvents();
                 updateHistoryButtons();
+                saveToLocalStorage();
                 isUndoRedoAction = false;
             }
         }
@@ -796,7 +902,12 @@
         }
 
         window.onload = () => {
-            saveHistoryState();
+            const loaded = loadFromLocalStorage();
+            if (!loaded) {
+                saveHistoryState();
+            } else {
+                updateHistoryButtons();
+            }
         };
 
         function switchView(mode) {
@@ -828,6 +939,11 @@
             document.body.classList.toggle('preview-mode');
         }
 
+        function changeGlobalFont(fontFamily) {
+            canvas.style.fontFamily = fontFamily;
+            saveHistoryState();
+        }
+
         function changeCanvasTheme(theme) {
             if (theme === 'dark') {
                 canvas.classList.add('dark-theme');
@@ -838,10 +954,18 @@
                 canvas.style.backgroundColor = '#ffffff';
                 document.getElementById('page-bg-color').value = '#ffffff';
             }
+            saveHistoryState();
         }
 
-        function changeCanvasBg(color) { canvas.style.backgroundColor = color; }
-        function changeCanvasPadding(val) { canvas.style.padding = val + 'px'; }
+        function changeCanvasBg(color) { 
+            canvas.style.backgroundColor = color; 
+            saveHistoryState();
+        }
+
+        function changeCanvasPadding(val) { 
+            canvas.style.padding = val + 'px'; 
+            saveHistoryState();
+        }
 
         function clearCanvas() {
             if (confirm("Очистить весь холст?")) {
@@ -860,25 +984,31 @@
             if (emptyMsg) emptyMsg.style.display = 'none';
 
             if (presetName === 'landing') {
+                addElement('site-theme-toggle');
                 addElement('navbar');
                 addElement('site-title');
                 addElement('countdown');
                 addElement('pricing');
+                addElement('star-reviews');
                 addElement('form');
                 addElement('footer');
             } else if (presetName === 'portfolio') {
+                addElement('site-theme-toggle');
                 addElement('navbar');
                 addElement('header');
                 addElement('text');
                 addElement('gallery2');
-                addElement('testimonials');
+                addElement('star-reviews');
+                addElement('social-share');
                 addElement('floating-messengers');
                 addElement('footer');
             } else if (presetName === 'shop') {
+                addElement('site-theme-toggle');
                 addElement('navbar');
                 addElement('header');
                 addElement('grid3');
                 addElement('pricing');
+                addElement('star-reviews');
                 addElement('faq');
                 addElement('form');
                 addElement('footer');
@@ -897,7 +1027,52 @@
             wrapper.id = 'item-' + elementCount;
 
             let el;
-            if (type === 'site-title') {
+            if (type === 'site-theme-toggle') {
+                el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.justifyContent = 'flex-end';
+                el.style.padding = '5px';
+                el.innerHTML = `
+                    <button class="site-theme-toggle-btn" onclick="toggleCreatedSiteTheme()" style="padding:8px 14px; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:20px; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <span>🌙</span> <span>Тёмная тема</span>
+                    </button>
+                `;
+            } else if (type === 'star-reviews') {
+                el = document.createElement('div');
+                el.style.padding = '15px';
+                el.style.backgroundColor = '#f8fafc';
+                el.style.border = '1px solid #e2e8f0';
+                el.style.borderRadius = '10px';
+                el.innerHTML = `
+                    <h3 style="font-size:16px; margin-bottom:12px; color:#0f172a; text-align:center;">⭐ Отзывы клиентов</h3>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+                            <div style="color:#f59e0b; font-size:14px; margin-bottom:4px;">★★★★★</div>
+                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Превосходное качество работы! Все выполнено точно в срок и с высшим уровнем дизайна.»</p>
+                            <strong style="font-size:11px; color:#0284c7;">— Дмитрий В.</strong>
+                        </div>
+                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+                            <div style="color:#f59e0b; font-size:14px; margin-bottom:4px;">★★★★★</div>
+                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Заказывали веб-сайт под ключ, результат превзошел все ожидания. Рекомендуем!»</p>
+                            <strong style="font-size:11px; color:#0284c7;">— Елена К.</strong>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'social-share') {
+                el = document.createElement('div');
+                el.style.padding = '12px';
+                el.style.textAlign = 'center';
+                el.style.backgroundColor = '#f1f5f9';
+                el.style.borderRadius = '8px';
+                el.innerHTML = `
+                    <p style="font-size:12px; font-weight:bold; color:#475569; margin-bottom:8px;">Мы в соцсетях & Поделиться:</p>
+                    <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+                        <a href="https://t.me/programisstuz" target="_blank" style="padding:6px 12px; background:#0088cc; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">Telegram</a>
+                        <a href="#" onclick="alert('Ссылка скопирована!'); return false;" style="padding:6px 12px; background:#6366f1; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">🔗 Поделиться</a>
+                        <a href="https://vk.com" target="_blank" style="padding:6px 12px; background:#0077ff; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">ВКонтакте</a>
+                    </div>
+                `;
+            } else if (type === 'site-title') {
                 el = document.createElement('h1');
                 el.className = 'animated-site-title';
                 el.innerText = 'Programist-studio';
@@ -1132,6 +1307,36 @@
 
             html += `
                 <div class="control-group">
+                    <label>Шрифт элемента:</label>
+                    <select id="prop-font">
+                        <option value="inherit">По умолчанию (как у сайта)</option>
+                        <option value="Inter" ${targetEl.style.fontFamily.includes('Inter') ? 'selected' : ''}>Inter</option>
+                        <option value="Montserrat" ${targetEl.style.fontFamily.includes('Montserrat') ? 'selected' : ''}>Montserrat</option>
+                        <option value="Roboto" ${targetEl.style.fontFamily.includes('Roboto') ? 'selected' : ''}>Roboto</option>
+                        <option value="Open Sans" ${targetEl.style.fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
+                        <option value="Oswald" ${targetEl.style.fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
+                        <option value="Playfair Display" ${targetEl.style.fontFamily.includes('Playfair Display') ? 'selected' : ''}>Playfair Display</option>
+                    </select>
+                </div>
+            `;
+
+            const currentRadius = parseInt(targetEl.style.borderRadius) || 0;
+            const hasShadow = targetEl.style.boxShadow && targetEl.style.boxShadow !== 'none';
+            const shadowVal = hasShadow ? 15 : 0;
+
+            html += `
+                <div class="control-group">
+                    <label>Скругление углов: <span id="val-radius">${currentRadius}px</span></label>
+                    <input type="range" id="prop-radius" min="0" max="50" value="${currentRadius}">
+                </div>
+                <div class="control-group">
+                    <label>Глубина тени: <span id="val-shadow">${shadowVal}px</span></label>
+                    <input type="range" id="prop-shadow" min="0" max="40" value="${shadowVal}">
+                </div>
+            `;
+
+            html += `
+                <div class="control-group">
                     <label>Анимация появления:</label>
                     <select id="prop-animation">
                         <option value="">Без анимации</option>
@@ -1165,7 +1370,7 @@
                 `;
             }
 
-            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown') {
+            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share') {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -1178,6 +1383,34 @@
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
+
+            const propFont = document.getElementById('prop-font');
+            if (propFont) {
+                propFont.onchange = (e) => {
+                    targetEl.style.fontFamily = e.target.value === 'inherit' ? 'inherit' : e.target.value;
+                    saveHistoryState();
+                };
+            }
+
+            const propRadius = document.getElementById('prop-radius');
+            if (propRadius) {
+                propRadius.oninput = (e) => {
+                    const val = e.target.value;
+                    targetEl.style.borderRadius = val + 'px';
+                    document.getElementById('val-radius').innerText = val + 'px';
+                    saveHistoryState();
+                };
+            }
+
+            const propShadow = document.getElementById('prop-shadow');
+            if (propShadow) {
+                propShadow.oninput = (e) => {
+                    const val = e.target.value;
+                    targetEl.style.boxShadow = val > 0 ? `0 ${val / 2}px ${val}px rgba(0, 0, 0, 0.15)` : 'none';
+                    document.getElementById('val-shadow').innerText = val + 'px';
+                    saveHistoryState();
+                };
+            }
 
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
@@ -1276,6 +1509,7 @@
 
             const bgColor = canvas.style.backgroundColor || '#ffffff';
             const padding = canvas.style.padding || '20px';
+            const fontFamily = canvas.style.fontFamily || 'Inter';
 
             const fullPageCode = `<!DOCTYPE html>
 <html lang="ru">
@@ -1283,15 +1517,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Сайт</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Playfair+Display:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: '${fontFamily}', sans-serif; 
             padding: ${padding}; 
             max-width: 1000px; 
             margin: 0 auto; 
             background-color: ${bgColor};
+            color: #1e293b;
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode div, 
+        body.dark-mode form, 
+        body.dark-mode nav, 
+        body.dark-mode footer {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+
+        body.dark-mode p, 
+        body.dark-mode h1, 
+        body.dark-mode h2, 
+        body.dark-mode h3, 
+        body.dark-mode h4, 
+        body.dark-mode strong {
+            color: #f8fafc !important;
         }
 
         @keyframes textGradient {
@@ -1319,6 +1579,17 @@
 </head>
 <body>
 ${cleanContent}
+
+<script>
+    function toggleCreatedSiteTheme() {
+        document.body.classList.toggle('dark-mode');
+        const btns = document.querySelectorAll('.site-theme-toggle-btn');
+        const isDark = document.body.classList.contains('dark-mode');
+        btns.forEach(btn => {
+            btn.innerHTML = isDark ? '<span>☀️</span> <span>Светлая тема</span>' : '<span>🌙</span> <span>Тёмная тема</span>';
+        });
+    }
+<\/script>
 </body>
 </html>`;
 
