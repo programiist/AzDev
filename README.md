@@ -37,6 +37,50 @@
             background: #38bdf8;
         }
 
+        /* АНИМАЦИИ ДЛЯ ЭЛЕМЕНТОВ */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Анимация переливающегося текста для Названия сайта */
+        @keyframes gradientTitle {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-site-title {
+            background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientTitle 5s ease infinite;
+            display: inline-block;
+            font-weight: 800;
+        }
+
+        /* Применение анимаций */
+        .anim-fade { animation: fadeIn 0.8s ease forwards; }
+        .anim-slide-up { animation: slideUp 0.8s ease forwards; }
+        .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
+        .anim-zoom { animation: zoomIn 0.6s ease forwards; }
+
         /* Верхняя панель (Header) */
         .top-bar {
             height: 65px;
@@ -58,13 +102,9 @@
             gap: 14px;
             font-size: 20px;
             font-weight: 800;
-            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
         }
 
-        /* Анимированная иконка */
         .brand-icon {
             position: relative;
             width: 42px;
@@ -85,21 +125,6 @@
             100% { box-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 45px rgba(168, 85, 247, 0.5); }
         }
 
-        .brand-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-conic-gradient(transparent 0deg 180deg, rgba(255, 255, 255, 0.15) 180deg 360deg);
-            animation: rotateBg 6s linear infinite;
-        }
-
-        @keyframes rotateBg {
-            100% { transform: rotate(360deg); }
-        }
-
         .brand-icon svg {
             position: relative;
             width: 26px;
@@ -111,19 +136,6 @@
             stroke-linecap: round;
             stroke-linejoin: round;
             filter: drop-shadow(0 0 6px #ffffff);
-        }
-
-        .brand-icon svg path {
-            stroke-dasharray: 60;
-            stroke-dashoffset: 60;
-            animation: lightningStrike 2s ease-in-out infinite;
-        }
-
-        @keyframes lightningStrike {
-            0% { stroke-dashoffset: 60; opacity: 0.3; }
-            40% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 12px #38bdf8); }
-            60% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 15px #ffffff); }
-            100% { stroke-dashoffset: -60; opacity: 0.3; }
         }
 
         .view-toggle {
@@ -234,7 +246,7 @@
             transform: none;
         }
 
-        /* РАБОЧАЯ ОБЛАСТЬ (Свободный скролл) */
+        /* РАБОЧАЯ ОБЛАСТЬ */
         .workspace {
             flex: 1;
             padding: 25px;
@@ -256,10 +268,9 @@
             padding: 25px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.2);
             transition: all 0.2s;
-            margin-bottom: 100px; /* Большой отступ снизу для комфортной прокрутки */
+            margin-bottom: 100px;
         }
 
-        /* Редактор кода */
         .code-editor-container {
             width: 100%;
             max-width: 850px;
@@ -285,7 +296,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        /* Элементы на холсте */
         .canvas-item {
             position: relative;
             margin-bottom: 15px;
@@ -329,7 +339,6 @@
             display: flex;
         }
 
-        /* Формы настройки */
         .control-group {
             display: flex;
             flex-direction: column;
@@ -378,7 +387,7 @@
 </head>
 <body>
 
-    <!-- Шапка сайта -->
+    <!-- Шапка конструктора -->
     <div class="top-bar">
         <div class="brand">
             <div class="brand-icon">
@@ -386,7 +395,7 @@
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                 </svg>
             </div>
-            Programmiist Studio
+            <span class="animated-site-title">Programmiist Studio</span>
         </div>
         <div class="view-toggle">
             <button class="toggle-btn active" id="btn-view-visual" onclick="switchView('visual')">Визуальный редактор</button>
@@ -400,6 +409,9 @@
         
         <!-- Левая панель -->
         <div class="sidebar">
+            <h2>Специальные блоки</h2>
+            <button class="btn-element" onclick="addElement('site-title')">Анимированный заголовок <span>+</span></button>
+
             <h2>Базовые блоки</h2>
             <button class="btn-element" onclick="addElement('navbar')">Шапка (Nav) <span>+</span></button>
             <button class="btn-element" onclick="addElement('header')">Заголовок <span>+</span></button>
@@ -469,6 +481,7 @@
         const codeContainer = document.getElementById('code-container');
         
         let selectedElement = null;
+        let selectedWrapper = null;
         let elementCount = 0;
         let currentMode = 'visual';
 
@@ -511,7 +524,14 @@
             wrapper.id = 'item-' + elementCount;
 
             let el;
-            if (type === 'navbar') {
+            if (type === 'site-title') {
+                el = document.createElement('h1');
+                el.className = 'animated-site-title';
+                el.innerText = 'Мой Супер Сайт';
+                el.style.fontSize = '36px';
+                el.style.textAlign = 'center';
+                el.style.width = '100%';
+            } else if (type === 'navbar') {
                 el = document.createElement('nav');
                 el.style.display = 'flex';
                 el.style.justifyContent = 'space-between';
@@ -519,7 +539,7 @@
                 el.style.padding = '12px 15px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:18px; color:#0f172a;">Programmiist Site</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:18px; color:#0f172a;" class="animated-site-title">Название Сайта</strong><div><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:15px; text-decoration:none; color:#334155;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -652,10 +672,11 @@
             document.querySelectorAll('.canvas-item').forEach(item => item.classList.remove('selected'));
             wrapper.classList.add('selected');
             selectedElement = targetEl;
+            selectedWrapper = wrapper;
 
             let html = '';
 
-            if (type === 'header' || type === 'text' || type === 'button' || type === 'footer') {
+            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer') {
                 html += `
                     <div class="control-group">
                         <label>Текст блока:</label>
@@ -663,6 +684,20 @@
                     </div>
                 `;
             }
+
+            /* Выбор анимации для выбранного блока */
+            html += `
+                <div class="control-group">
+                    <label>Анимация появления:</label>
+                    <select id="prop-animation">
+                        <option value="">Без анимации</option>
+                        <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавный проявление</option>
+                        <option value="anim-slide-up" ${wrapper.classList.contains('anim-slide-up') ? 'selected' : ''}>Появление снизу</option>
+                        <option value="anim-slide-left" ${wrapper.classList.contains('anim-slide-left') ? 'selected' : ''}>Появление слева</option>
+                        <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Увеличение (Zoom)</option>
+                    </select>
+                </div>
+            `;
 
             if (type === 'button') {
                 html += `
@@ -695,12 +730,16 @@
                 `;
             }
 
-            if (type === 'header' || type === 'text' || type === 'footer') {
+            if (type === 'header' || type === 'text' || type === 'footer' || type === 'site-title') {
+                if (type !== 'site-title') {
+                    html += `
+                        <div class="control-group">
+                            <label>Цвет текста:</label>
+                            <input type="color" id="prop-color" value="${rgbToHex(targetEl.style.color)}">
+                        </div>
+                    `;
+                }
                 html += `
-                    <div class="control-group">
-                        <label>Цвет текста:</label>
-                        <input type="color" id="prop-color" value="${rgbToHex(targetEl.style.color)}">
-                    </div>
                     <div class="control-group">
                         <label>Выравнивание:</label>
                         <select id="prop-align">
@@ -712,10 +751,20 @@
                 `;
             }
 
-            editorControls.innerHTML = html || '<p style="color: #64748b; font-size: 13px;">Для этого элемента нет быстрой настройки</p>';
+            editorControls.innerHTML = html;
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => targetEl.innerText = e.target.value;
+
+            const propAnim = document.getElementById('prop-animation');
+            if (propAnim) {
+                propAnim.onchange = (e) => {
+                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom');
+                    if (e.target.value) {
+                        wrapper.classList.add(e.target.value);
+                    }
+                };
+            }
 
             const propHref = document.getElementById('prop-href');
             if (propHref) propHref.oninput = (e) => targetEl.setAttribute('href', e.target.value);
@@ -804,7 +853,7 @@
 
             let cleanContent = '';
             cloneCanvas.querySelectorAll('.canvas-item').forEach(item => {
-                cleanContent += `  <div style="margin-bottom: 15px;">\n    ${item.firstElementChild.outerHTML}\n  </div>\n`;
+                cleanContent += `  <div class="${item.className}" style="margin-bottom: 15px;">\n    ${item.firstElementChild.outerHTML}\n  </div>\n`;
             });
 
             const bgColor = canvas.style.backgroundColor || '#ffffff';
@@ -816,7 +865,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт созданный в Programmiist Studio</title>
+    <title>Экспортированный Сайт</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -828,6 +877,32 @@
             min-height: 100vh;
             overflow-y: auto;
         }
+
+        /* АНИМАЦИИ */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes gradientTitle {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-site-title {
+            background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientTitle 5s ease infinite;
+            display: inline-block;
+            font-weight: 800;
+        }
+
+        .anim-fade { animation: fadeIn 0.8s ease forwards; }
+        .anim-slide-up { animation: slideUp 0.8s ease forwards; }
+        .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
+        .anim-zoom { animation: zoomIn 0.6s ease forwards; }
     </style>
 </head>
 <body>
