@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Programist-studio — Конструктор Сайтов с AI & RGB</title>
+    <title>Programist-studio — Конструктор Сайтов </title>
     <!-- Динамическое подключение Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
