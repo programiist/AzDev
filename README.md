@@ -392,14 +392,14 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             margin-bottom: 40px;
             position: relative;
         }
 
         .canvas.dark-theme {
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: #000000 !important;
+            color: #ffffff !important;
         }
 
         .canvas.tablet-mode { max-width: 768px; }
@@ -444,6 +444,7 @@
             z-index: 100;
             cursor: move;
             user-select: none;
+            touch-action: none;
         }
 
         .canvas-item.selected {
@@ -580,20 +581,23 @@
                 top: 0; 
                 display: none; 
                 border: none; 
+                padding: 12px;
             }
             .sidebar.active-tab { display: flex; }
-            .workspace { display: flex; width: 100%; padding: 10px; }
+            .workspace { display: flex; width: 100%; padding: 8px; }
             .workspace.hidden-tab { display: none; }
             .device-toggle, .zoom-controls { display: none; }
-            .top-bar { justify-content: space-between; gap: 5px; }
+            .top-bar { justify-content: space-between; gap: 5px; padding: 6px 10px; }
+            .btn-element { padding: 12px; font-size: 14px; }
+            .control-group input, .control-group select, .control-group textarea { padding: 10px; font-size: 14px; }
         }
 
         @media (max-width: 600px) {
             .brand span { font-size: 14px; }
             .tg-banner-link span { display: none; }
             .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
-            .action-btn { flex: 1; text-align: center; }
-            .canvas { padding: 10px; }
+            .action-btn { flex: 1; text-align: center; padding: 10px; }
+            .canvas { padding: 10px; min-height: 500px; }
             .save-badge { display: none; }
             .page-manager { max-width: 140px; }
         }
@@ -670,6 +674,7 @@
         <div class="sidebar" id="sidebar-left">
             <h2>AI Дизайн & Цвета</h2>
             <button class="btn-element btn-ai" onclick="generateAIPalette()">🎨 Сгенерировать AI-палитру <span>★</span></button>
+            <button class="btn-element btn-ai" onclick="generateElementDesignAI()">🤖 AI Стили блока <span>★</span></button>
             <button class="btn-element btn-rgb-effect" onclick="applyRGBEffectToSelected()">🌈 RGB Подсветка (Выделенное)</button>
 
             <h2>Готовые Шаблоны</h2>
@@ -678,6 +683,8 @@
             <button class="btn-element btn-preset" onclick="loadPreset('shop')">🛒 Интернет-магазин <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('saas')">⚡ SaaS Продукт <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('blog')">📰 Блог / Медиа <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('event')">🎉 Событие / Ивент <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('education')">🎓 Курс / Инфопродукт <span>★</span></button>
 
             <h2>Анимированные и Интерактивные</h2>
             <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
@@ -686,6 +693,7 @@
             <button class="btn-element" onclick="addElement('draggable-icon')">✋ Перетаскиваемая Иконка <span>+</span></button>
             <button class="btn-element" onclick="addElement('image-slider')">🖼️ Слайдер Картинок <span>+</span></button>
             <button class="btn-element" onclick="addElement('popup-btn')">🪟 Всплывающее Окно (Popup) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('modal-form')">📋 Модальная форма <span>+</span></button>
 
             <h2>Базовые блоки</h2>
             <button class="btn-element" onclick="addElement('navbar')">Шапка (Nav) <span>+</span></button>
@@ -694,6 +702,7 @@
             <button class="btn-element" onclick="addElement('button')">Кнопка <span>+</span></button>
             <button class="btn-element" onclick="addElement('image')">Изображение <span>+</span></button>
             <button class="btn-element" onclick="addElement('video')">🎬 Видео плеер <span>+</span></button>
+            <button class="btn-element" onclick="addElement('audio')">🎵 Аудио плеер <span>+</span></button>
             <button class="btn-element" onclick="addElement('divider')">Разделитель <span>+</span></button>
             <button class="btn-element" onclick="addElement('footer')">Подвал (Footer) <span>+</span></button>
 
@@ -706,7 +715,10 @@
             <button class="btn-element" onclick="addElement('testimonials')">Простой отзыв <span>+</span></button>
             <button class="btn-element" onclick="addElement('floating-messengers')">Мессенджеры <span>+</span></button>
             <button class="btn-element" onclick="addElement('card')">Карточка <span>+</span></button>
+            <button class="btn-element" onclick="addElement('grid2')">Колонки (2 блока) <span>+</span></button>
             <button class="btn-element" onclick="addElement('grid3')">Сетка (3 блока) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('features')">Блок Преимуществ <span>+</span></button>
+            <button class="btn-element" onclick="addElement('stats')">📊 Статистика / Цифры <span>+</span></button>
             <button class="btn-element" onclick="addElement('gallery2')">Галерея (2 фото) <span>+</span></button>
             <button class="btn-element" onclick="addElement('faq')">Блок FAQ <span>+</span></button>
             <button class="btn-element" onclick="addElement('map')">📍 Карта / Геолокация <span>+</span></button>
@@ -814,7 +826,7 @@
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v3';
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v4';
 
         const aiTextDatabase = {
             it: {
@@ -849,8 +861,33 @@
             { bg: '#090d16', cardBg: '#131c2e', text: '#f1f5f9', accent: '#a855f7', btnText: '#ffffff' },
             { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' },
             { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' },
-            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' }
+            { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' },
+            { bg: '#2e1065', cardBg: '#3b0764', text: '#faf5ff', accent: '#c084fc', btnText: '#0f172a' }
         ];
+
+        // Функция снятия выделения
+        function clearSelection() {
+            document.querySelectorAll('.canvas-item').forEach(item => item.classList.remove('selected'));
+            selectedElement = null;
+            selectedWrapper = null;
+            if (editorControls) {
+                editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Нажмите на любой элемент на холсте для его настройки</p>';
+            }
+        }
+
+        // Клик по пустому пространству снятие выделения
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.canvas-item') && !e.target.closest('.sidebar') && !e.target.closest('.top-bar') && !e.target.closest('.mobile-tabs')) {
+                clearSelection();
+            }
+        });
+
+        // Снятие выделения по клавише ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                clearSelection();
+            }
+        });
 
         function setZoom(scale) {
             canvasWrapper.style.transform = `scale(${scale})`;
@@ -886,6 +923,7 @@
             document.getElementById('global-font').value = p.font;
             document.getElementById('page-theme').value = p.theme;
 
+            clearSelection();
             rebindCanvasEvents();
             saveHistoryState();
         }
@@ -1062,6 +1100,28 @@
             saveHistoryState();
         }
 
+        function generateElementDesignAI() {
+            if (!selectedElement) {
+                alert("Сначала выберите блок на холсте!");
+                return;
+            }
+            const colors = ['#38bdf8', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#6366f1', '#14b8a6'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const randomRadius = Math.floor(Math.random() * 25) + 'px';
+            
+            selectedElement.style.borderRadius = randomRadius;
+            
+            const tag = selectedElement.tagName.toLowerCase();
+            if (tag === 'a' || tag === 'button') {
+                selectedElement.style.backgroundColor = randomColor;
+                selectedElement.style.color = '#ffffff';
+            } else {
+                selectedElement.style.borderColor = randomColor;
+                selectedElement.style.boxShadow = `0 4px 20px ${randomColor}44`;
+            }
+            saveHistoryState();
+        }
+
         function applyRGBEffectToSelected() {
             if (!selectedElement) {
                 alert("Сначала выберите элемент на холсте!");
@@ -1123,6 +1183,7 @@
                 isUndoRedoAction = true;
                 historyIndex--;
                 canvas.innerHTML = historyStack[historyIndex];
+                clearSelection();
                 rebindCanvasEvents();
                 updateHistoryButtons();
                 saveToLocalStorage();
@@ -1135,6 +1196,7 @@
                 isUndoRedoAction = true;
                 historyIndex++;
                 canvas.innerHTML = historyStack[historyIndex];
+                clearSelection();
                 rebindCanvasEvents();
                 updateHistoryButtons();
                 saveToLocalStorage();
@@ -1187,7 +1249,7 @@
                         if (canvas.querySelectorAll('.canvas-item').length === 0 && emptyMsg) {
                             emptyMsg.style.display = 'block';
                         }
-                        editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                        clearSelection();
                         saveHistoryState();
                     };
                 }
@@ -1237,6 +1299,7 @@
         }
 
         function togglePreviewMode() {
+            clearSelection();
             document.body.classList.toggle('preview-mode');
         }
 
@@ -1245,14 +1308,17 @@
             saveHistoryState();
         }
 
+        // Выставление темной темы с фон=черный, текст=белый
         function changeCanvasTheme(theme) {
             if (theme === 'dark') {
                 canvas.classList.add('dark-theme');
-                canvas.style.backgroundColor = '#0f172a';
-                document.getElementById('page-bg-color').value = '#0f172a';
+                canvas.style.backgroundColor = '#000000';
+                canvas.style.color = '#ffffff';
+                document.getElementById('page-bg-color').value = '#000000';
             } else {
                 canvas.classList.remove('dark-theme');
                 canvas.style.backgroundColor = '#ffffff';
+                canvas.style.color = '#1e293b';
                 document.getElementById('page-bg-color').value = '#ffffff';
             }
             saveHistoryState();
@@ -1275,7 +1341,7 @@
                     emptyMsg.style.display = 'block';
                     canvas.appendChild(emptyMsg);
                 }
-                editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                clearSelection();
                 saveHistoryState();
             }
         }
@@ -1291,6 +1357,7 @@
                 addElement('site-title');
                 addElement('image-slider');
                 addElement('countdown');
+                addElement('features');
                 addElement('pricing');
                 addElement('star-reviews');
                 addElement('form');
@@ -1300,6 +1367,7 @@
                 addElement('navbar');
                 addElement('header');
                 addElement('text');
+                addElement('stats');
                 addElement('gallery2');
                 addElement('star-reviews');
                 addElement('social-share');
@@ -1323,6 +1391,7 @@
                 addElement('text');
                 addElement('button');
                 addElement('video');
+                addElement('features');
                 addElement('pricing');
                 addElement('faq');
                 addElement('footer');
@@ -1330,12 +1399,32 @@
                 addElement('navbar');
                 addElement('header');
                 addElement('grid3');
+                addElement('audio');
                 addElement('divider');
                 addElement('star-reviews');
                 addElement('social-share');
                 addElement('footer');
+            } else if (presetName === 'event') {
+                addElement('promo-banner');
+                addElement('site-title');
+                addElement('countdown');
+                addElement('grid2');
+                addElement('modal-form');
+                addElement('map');
+                addElement('footer');
+            } else if (presetName === 'education') {
+                addElement('navbar');
+                addElement('header');
+                addElement('video');
+                addElement('features');
+                addElement('stats');
+                addElement('pricing');
+                addElement('faq');
+                addElement('form');
+                addElement('footer');
             }
 
+            clearSelection();
             if (window.innerWidth <= 1024) switchMobileTab('canvas');
             saveHistoryState();
         }
@@ -1393,6 +1482,23 @@
                         🪟 Открыть всплывающее окно
                     </button>
                 `;
+            } else if (type === 'modal-form') {
+                el = document.createElement('div');
+                el.style.textAlign = 'center';
+                el.innerHTML = `
+                    <button onclick="document.getElementById('demo-modal').style.display='flex'" style="padding:12px 24px; background:linear-gradient(135deg,#10b981,#059669); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                        📋 Быстрая Заявка (Модальное окно)
+                    </button>
+                    <div id="demo-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999; justify-content:center; align-items:center;">
+                        <div style="background:#fff; padding:20px; border-radius:10px; max-width:320px; width:90%; color:#0f172a; position:relative;">
+                            <span onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute; right:10px; top:5px; cursor:pointer; font-size:18px;">✕</span>
+                            <h3 style="margin-bottom:10px;">Заказать звонок</h3>
+                            <input type="text" placeholder="Ваше Имя" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:4px;">
+                            <input type="text" placeholder="Телефон" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:4px;">
+                            <button onclick="alert('Спасибо за заявку!'); document.getElementById('demo-modal').style.display='none'" style="width:100%; padding:8px; background:#10b981; color:white; border:none; border-radius:4px; font-weight:bold;">Отправить</button>
+                        </div>
+                    </div>
+                `;
             } else if (type === 'map') {
                 el = document.createElement('div');
                 el.style.width = '100%';
@@ -1413,6 +1519,13 @@
                 el.style.overflow = 'hidden';
                 el.style.borderRadius = '8px';
                 el.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>`;
+            } else if (type === 'audio') {
+                el = document.createElement('div');
+                el.style.padding = '10px';
+                el.style.background = '#1e293b';
+                el.style.borderRadius = '8px';
+                el.style.textAlign = 'center';
+                el.innerHTML = `<audio controls style="width:100%; max-width:400px;"><source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">Ваш браузер не поддерживает аудио.</audio>`;
             } else if (type === 'site-theme-toggle') {
                 el = document.createElement('div');
                 el.style.display = 'flex';
@@ -1490,19 +1603,66 @@
                         <h3 style="font-size:16px;">Старт</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 000 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">1 Страница<br>Поддержка 24/7</p>
-                        <button style="margin-top:10px; padding:6px 12px; background:#0284c7; color:white; border:none; border-radius:4px; font-size:12px;">Заказать</button>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;">Заказать</a>
                     </div>
                     <div class="rgb-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
                         <h3 style="font-size:16px;">Бизнес</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 500 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">До 5 Страниц<br>SEO оптимизация</p>
-                        <button style="margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; border:none; border-radius:4px; font-weight:bold; font-size:12px;">Заказать</button>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;">Заказать</a>
                     </div>
                     <div style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
                         <h3 style="font-size:16px;">Премиум</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">3 000 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">Индивидуальный дизайн<br>Интеграция с ИИ</p>
-                        <button style="margin-top:10px; padding:6px 12px; background:#0284c7; color:white; border:none; border-radius:4px; font-size:12px;">Заказать</button>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;">Заказать</a>
+                    </div>
+                `;
+            } else if (type === 'features') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(180px, 1fr))';
+                el.style.gap = '12px';
+                el.style.padding = '10px 0';
+                el.innerHTML = `
+                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                        <div style="font-size:24px; margin-bottom:4px;">⚡</div>
+                        <strong style="font-size:13px; color:#0f172a;">Высокая скорость</strong>
+                        <p style="font-size:11px; color:#64748b; margin-top:4px;">Оптимизированный код и моментальная загрузка.</p>
+                    </div>
+                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                        <div style="font-size:24px; margin-bottom:4px;">🛡️</div>
+                        <strong style="font-size:13px; color:#0f172a;">Надежная защита</strong>
+                        <p style="font-size:11px; color:#64748b; margin-top:4px;">Защита от атак и полная сохранность данных.</p>
+                    </div>
+                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                        <div style="font-size:24px; margin-bottom:4px;">🎨</div>
+                        <strong style="font-size:13px; color:#0f172a;">AI Дизайн</strong>
+                        <p style="font-size:11px; color:#64748b; margin-top:4px;">Современный внешний вид с адаптивностью.</p>
+                    </div>
+                `;
+            } else if (type === 'stats') {
+                el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.justifyContent = 'space-around';
+                el.style.padding = '15px';
+                el.style.background = 'linear-gradient(135deg, #0f172a, #1e293b)';
+                el.style.borderRadius = '10px';
+                el.style.color = '#ffffff';
+                el.style.flexWrap = 'wrap';
+                el.style.gap = '10px';
+                el.innerHTML = `
+                    <div style="text-align:center;">
+                        <div style="font-size:22px; font-weight:800; color:#38bdf8;">150+</div>
+                        <div style="font-size:11px; color:#94a3b8;">Проектов</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:22px; font-weight:800; color:#a855f7;">99%</div>
+                        <div style="font-size:11px; color:#94a3b8;">Довольных клиентов</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:22px; font-weight:800; color:#10b981;">24/7</div>
+                        <div style="font-size:11px; color:#94a3b8;">Поддержка</div>
                     </div>
                 `;
             } else if (type === 'testimonials') {
@@ -1539,7 +1699,7 @@
                 el.style.padding = '10px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Главная</a><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Услуги</a><a href="#" style="margin-left:8px; text-decoration:none; color:#334155;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Главная</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Услуги</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -1575,6 +1735,21 @@
                 el.style.padding = '12px';
                 el.style.backgroundColor = '#f8fafc';
                 el.innerHTML = '<h3 style="color:#0f172a; font-size:15px;">Название карточки</h3><p style="margin-top:5px; font-size:12px; color:#64748b;">Описание товара или услуги.</p>';
+            } else if (type === 'grid2') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+                el.style.gap = '10px';
+                el.innerHTML = `
+                    <div style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
+                        <h4 style="font-size:14px; color:#0f172a;">Колонка 1</h4>
+                        <p style="font-size:12px; color:#64748b; margin-top:4px;">Текст описания для первой колонки.</p>
+                    </div>
+                    <div style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
+                        <h4 style="font-size:14px; color:#0f172a;">Колонка 2</h4>
+                        <p style="font-size:12px; color:#64748b; margin-top:4px;">Текст описания для второй колонки.</p>
+                    </div>
+                `;
             } else if (type === 'grid3') {
                 el = document.createElement('div');
                 el.style.display = 'grid';
@@ -1647,7 +1822,7 @@
                 if (canvas.querySelectorAll('.canvas-item').length === 0 && emptyMsg) {
                     emptyMsg.style.display = 'block';
                 }
-                editorControls.innerHTML = '<p style="color: #64748b; font-size: 13px;">Выберите элемент на холсте для настройки</p>';
+                clearSelection();
                 saveHistoryState();
             };
             wrapper.appendChild(deleteBtn);
@@ -1690,6 +1865,19 @@
                             <option value="💎">💎 Бриллиант</option>
                             <option value="🛒">🛒 Корзина</option>
                             <option value="❤️">❤️ Сердце</option>
+                            <option value="🎯">🎯 Цель</option>
+                            <option value="👑">👑 Корона</option>
+                            <option value="💻">💻 Ноутбук</option>
+                            <option value="📱">📱 Телефон</option>
+                            <option value="🛠️">🛠️ Инструменты</option>
+                            <option value="🎨">🎨 Кисть</option>
+                            <option value="🌟">🌟 Сияние</option>
+                            <option value="🍕">🍕 Пицца</option>
+                            <option value="🏆">🏆 Кубок</option>
+                            <option value="🎁">🎁 Подарок</option>
+                            <option value="📞">📞 Звонок</option>
+                            <option value="📍">📍 Метка</option>
+                            <option value="✉️">✉️ Письмо</option>
                         </select>
                     </div>
                     <div class="control-group">
@@ -1749,6 +1937,10 @@
                         <option value="Pacifico" ${targetEl.style.fontFamily.includes('Pacifico') ? 'selected' : ''}>Pacifico</option>
                     </select>
                 </div>
+                <div class="control-group">
+                    <label>Цвет текста элемента:</label>
+                    <input type="color" id="prop-color" value="${rgbToHex(targetEl.style.color)}">
+                </div>
             `;
 
             const currentRadius = parseInt(targetEl.style.borderRadius) || 0;
@@ -1782,11 +1974,11 @@
                 </div>
             `;
 
-            if (type === 'button') {
+            if (type === 'button' || targetEl.tagName.toLowerCase() === 'a') {
                 html += `
                     <div class="control-group">
                         <label>Ссылка (URL):</label>
-                        <input type="text" id="prop-href" value="${targetEl.getAttribute('href')}">
+                        <input type="text" id="prop-href" value="${targetEl.getAttribute('href') || 'https://t.me/programisstuz'}">
                     </div>
                     <div class="control-group">
                         <label>Цвет кнопки:</label>
@@ -1804,7 +1996,7 @@
                 `;
             }
 
-            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share' || type === 'promo-banner') {
+            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share' || type === 'promo-banner' || type === 'features' || type === 'stats') {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -1832,6 +2024,9 @@
 
             const propText = document.getElementById('prop-text');
             if (propText) propText.oninput = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
+
+            const propColor = document.getElementById('prop-color');
+            if (propColor) propColor.oninput = (e) => { targetEl.style.color = e.target.value; saveHistoryState(); };
 
             const propFont = document.getElementById('prop-font');
             if (propFont) {
@@ -1965,7 +2160,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Сайт</title>
+    <title>Мой Сайт — Programist-studio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1984,8 +2179,8 @@
         .canvas-item.is-draggable { position: absolute; z-index: 100; }
 
         body.dark-mode {
-            background-color: #0f172a !important;
-            color: #f8fafc !important;
+            background-color: #000000 !important;
+            color: #ffffff !important;
         }
 
         body.dark-mode div, body.dark-mode form, body.dark-mode nav, body.dark-mode footer {
@@ -2032,11 +2227,6 @@ ${cleanContent}
 <script>
     function toggleCreatedSiteTheme() {
         document.body.classList.toggle('dark-mode');
-        const btns = document.querySelectorAll('.site-theme-toggle-btn');
-        const isDark = document.body.classList.contains('dark-mode');
-        btns.forEach(btn => {
-            btn.innerHTML = isDark ? '<span>☀️</span> <span>Светлая тема</span>' : '<span>🌙</span> <span>Тёмная тема</span>';
-        });
     }
 <\/script>
 </body>
