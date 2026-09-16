@@ -2,8 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Programist-studio — Конструктор Сайтов </title>
-    <!-- Динамическое подключение Google Fonts -->
+    <title>Programist-studio — Конструктор Сайтов с AI, RGB & Drag-and-Drop</title>
+    <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * {
@@ -88,6 +88,29 @@
             100% { transform: rotateY(0deg); opacity: 1; }
         }
 
+        @keyframes bounceAnim {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes rotateAnim {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes sparkleGlow {
+            0% { filter: drop-shadow(0 0 2px #38bdf8); }
+            50% { filter: drop-shadow(0 0 12px #ec4899); }
+            100% { filter: drop-shadow(0 0 2px #38bdf8); }
+        }
+
         .animated-site-title {
             background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
             background-size: 300% 300%;
@@ -146,6 +169,10 @@
         .anim-float { animation: floatAnim 3s ease-in-out infinite; }
         .anim-pulse { animation: pulseGlow 2s infinite; }
         .anim-flip { animation: flipIn 0.8s ease forwards; }
+        .anim-bounce { animation: bounceAnim 2s infinite; }
+        .anim-shake { animation: shakeAnim 2s infinite; }
+        .anim-rotate { animation: rotateAnim 10s linear infinite; }
+        .anim-sparkle { animation: sparkleGlow 2s ease-in-out infinite; }
 
         .top-bar {
             min-height: 60px;
@@ -398,8 +425,17 @@
         }
 
         .canvas.dark-theme {
-            background-color: #000000 !important;
+            background-color: #0d1117 !important;
             color: #ffffff !important;
+        }
+        
+        .canvas.dark-theme div, .canvas.dark-theme p, .canvas.dark-theme h1, .canvas.dark-theme h2, .canvas.dark-theme h3 {
+            color: inherit;
+        }
+        .canvas.dark-theme .dark-card {
+            background-color: #161b22 !important;
+            color: #f0f6fc !important;
+            border-color: #30363d !important;
         }
 
         .canvas.tablet-mode { max-width: 768px; }
@@ -433,10 +469,16 @@
             position: relative;
             margin-bottom: 12px;
             padding: 4px;
-            border: 1px dashed transparent;
+            border: 2px dashed transparent;
             border-radius: 6px;
             cursor: pointer;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .canvas-item.drag-over {
+            border-color: #a855f7 !important;
+            background-color: rgba(168, 85, 247, 0.08);
+            transform: scale(1.01);
         }
 
         .canvas-item.is-draggable {
@@ -450,13 +492,13 @@
         .canvas-item.selected {
             border-color: #818cf8;
             outline: 2px solid #818cf8;
-            box-shadow: 0 0 8px rgba(129, 140, 248, 0.3);
+            box-shadow: 0 0 12px rgba(129, 140, 248, 0.4);
         }
 
         .canvas-item .delete-btn {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: -10px;
+            right: -10px;
             background: #ef4444;
             color: white;
             border: none;
@@ -470,6 +512,25 @@
             justify-content: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
             z-index: 10;
+        }
+
+        .drag-handle {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: #38bdf8;
+            color: #0f172a;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: grab;
+            z-index: 10;
+            display: none;
+        }
+
+        .canvas-item.selected .drag-handle {
+            display: block;
         }
 
         .control-group {
@@ -504,6 +565,28 @@
         }
 
         .control-group input[type="color"] { height: 38px; cursor: pointer; padding: 2px; }
+
+        .btn-row-controls {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .btn-row-controls button {
+            flex: 1;
+            padding: 8px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-row-controls button:hover {
+            background: #334155;
+        }
 
         .action-btn {
             padding: 8px 14px;
@@ -549,7 +632,7 @@
             padding: 20px;
         }
         body.preview-mode .canvas-item { border: none !important; outline: none !important; }
-        body.preview-mode .delete-btn { display: none !important; }
+        body.preview-mode .delete-btn, body.preview-mode .drag-handle { display: none !important; }
 
         #exit-preview-btn {
             position: fixed;
@@ -570,7 +653,6 @@
 
         body.preview-mode #exit-preview-btn { display: block; }
 
-        /* Полная адаптация */
         @media (max-width: 1024px) {
             .main-container { flex-direction: column; }
             .mobile-tabs { display: flex; }
@@ -674,7 +756,8 @@
         <div class="sidebar" id="sidebar-left">
             <h2>AI Дизайн & Цвета</h2>
             <button class="btn-element btn-ai" onclick="generateAIPalette()">🎨 Сгенерировать AI-палитру <span>★</span></button>
-            <button class="btn-element btn-ai" onclick="generateElementDesignAI()">🤖 AI Стили блока <span>★</span></button>
+            <button class="btn-element btn-ai" onclick="enhanceCanvasDesignAI()">✨ Улучшить стиль (AI) <span>★</span></button>
+            <button class="btn-element btn-ai" onclick="generateElementDesignAI()">🤖 AI Стили элемента <span>★</span></button>
             <button class="btn-element btn-rgb-effect" onclick="applyRGBEffectToSelected()">🌈 RGB Подсветка (Выделенное)</button>
 
             <h2>Готовые Шаблоны</h2>
@@ -685,6 +768,8 @@
             <button class="btn-element btn-preset" onclick="loadPreset('blog')">📰 Блог / Медиа <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('event')">🎉 Событие / Ивент <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('education')">🎓 Курс / Инфопродукт <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('restaurant')">🍕 Еда & Ресторан <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('corporate')">🏢 Корпоративный сайт <span>★</span></button>
 
             <h2>Анимированные и Интерактивные</h2>
             <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
@@ -779,7 +864,7 @@
             <div class="canvas-wrapper" id="canvas-wrapper">
                 <div class="canvas" id="canvas">
                     <p id="empty-msg" style="color: #64748b; text-align: center; margin-top: 150px; font-size: 14px;">
-                        Выберите блоки во вкладке «Блоки»
+                        Выберите блоки во вкладке «Блоки» или загрузите готовый шаблон!
                     </p>
                 </div>
             </div>
@@ -814,6 +899,7 @@
         let elementCount = 0;
         let currentMode = 'visual';
         let currentPage = 'index';
+        let draggedWrapper = null;
 
         let pagesData = {
             'index': { html: '', bg: '#ffffff', padding: '20px', font: 'Inter', theme: 'light' },
@@ -826,7 +912,7 @@
         let historyIndex = -1;
         let isUndoRedoAction = false;
 
-        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v4';
+        const LOCAL_STORAGE_KEY = 'programist_studio_site_data_v6';
 
         const aiTextDatabase = {
             it: {
@@ -862,10 +948,14 @@
             { bg: '#052e16', cardBg: '#14532d', text: '#f0fdf4', accent: '#22c55e', btnText: '#052e16' },
             { bg: '#18181b', cardBg: '#27272a', text: '#fafafa', accent: '#f97316', btnText: '#ffffff' },
             { bg: '#fff7ed', cardBg: '#ffedd5', text: '#431407', accent: '#ea580c', btnText: '#ffffff' },
-            { bg: '#2e1065', cardBg: '#3b0764', text: '#faf5ff', accent: '#c084fc', btnText: '#0f172a' }
+            { bg: '#2e1065', cardBg: '#3b0764', text: '#faf5ff', accent: '#c084fc', btnText: '#0f172a' },
+            { bg: '#030712', cardBg: '#111827', text: '#f9fafb', accent: '#ec4899', btnText: '#ffffff' },
+            { bg: '#f0fdf4', cardBg: '#dcfce7', text: '#14532d', accent: '#16a34a', btnText: '#ffffff' },
+            { bg: '#000000', cardBg: '#121212', text: '#00ffcc', accent: '#ff0055', btnText: '#ffffff' },
+            { bg: '#1e1b4b', cardBg: '#312e81', text: '#e0e7ff', accent: '#6366f1', btnText: '#ffffff' },
+            { bg: '#fef2f2', cardBg: '#ffe4e6', text: '#881337', accent: '#e11d48', btnText: '#ffffff' }
         ];
 
-        // Функция снятия выделения
         function clearSelection() {
             document.querySelectorAll('.canvas-item').forEach(item => item.classList.remove('selected'));
             selectedElement = null;
@@ -875,14 +965,12 @@
             }
         }
 
-        // Клик по пустому пространству снятие выделения
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.canvas-item') && !e.target.closest('.sidebar') && !e.target.closest('.top-bar') && !e.target.closest('.mobile-tabs')) {
                 clearSelection();
             }
         });
 
-        // Снятие выделения по клавише ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 clearSelection();
@@ -892,15 +980,36 @@
         function setZoom(scale) {
             canvasWrapper.style.transform = `scale(${scale})`;
             document.querySelectorAll('.zoom-controls .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            if (event) event.target.classList.add('active');
+            if (window.event && window.event.target) window.event.target.classList.add('active');
         }
 
-        function changeCanvasWidth(val) {
-            canvas.style.maxWidth = val;
+        function changeCanvasWidth(val) { canvas.style.maxWidth = val; }
+        function changeCanvasHeight(val) { canvas.style.minHeight = val; }
+
+        function moveSelectedUp() {
+            if (selectedWrapper && selectedWrapper.previousElementSibling && selectedWrapper.previousElementSibling.id !== 'empty-msg') {
+                canvas.insertBefore(selectedWrapper, selectedWrapper.previousElementSibling);
+                saveHistoryState();
+            }
         }
 
-        function changeCanvasHeight(val) {
-            canvas.style.minHeight = val;
+        function moveSelectedDown() {
+            if (selectedWrapper && selectedWrapper.nextElementSibling) {
+                canvas.insertBefore(selectedWrapper.nextElementSibling, selectedWrapper);
+                saveHistoryState();
+            }
+        }
+
+        function duplicateSelected() {
+            if (selectedWrapper) {
+                elementCount++;
+                const clone = selectedWrapper.cloneNode(true);
+                clone.id = 'item-' + elementCount;
+                canvas.insertBefore(clone, selectedWrapper.nextElementSibling);
+                rebindCanvasEvents();
+                selectElement(clone, clone.firstElementChild, clone.firstElementChild ? clone.firstElementChild.tagName.toLowerCase() : 'block');
+                saveHistoryState();
+            }
         }
 
         function switchPage(pageKey) {
@@ -1053,6 +1162,8 @@
                         document.getElementById('global-font').value = p.font || 'Inter';
                         document.getElementById('page-theme').value = p.theme || 'light';
 
+                        if (p.theme === 'dark') canvas.classList.add('dark-theme');
+
                         rebindCanvasEvents();
                         return true;
                     }
@@ -1082,7 +1193,7 @@
                 if (!el) return;
 
                 const tag = el.tagName.toLowerCase();
-                if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'p' || tag === 'strong' || tag === 'span') {
+                if (['h1', 'h2', 'h3', 'p', 'strong', 'span'].includes(tag)) {
                     if (!el.classList.contains('animated-site-title') && !el.classList.contains('rgb-text-glow')) {
                         el.style.color = randomPalette.text;
                     }
@@ -1091,12 +1202,23 @@
                         el.style.backgroundColor = randomPalette.accent;
                         el.style.color = randomPalette.btnText;
                     }
-                } else if (tag === 'div' || tag === 'form' || tag === 'nav' || tag === 'footer') {
+                } else if (['div', 'form', 'nav', 'footer'].includes(tag)) {
                     el.style.backgroundColor = randomPalette.cardBg;
                     el.style.color = randomPalette.text;
                 }
             });
 
+            saveHistoryState();
+        }
+
+        function enhanceCanvasDesignAI() {
+            const wrappers = canvas.querySelectorAll('.canvas-item');
+            wrappers.forEach(w => {
+                const el = w.firstElementChild;
+                if (!el) return;
+                el.style.borderRadius = '12px';
+                el.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+            });
             saveHistoryState();
         }
 
@@ -1240,6 +1362,48 @@
 
                 if (wrapper.classList.contains('is-draggable')) {
                     makeDraggable(wrapper);
+                } else {
+                    wrapper.setAttribute('draggable', 'true');
+                    
+                    wrapper.ondragstart = (e) => {
+                        draggedWrapper = wrapper;
+                        e.dataTransfer.setData('text/plain', wrapper.id);
+                        setTimeout(() => wrapper.style.opacity = '0.4', 0);
+                    };
+
+                    wrapper.ondragend = () => {
+                        wrapper.style.opacity = '1';
+                        canvas.querySelectorAll('.canvas-item').forEach(i => i.classList.remove('drag-over'));
+                        draggedWrapper = null;
+                        saveHistoryState();
+                    };
+
+                    wrapper.ondragover = (e) => {
+                        e.preventDefault();
+                        if (draggedWrapper && draggedWrapper !== wrapper) {
+                            wrapper.classList.add('drag-over');
+                        }
+                    };
+
+                    wrapper.ondragleave = () => {
+                        wrapper.classList.remove('drag-over');
+                    };
+
+                    wrapper.ondrop = (e) => {
+                        e.preventDefault();
+                        wrapper.classList.remove('drag-over');
+                        if (draggedWrapper && draggedWrapper !== wrapper) {
+                            const children = Array.from(canvas.children);
+                            const draggedIndex = children.indexOf(draggedWrapper);
+                            const targetIndex = children.indexOf(wrapper);
+
+                            if (draggedIndex < targetIndex) {
+                                canvas.insertBefore(draggedWrapper, wrapper.nextElementSibling);
+                            } else {
+                                canvas.insertBefore(draggedWrapper, wrapper);
+                            }
+                        }
+                    };
                 }
 
                 if (deleteBtn) {
@@ -1308,13 +1472,12 @@
             saveHistoryState();
         }
 
-        // Выставление темной темы с фон=черный, текст=белый
         function changeCanvasTheme(theme) {
             if (theme === 'dark') {
                 canvas.classList.add('dark-theme');
-                canvas.style.backgroundColor = '#000000';
+                canvas.style.backgroundColor = '#0d1117';
                 canvas.style.color = '#ffffff';
-                document.getElementById('page-bg-color').value = '#000000';
+                document.getElementById('page-bg-color').value = '#0d1117';
             } else {
                 canvas.classList.remove('dark-theme');
                 canvas.style.backgroundColor = '#ffffff';
@@ -1322,6 +1485,30 @@
                 document.getElementById('page-bg-color').value = '#ffffff';
             }
             saveHistoryState();
+        }
+
+        function toggleCreatedSiteTheme() {
+            const isDark = canvas.classList.toggle('dark-theme');
+            if (isDark) {
+                canvas.style.backgroundColor = '#0d1117';
+                canvas.style.color = '#ffffff';
+                document.getElementById('page-bg-color').value = '#0d1117';
+                document.getElementById('page-theme').value = 'dark';
+            } else {
+                canvas.style.backgroundColor = '#ffffff';
+                canvas.style.color = '#1e293b';
+                document.getElementById('page-bg-color').value = '#ffffff';
+                document.getElementById('page-theme').value = 'light';
+            }
+            saveHistoryState();
+        }
+
+        function changeAudioSource(selectEl) {
+            const player = selectEl.parentElement.querySelector('audio');
+            if (player) {
+                player.src = selectEl.value;
+                player.play();
+            }
         }
 
         function changeCanvasBg(color) { 
@@ -1420,6 +1607,24 @@
                 addElement('stats');
                 addElement('pricing');
                 addElement('faq');
+                addElement('form');
+                addElement('footer');
+            } else if (presetName === 'restaurant') {
+                addElement('promo-banner');
+                addElement('navbar');
+                addElement('site-title');
+                addElement('image-slider');
+                addElement('grid3');
+                addElement('modal-form');
+                addElement('star-reviews');
+                addElement('map');
+                addElement('footer');
+            } else if (presetName === 'corporate') {
+                addElement('navbar');
+                addElement('header');
+                addElement('features');
+                addElement('stats');
+                addElement('grid2');
                 addElement('form');
                 addElement('footer');
             }
@@ -1521,11 +1726,22 @@
                 el.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>`;
             } else if (type === 'audio') {
                 el = document.createElement('div');
-                el.style.padding = '10px';
+                el.style.padding = '15px';
                 el.style.background = '#1e293b';
                 el.style.borderRadius = '8px';
                 el.style.textAlign = 'center';
-                el.innerHTML = `<audio controls style="width:100%; max-width:400px;"><source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">Ваш браузер не поддерживает аудио.</audio>`;
+                el.className = 'dark-card';
+                el.innerHTML = `
+                    <label style="display:block; font-size:12px; color:#38bdf8; margin-bottom:6px; font-weight:bold;">🎵 Выберите аудиозапись:</label>
+                    <select onchange="changeAudioSource(this)" style="width:100%; max-width:400px; padding:6px; background:#0f172a; color:#fff; border:1px solid #334155; border-radius:6px; margin-bottom:10px; font-size:12px;">
+                        <option value="https://www.w3schools.com/html/horse.mp3">🐴 Лошадь (Звук)</option>
+                        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎶 Мелодия 1 (SoundHelix)</option>
+                        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">🎶 Мелодия 2 (SoundHelix)</option>
+                    </select>
+                    <audio controls style="width:100%; max-width:400px; display:block; margin:0 auto;">
+                        <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+                    </audio>
+                `;
             } else if (type === 'site-theme-toggle') {
                 el = document.createElement('div');
                 el.style.display = 'flex';
@@ -1533,11 +1749,12 @@
                 el.style.padding = '5px';
                 el.innerHTML = `
                     <button class="site-theme-toggle-btn" onclick="toggleCreatedSiteTheme()" style="padding:8px 14px; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:20px; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:6px;">
-                        <span>🌙</span> <span>Тёмная тема</span>
+                        <span>🌙</span> <span>Переключить тему</span>
                     </button>
                 `;
             } else if (type === 'star-reviews') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.padding = '15px';
                 el.style.backgroundColor = '#f8fafc';
                 el.style.border = '1px solid #e2e8f0';
@@ -1545,20 +1762,21 @@
                 el.innerHTML = `
                     <h3 style="font-size:16px; margin-bottom:12px; color:#0f172a; text-align:center;">⭐ Отзывы клиентов</h3>
                     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;" class="dark-card">
                             <div style="color:#f59e0b; font-size:14px; margin-bottom:4px;">★★★★★</div>
-                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Превосходное качество работы! Все выполнено точно в срок и с высшим уровнем дизайна.»</p>
+                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Превосходное качество работы! Все выполнено точно в срок.»</p>
                             <strong style="font-size:11px; color:#0284c7;">— Дмитрий В.</strong>
                         </div>
-                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+                        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;" class="dark-card">
                             <div style="color:#f59e0b; font-size:14px; margin-bottom:4px;">★★★★★</div>
-                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Заказывали веб-сайт под ключ, результат превзошел все ожидания. Рекомендуем!»</p>
+                            <p style="font-size:12px; color:#334155; margin-bottom:6px;">«Заказывали веб-сайт под ключ, результат превзошел все ожидания.»</p>
                             <strong style="font-size:11px; color:#0284c7;">— Елена К.</strong>
                         </div>
                     </div>
                 `;
             } else if (type === 'social-share') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.padding = '12px';
                 el.style.textAlign = 'center';
                 el.style.backgroundColor = '#f1f5f9';
@@ -1585,6 +1803,7 @@
                 el.style.color = '#38bdf8';
                 el.style.borderRadius = '10px';
                 el.style.textAlign = 'center';
+                el.className = 'dark-card';
                 el.innerHTML = `
                     <h3 style="color:#ffffff; margin-bottom:8px; font-size:16px;">🔥 До конца акции:</h3>
                     <div style="display:flex; justify-content:center; gap:10px; font-size:18px; font-weight:bold;">
@@ -1599,19 +1818,19 @@
                 el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
                 el.style.gap = '10px';
                 el.innerHTML = `
-                    <div style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
                         <h3 style="font-size:16px;">Старт</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 000 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">1 Страница<br>Поддержка 24/7</p>
                         <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;">Заказать</a>
                     </div>
-                    <div class="rgb-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
+                    <div class="rgb-card dark-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
                         <h3 style="font-size:16px;">Бизнес</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 500 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">До 5 Страниц<br>SEO оптимизация</p>
                         <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;">Заказать</a>
                     </div>
-                    <div style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
                         <h3 style="font-size:16px;">Премиум</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">3 000 000 сум</p>
                         <p style="font-size:11px; color:#64748b;">Индивидуальный дизайн<br>Интеграция с ИИ</p>
@@ -1625,17 +1844,17 @@
                 el.style.gap = '12px';
                 el.style.padding = '10px 0';
                 el.innerHTML = `
-                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                    <div class="dark-card" style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
                         <div style="font-size:24px; margin-bottom:4px;">⚡</div>
                         <strong style="font-size:13px; color:#0f172a;">Высокая скорость</strong>
                         <p style="font-size:11px; color:#64748b; margin-top:4px;">Оптимизированный код и моментальная загрузка.</p>
                     </div>
-                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                    <div class="dark-card" style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
                         <div style="font-size:24px; margin-bottom:4px;">🛡️</div>
                         <strong style="font-size:13px; color:#0f172a;">Надежная защита</strong>
                         <p style="font-size:11px; color:#64748b; margin-top:4px;">Защита от атак и полная сохранность данных.</p>
                     </div>
-                    <div style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+                    <div class="dark-card" style="padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
                         <div style="font-size:24px; margin-bottom:4px;">🎨</div>
                         <strong style="font-size:13px; color:#0f172a;">AI Дизайн</strong>
                         <p style="font-size:11px; color:#64748b; margin-top:4px;">Современный внешний вид с адаптивностью.</p>
@@ -1643,6 +1862,7 @@
                 `;
             } else if (type === 'stats') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.display = 'flex';
                 el.style.justifyContent = 'space-around';
                 el.style.padding = '15px';
@@ -1667,6 +1887,7 @@
                 `;
             } else if (type === 'testimonials') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.border = '1px solid #cbd5e1';
                 el.style.padding = '12px';
                 el.style.borderRadius = '8px';
@@ -1693,23 +1914,22 @@
                 `;
             } else if (type === 'navbar') {
                 el = document.createElement('nav');
+                el.className = 'dark-card';
                 el.style.display = 'flex';
                 el.style.justifyContent = 'space-between';
                 el.style.alignItems = 'center';
                 el.style.padding = '10px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Главная</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Услуги</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:#334155;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Главная</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Услуги</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
                 el.style.fontSize = '22px';
-                el.style.color = '#0f172a';
             } else if (type === 'text') {
                 el = document.createElement('p');
                 el.innerText = 'Это пример текстового блока для вашего нового сайта.';
                 el.style.fontSize = '14px';
-                el.style.color = '#334155';
             } else if (type === 'button') {
                 el = document.createElement('a');
                 el.innerText = 'Узнать больше';
@@ -1730,23 +1950,24 @@
                 el.style.borderRadius = '6px';
             } else if (type === 'card') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.border = '1px solid #e2e8f0';
                 el.style.borderRadius = '8px';
                 el.style.padding = '12px';
                 el.style.backgroundColor = '#f8fafc';
-                el.innerHTML = '<h3 style="color:#0f172a; font-size:15px;">Название карточки</h3><p style="margin-top:5px; font-size:12px; color:#64748b;">Описание товара или услуги.</p>';
+                el.innerHTML = '<h3 style="font-size:15px;">Название карточки</h3><p style="margin-top:5px; font-size:12px; color:#64748b;">Описание товара или услуги.</p>';
             } else if (type === 'grid2') {
                 el = document.createElement('div');
                 el.style.display = 'grid';
                 el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
                 el.style.gap = '10px';
                 el.innerHTML = `
-                    <div style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
-                        <h4 style="font-size:14px; color:#0f172a;">Колонка 1</h4>
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
+                        <h4 style="font-size:14px;">Колонка 1</h4>
                         <p style="font-size:12px; color:#64748b; margin-top:4px;">Текст описания для первой колонки.</p>
                     </div>
-                    <div style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
-                        <h4 style="font-size:14px; color:#0f172a;">Колонка 2</h4>
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; background:#f8fafc;">
+                        <h4 style="font-size:14px;">Колонка 2</h4>
                         <p style="font-size:12px; color:#64748b; margin-top:4px;">Текст описания для второй колонки.</p>
                     </div>
                 `;
@@ -1756,13 +1977,13 @@
                 el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(140px, 1fr))';
                 el.style.gap = '8px';
                 el.innerHTML = `
-                    <div style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
                         <h4 style="font-size:13px;">Услуга 1</h4>
                     </div>
-                    <div style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
                         <h4 style="font-size:13px;">Услуга 2</h4>
                     </div>
-                    <div style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
+                    <div class="dark-card" style="border:1px solid #e2e8f0; padding:10px; border-radius:6px; background:#f8fafc;">
                         <h4 style="font-size:13px;">Услуга 3</h4>
                     </div>
                 `;
@@ -1777,25 +1998,27 @@
                 `;
             } else if (type === 'form') {
                 el = document.createElement('form');
+                el.className = 'dark-card';
                 el.style.border = '1px solid #e2e8f0';
                 el.style.padding = '12px';
                 el.style.borderRadius = '8px';
                 el.style.backgroundColor = '#f8fafc';
                 el.onsubmit = (e) => e.preventDefault();
                 el.innerHTML = `
-                    <h3 style="margin-bottom:8px; color:#0f172a; font-size:15px;">Оставить заявку</h3>
+                    <h3 style="margin-bottom:8px; font-size:15px;">Оставить заявку</h3>
                     <input type="text" placeholder="Ваше Имя" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
                     <input type="text" placeholder="Телефон / Telegram" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
                     <button style="width:100%; padding:8px; background:#38bdf8; border:none; border-radius:4px; font-weight:bold; font-size:13px; cursor:pointer;">Отправить заявку</button>
                 `;
             } else if (type === 'faq') {
                 el = document.createElement('div');
+                el.className = 'dark-card';
                 el.style.padding = '10px';
                 el.style.borderLeft = '3px solid #38bdf8';
                 el.style.backgroundColor = '#f1f5f9';
                 el.innerHTML = `
-                    <h4 style="color:#0f172a; font-size:13px;">Вопрос: Как быстро готовится сайт?</h4>
-                    <p style="margin-top:3px; font-size:12px; color:#475569;">Сроки изготовления от 1 до 3 дней в зависимости от сложности.</p>
+                    <h4 style="font-size:13px;">Вопрос: Как быстро готовится сайт?</h4>
+                    <p style="margin-top:3px; font-size:12px; color:#64748b;">Сроки изготовления от 1 до 3 дней в зависимости от сложности.</p>
                 `;
             } else if (type === 'divider') {
                 el = document.createElement('hr');
@@ -1827,12 +2050,13 @@
             };
             wrapper.appendChild(deleteBtn);
 
-            wrapper.onclick = (e) => {
-                e.stopPropagation();
-                selectElement(wrapper, el, type);
-            };
+            const dragHandle = document.createElement('div');
+            dragHandle.className = 'drag-handle';
+            dragHandle.innerText = '⋮⋮ Перетащить';
+            wrapper.appendChild(dragHandle);
 
             canvas.appendChild(wrapper);
+            rebindCanvasEvents();
             selectElement(wrapper, el, type);
 
             if (currentMode === 'code') {
@@ -1850,7 +2074,13 @@
             selectedElement = targetEl;
             selectedWrapper = wrapper;
 
-            let html = '';
+            let html = `
+                <div class="btn-row-controls">
+                    <button onclick="moveSelectedUp()">⬆️ Вверх</button>
+                    <button onclick="moveSelectedDown()">⬇️ Вниз</button>
+                    <button onclick="duplicateSelected()">📋 Клон</button>
+                </div>
+            `;
 
             if (type === 'draggable-icon') {
                 html += `
@@ -1867,17 +2097,6 @@
                             <option value="❤️">❤️ Сердце</option>
                             <option value="🎯">🎯 Цель</option>
                             <option value="👑">👑 Корона</option>
-                            <option value="💻">💻 Ноутбук</option>
-                            <option value="📱">📱 Телефон</option>
-                            <option value="🛠️">🛠️ Инструменты</option>
-                            <option value="🎨">🎨 Кисть</option>
-                            <option value="🌟">🌟 Сияние</option>
-                            <option value="🍕">🍕 Пицца</option>
-                            <option value="🏆">🏆 Кубок</option>
-                            <option value="🎁">🎁 Подарок</option>
-                            <option value="📞">📞 Звонок</option>
-                            <option value="📍">📍 Метка</option>
-                            <option value="✉️">✉️ Письмо</option>
                         </select>
                     </div>
                     <div class="control-group">
@@ -1896,7 +2115,7 @@
                 `;
             }
 
-            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'card' || type === 'promo-banner') {
+            if (['site-title', 'header', 'text', 'button', 'footer', 'card', 'promo-banner'].includes(type)) {
                 html += `
                     <div class="control-group">
                         <label>Тематика для AI-генерации:</label>
@@ -1911,7 +2130,7 @@
                 `;
             }
 
-            if (type === 'site-title' || type === 'header' || type === 'text' || type === 'button' || type === 'footer' || type === 'promo-banner') {
+            if (['site-title', 'header', 'text', 'button', 'footer', 'promo-banner'].includes(type)) {
                 html += `
                     <div class="control-group">
                         <label>Текст блока:</label>
@@ -1970,6 +2189,10 @@
                         <option value="anim-float" ${wrapper.classList.contains('anim-float') ? 'selected' : ''}>Парение (Floating)</option>
                         <option value="anim-pulse" ${wrapper.classList.contains('anim-pulse') ? 'selected' : ''}>Пульсация (Pulse Glow)</option>
                         <option value="anim-flip" ${wrapper.classList.contains('anim-flip') ? 'selected' : ''}>Переворот (3D Flip)</option>
+                        <option value="anim-bounce" ${wrapper.classList.contains('anim-bounce') ? 'selected' : ''}>Прыжки (Bounce)</option>
+                        <option value="anim-shake" ${wrapper.classList.contains('anim-shake') ? 'selected' : ''}>Тряска (Shake)</option>
+                        <option value="anim-rotate" ${wrapper.classList.contains('anim-rotate') ? 'selected' : ''}>Вращение (Rotate)</option>
+                        <option value="anim-sparkle" ${wrapper.classList.contains('anim-sparkle') ? 'selected' : ''}>Сияние (Sparkle)</option>
                     </select>
                 </div>
             `;
@@ -1996,7 +2219,7 @@
                 `;
             }
 
-            if (type === 'card' || type === 'navbar' || type === 'form' || type === 'faq' || type === 'countdown' || type === 'star-reviews' || type === 'social-share' || type === 'promo-banner' || type === 'features' || type === 'stats') {
+            if (['card', 'navbar', 'form', 'faq', 'countdown', 'star-reviews', 'social-share', 'promo-banner', 'features', 'stats', 'audio'].includes(type)) {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -2059,7 +2282,7 @@
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
                 propAnim.onchange = (e) => {
-                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom', 'anim-float', 'anim-pulse', 'anim-flip');
+                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom', 'anim-float', 'anim-pulse', 'anim-flip', 'anim-bounce', 'anim-shake', 'anim-rotate', 'anim-sparkle');
                     if (e.target.value) wrapper.classList.add(e.target.value);
                     saveHistoryState();
                 };
@@ -2077,7 +2300,7 @@
 
         function updateCodeEditorFromCanvas() {
             const cloneCanvas = canvas.cloneNode(true);
-            cloneCanvas.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
+            cloneCanvas.querySelectorAll('.delete-btn, .drag-handle').forEach(btn => btn.remove());
             cloneCanvas.querySelectorAll('#empty-msg').forEach(msg => msg.remove());
             
             let cleanHTML = '';
@@ -2121,121 +2344,74 @@
                 };
                 wrapper.appendChild(deleteBtn);
 
-                wrapper.onclick = (e) => {
-                    e.stopPropagation();
-                    selectElement(wrapper, wrapper.firstElementChild, child.tagName.toLowerCase());
-                };
+                const dragHandle = document.createElement('div');
+                dragHandle.className = 'drag-handle';
+                dragHandle.innerText = '⋮⋮ Перетащить';
+                wrapper.appendChild(dragHandle);
 
                 canvas.appendChild(wrapper);
             });
 
+            rebindCanvasEvents();
             saveHistoryState();
         }
 
         function rgbToHex(rgb) {
             if (!rgb) return '#ffffff';
+            if (rgb.startsWith('#')) return rgb;
             const res = rgb.match(/\d+/g);
-            if (!res) return '#ffffff';
+            if (!res || res.length < 3) return '#ffffff';
             return "#" + ((1 << 24) + (parseInt(res[0]) << 16) + (parseInt(res[1]) << 8) + parseInt(res[2])).toString(16).slice(1);
         }
 
         function exportHTML() {
-            if (currentMode === 'code') applyCodeChanges();
-
             const cloneCanvas = canvas.cloneNode(true);
-            cloneCanvas.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
-            cloneCanvas.querySelectorAll('#empty-msg').forEach(msg => msg.remove());
+            cloneCanvas.querySelectorAll('.delete-btn, .drag-handle').forEach(b => b.remove());
+            cloneCanvas.querySelectorAll('#empty-msg').forEach(m => m.remove());
 
-            let cleanContent = '';
-            cloneCanvas.querySelectorAll('.canvas-item').forEach(item => {
-                cleanContent += `  <div class="${item.className}" style="margin-bottom: 12px; ${item.style.cssText}">\n    ${item.firstElementChild.outerHTML}\n  </div>\n`;
-            });
-
-            const bgColor = canvas.style.backgroundColor || '#ffffff';
-            const padding = canvas.style.padding || '20px';
-            const fontFamily = canvas.style.fontFamily || 'Inter';
+            const isDark = canvas.classList.contains('dark-theme');
+            const bg = canvas.style.backgroundColor || (isDark ? '#0d1117' : '#ffffff');
+            const font = canvas.style.fontFamily || 'Inter';
 
             const fullPageCode = `<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Сайт — Programist-studio</title>
+    <title>${currentPage.toUpperCase()} — Сгенерировано в Programist-studio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: '${fontFamily}', sans-serif; 
-            padding: ${padding}; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            background-color: ${bgColor};
-            color: #1e293b;
-            min-height: 100vh;
-            position: relative;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .canvas-item.is-draggable { position: absolute; z-index: 100; }
-
-        body.dark-mode {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-        }
-
-        body.dark-mode div, body.dark-mode form, body.dark-mode nav, body.dark-mode footer {
-            background-color: #1e293b !important;
-            color: #f8fafc !important;
-            border-color: #334155 !important;
-        }
-
-        body.dark-mode p, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode strong {
-            color: #f8fafc !important;
-        }
-
-        @keyframes rgbBorder {
-            0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
-            33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
-            66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); }
-            100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
-        }
-
-        @keyframes rgbGlowText {
-            0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
-            33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; }
-            66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; }
-            100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
-        }
-
-        .rgb-card { border: 2px solid #ff0055 !important; animation: rgbBorder 4s linear infinite !important; }
-        .rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
-
+        body { background-color: ${bg}; font-family: '${font}', sans-serif; padding: ${canvas.style.padding || '20px'}; color: ${isDark ? '#ffffff' : '#1e293b'}; min-height: 100vh; }
+        .canvas-item { margin-bottom: 12px; }
+        @keyframes textGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes titlePulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
         @keyframes floatAnim { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); } }
-        @keyframes flipIn { 0% { transform: rotateY(-90deg); opacity: 0; } 100% { transform: rotateY(0deg); opacity: 1; } }
-
+        @keyframes rgbBorder { 0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); } 33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); } 66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); } 100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); } }
+        @keyframes rgbGlowText { 0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; } 33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; } 66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; } 100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; } }
+        .animated-site-title { background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite; display: inline-block; font-weight: 800; }
+        .rgb-card { border: 2px solid #ff0055 !important; animation: rgbBorder 4s linear infinite !important; }
+        .rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
+        .anim-zoom { animation: zoomIn 0.6s ease forwards; }
         .anim-float { animation: floatAnim 3s ease-in-out infinite; }
         .anim-pulse { animation: pulseGlow 2s infinite; }
-        .anim-flip { animation: flipIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
-${cleanContent}
-
-<script>
-    function toggleCreatedSiteTheme() {
-        document.body.classList.toggle('dark-mode');
-    }
-<\/script>
+    ${cloneCanvas.innerHTML}
 </body>
 </html>`;
 
             const blob = new Blob([fullPageCode], { type: 'text/html' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `${currentPage}.html`;
+            a.download = `${currentPage}_page.html`;
             a.click();
         }
     </script>
