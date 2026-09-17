@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Programist-studio — Конструктор Сайтов с AI, RGB & Drag-and-Drop</title>
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;600;700&family=Exo+2:wght@400;600;800&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Nunito:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Raleway:wght@400;600;800&family=Roboto:wght@400;600;800&family=Roboto+Mono:wght@700&family=Source+Sans+3:wght@400;600;800&display=swap">
     <style>
         * {
             box-sizing: border-box;
@@ -17,9 +18,24 @@
         html, body {
             width: 100%;
             min-height: 100vh;
-            background-color: #0b0f19;
+            background-color: #070b14;
+            background-image:
+                radial-gradient(at 10% 15%, rgba(56, 189, 248, 0.28) 0px, transparent 45%),
+                radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.26) 0px, transparent 45%),
+                radial-gradient(at 50% 85%, rgba(236, 72, 153, 0.22) 0px, transparent 50%),
+                radial-gradient(at 85% 90%, rgba(16, 185, 129, 0.18) 0px, transparent 45%),
+                radial-gradient(at 30% 60%, rgba(99, 102, 241, 0.12) 0px, transparent 40%);
+            background-attachment: fixed;
+            background-size: 200% 200%;
+            animation: meshDrift 20s ease-in-out infinite;
             color: #f8fafc;
             overflow-x: hidden;
+        }
+
+        @keyframes meshDrift {
+            0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%, 100% 100%, 30% 50%; }
+            33% { background-position: 8% 10%, 92% 15%, 48% 90%, 88% 85%, 35% 55%; }
+            66% { background-position: 15% 20%, 85% 8%, 55% 80%, 95% 92%, 25% 65%; }
         }
 
         ::-webkit-scrollbar {
@@ -36,27 +52,83 @@
 
         /* --- RGB АНИМАЦИИ И ЭФФЕКТЫ --- */
         @keyframes rgbBorder {
-            0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
-            33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
-            66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); }
-            100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); }
+            0% { border-color: #ff0055; box-shadow: 0 0 18px rgba(255, 0, 85, 0.7); }
+            20% { border-color: #ff8800; box-shadow: 0 0 18px rgba(255, 136, 0, 0.7); }
+            40% { border-color: #00ffcc; box-shadow: 0 0 18px rgba(0, 255, 204, 0.7); }
+            60% { border-color: #3388ff; box-shadow: 0 0 18px rgba(51, 136, 255, 0.7); }
+            80% { border-color: #9900ff; box-shadow: 0 0 18px rgba(153, 0, 255, 0.7); }
+            100% { border-color: #ff0055; box-shadow: 0 0 18px rgba(255, 0, 85, 0.7); }
         }
 
         @keyframes rgbGlowText {
-            0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
-            33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; }
-            66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; }
-            100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; }
+            0% { text-shadow: 0 0 8px #ff0055, 0 0 16px #ff0055; color: #fff; }
+            20% { text-shadow: 0 0 8px #ff8800, 0 0 16px #ff8800; color: #fff; }
+            40% { text-shadow: 0 0 8px #00ffcc, 0 0 16px #00ffcc; color: #fff; }
+            60% { text-shadow: 0 0 8px #3388ff, 0 0 16px #3388ff; color: #fff; }
+            80% { text-shadow: 0 0 8px #9900ff, 0 0 16px #9900ff; color: #fff; }
+            100% { text-shadow: 0 0 8px #ff0055, 0 0 16px #ff0055; color: #fff; }
         }
 
-        .rgb-card {
-            border: 2px solid #ff0055 !important;
-            animation: rgbBorder 4s linear infinite !important;
+        @keyframes rgbBorderFire {
+            0% { border-color: #ff0000; box-shadow: 0 0 18px rgba(255, 0, 0, 0.7); }
+            50% { border-color: #ffcc00; box-shadow: 0 0 18px rgba(255, 204, 0, 0.7); }
+            100% { border-color: #ff0000; box-shadow: 0 0 18px rgba(255, 0, 0, 0.7); }
+        }
+        @keyframes rgbGlowTextFire {
+            0% { text-shadow: 0 0 8px #ff3300, 0 0 16px #ff3300; color: #fff; }
+            50% { text-shadow: 0 0 8px #ffcc00, 0 0 16px #ffcc00; color: #fff; }
+            100% { text-shadow: 0 0 8px #ff3300, 0 0 16px #ff3300; color: #fff; }
         }
 
-        .rgb-text-glow {
-            animation: rgbGlowText 3s linear infinite !important;
+        @keyframes rgbBorderOcean {
+            0% { border-color: #0ea5e9; box-shadow: 0 0 18px rgba(14, 165, 233, 0.7); }
+            50% { border-color: #22d3ee; box-shadow: 0 0 18px rgba(34, 211, 238, 0.7); }
+            100% { border-color: #0ea5e9; box-shadow: 0 0 18px rgba(14, 165, 233, 0.7); }
         }
+        @keyframes rgbGlowTextOcean {
+            0% { text-shadow: 0 0 8px #0ea5e9, 0 0 16px #0ea5e9; color: #fff; }
+            50% { text-shadow: 0 0 8px #22d3ee, 0 0 16px #22d3ee; color: #fff; }
+            100% { text-shadow: 0 0 8px #0ea5e9, 0 0 16px #0ea5e9; color: #fff; }
+        }
+
+        @keyframes rgbBorderNeon {
+            0% { border-color: #ec4899; box-shadow: 0 0 18px rgba(236, 72, 153, 0.7); }
+            50% { border-color: #a855f7; box-shadow: 0 0 18px rgba(168, 85, 247, 0.7); }
+            100% { border-color: #ec4899; box-shadow: 0 0 18px rgba(236, 72, 153, 0.7); }
+        }
+        @keyframes rgbGlowTextNeon {
+            0% { text-shadow: 0 0 8px #ec4899, 0 0 16px #ec4899; color: #fff; }
+            50% { text-shadow: 0 0 8px #a855f7, 0 0 16px #a855f7; color: #fff; }
+            100% { text-shadow: 0 0 8px #ec4899, 0 0 16px #ec4899; color: #fff; }
+        }
+
+        .rgb-card { border: 2px solid #ff0055 !important; animation: rgbBorder 4s linear infinite !important; }
+        .rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
+
+        .rgb-theme-fire.rgb-card { animation: rgbBorderFire 2.6s ease-in-out infinite !important; }
+        .rgb-theme-fire.rgb-text-glow { animation: rgbGlowTextFire 2.2s ease-in-out infinite !important; }
+
+        .rgb-theme-ocean.rgb-card { animation: rgbBorderOcean 3s ease-in-out infinite !important; }
+        .rgb-theme-ocean.rgb-text-glow { animation: rgbGlowTextOcean 2.6s ease-in-out infinite !important; }
+
+        .rgb-theme-neon.rgb-card { animation: rgbBorderNeon 2.4s ease-in-out infinite !important; }
+        .rgb-theme-neon.rgb-text-glow { animation: rgbGlowTextNeon 2s ease-in-out infinite !important; }
+
+        .rgb-theme-rainbow.rgb-card { animation: rgbBorder 4s linear infinite !important; }
+        .rgb-theme-rainbow.rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
+
+        @keyframes rgbBorderEmerald {
+            0% { border-color: #10b981; box-shadow: 0 0 18px rgba(16, 185, 129, 0.7); }
+            50% { border-color: #a3e635; box-shadow: 0 0 18px rgba(163, 230, 53, 0.7); }
+            100% { border-color: #10b981; box-shadow: 0 0 18px rgba(16, 185, 129, 0.7); }
+        }
+        @keyframes rgbGlowTextEmerald {
+            0% { text-shadow: 0 0 8px #10b981, 0 0 16px #10b981; color: #fff; }
+            50% { text-shadow: 0 0 8px #a3e635, 0 0 16px #a3e635; color: #fff; }
+            100% { text-shadow: 0 0 8px #10b981, 0 0 16px #10b981; color: #fff; }
+        }
+        .rgb-theme-emerald.rgb-card { animation: rgbBorderEmerald 2.8s ease-in-out infinite !important; }
+        .rgb-theme-emerald.rgb-text-glow { animation: rgbGlowTextEmerald 2.4s ease-in-out infinite !important; }
 
         /* --- ДОПОЛНИТЕЛЬНЫЕ АНИМАЦИИ --- */
         @keyframes textGradient {
@@ -112,71 +184,120 @@
         }
 
         .animated-site-title {
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
-            background-size: 300% 300%;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #f472b6, #38bdf8);
+            background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite;
+            background-clip: text;
+            animation: textGradient 4s linear infinite, titlePulse 2.8s ease-in-out infinite;
             display: inline-block;
             font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
-        @keyframes lightningStrike {
-            0% { transform: translateY(-25px) scaleY(0.2); opacity: 0; }
-            10% { transform: translateY(2px) scaleY(1.1); opacity: 1; filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 25px #38bdf8); }
-            15% { transform: translateY(-1px) scaleY(0.95); opacity: 0.4; }
-            20% { transform: translateY(1px) scaleY(1.05); opacity: 1; filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #c084fc); }
-            25% { transform: translateY(0) scaleY(1); opacity: 0.8; }
-            30% { opacity: 1; filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #38bdf8); }
-            70% { transform: translateY(0) scaleY(1); opacity: 1; filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #38bdf8); }
-            100% { transform: translateY(-25px) scaleY(0.2); opacity: 0; }
+        .title-theme-fire { background: linear-gradient(90deg, #ff3300, #ff8800, #ffcc00, #ff3300) !important; background-size: 300% 300% !important; }
+        .title-theme-ocean { background: linear-gradient(90deg, #0ea5e9, #22d3ee, #38bdf8, #0ea5e9) !important; background-size: 300% 300% !important; }
+        .title-theme-neon { background: linear-gradient(90deg, #ec4899, #a855f7, #6366f1, #ec4899) !important; background-size: 300% 300% !important; }
+        .title-theme-rainbow { background: linear-gradient(90deg, #ff0055, #ff8800, #ffee00, #00ffcc, #3388ff, #9900ff, #ff0055) !important; background-size: 400% 400% !important; }
+        .title-theme-emerald { background: linear-gradient(90deg, #10b981, #22c55e, #a3e635, #10b981) !important; background-size: 300% 300% !important; }
+
+        @keyframes codeSymbolPulse {
+            0% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56,189,248,0.4)); }
+            25% { transform: scale(1.08) rotate(3deg); filter: drop-shadow(0 0 10px #818cf8) drop-shadow(0 0 18px rgba(129,140,248,0.5)); }
+            50% { transform: scale(1.15) rotate(-5deg); filter: drop-shadow(0 0 14px #c084fc) drop-shadow(0 0 22px rgba(192,132,252,0.6)); }
+            75% { transform: scale(1.08) rotate(2deg); filter: drop-shadow(0 0 10px #f472b6) drop-shadow(0 0 18px rgba(244,114,182,0.5)); }
+            100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56,189,248,0.4)); }
+        }
+
+        @keyframes codeSymbolGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes brandIconGlow {
+            0%, 100% { box-shadow: 0 0 12px rgba(56, 189, 248, 0.5), 0 0 24px rgba(99, 102, 241, 0.25), inset 0 0 12px rgba(255,255,255,0.08); }
+            50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.7), 0 0 36px rgba(236, 72, 153, 0.35), inset 0 0 16px rgba(255,255,255,0.12); }
         }
 
         .brand-icon {
             position: relative;
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #0284c7, #6366f1, #9333ea);
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0284c7, #6366f1, #9333ea, #ec4899);
+            background-size: 200% 200%;
+            animation: textGradient 6s linear infinite, brandIconGlow 3s ease-in-out infinite;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
             overflow: hidden;
             flex-shrink: 0;
         }
 
-        .brand-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: none;
-            stroke: #ffffff;
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            animation: lightningStrike 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, rgba(15,23,42,0.85), rgba(30,41,59,0.9));
+            z-index: 0;
+        }
+
+        .brand-icon span {
+            position: relative;
+            z-index: 1;
+            font-family: 'JetBrains Mono', 'Roboto Mono', 'Courier New', monospace;
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: -1.5px;
+            background: linear-gradient(90deg, #ffffff, #38bdf8, #c084fc, #f472b6, #ffffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: codeSymbolGradient 2.5s linear infinite, codeSymbolPulse 2.8s ease-in-out infinite;
+            display: inline-block;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes zoomOut { from { opacity: 0; transform: scale(1.2); } to { opacity: 1; transform: scale(1); } }
+        @keyframes swingAnim { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(6deg); } 40% { transform: rotate(-5deg); } 60% { transform: rotate(3deg); } 80% { transform: rotate(-2deg); } }
+        @keyframes wobbleAnim { 0%, 100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-4px) rotate(-1.5deg); } 75% { transform: translateX(4px) rotate(1.5deg); } }
+        @keyframes glowPulseColor { 0% { box-shadow: 0 0 12px rgba(56,189,248,0.6); } 33% { box-shadow: 0 0 18px rgba(168,85,247,0.6); } 66% { box-shadow: 0 0 18px rgba(236,72,153,0.6); } 100% { box-shadow: 0 0 12px rgba(56,189,248,0.6); } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.08); } 28% { transform: scale(1); } 42% { transform: scale(1.08); } 70% { transform: scale(1); } }
+        @keyframes blurIn { from { opacity: 0; filter: blur(8px); } to { opacity: 1; filter: blur(0); } }
+        @keyframes flipY { 0% { transform: perspective(400px) rotateY(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateY(0); opacity: 1; } }
 
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
         .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
+        .anim-slide-right { animation: slideInRight 0.8s ease forwards; }
+        .anim-slide-down { animation: slideDown 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
+        .anim-zoom-out { animation: zoomOut 0.6s ease forwards; }
         .anim-float { animation: floatAnim 3s ease-in-out infinite; }
         .anim-pulse { animation: pulseGlow 2s infinite; }
         .anim-flip { animation: flipIn 0.8s ease forwards; }
+        .anim-flip-y { animation: flipY 0.9s ease forwards; }
         .anim-bounce { animation: bounceAnim 2s infinite; }
         .anim-shake { animation: shakeAnim 2s infinite; }
         .anim-rotate { animation: rotateAnim 10s linear infinite; }
         .anim-sparkle { animation: sparkleGlow 2s ease-in-out infinite; }
+        .anim-swing { animation: swingAnim 2.5s ease-in-out infinite; transform-origin: top center; }
+        .anim-wobble { animation: wobbleAnim 2s ease-in-out infinite; }
+        .anim-glow-pulse { animation: glowPulseColor 3s ease-in-out infinite; }
+        .anim-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        .anim-blur-in { animation: blurIn 0.9s ease forwards; }
 
         .top-bar {
             min-height: 60px;
-            background: rgba(30, 41, 59, 0.95);
+            background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
@@ -188,6 +309,17 @@
             top: 0;
             z-index: 100;
             gap: 10px;
+        }
+
+        .top-bar::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -1px;
+            height: 2px;
+            background: linear-gradient(90deg, #38bdf8, #a855f7, #ec4899, #38bdf8);
+            background-size: 300% 100%;
+            animation: textGradient 6s linear infinite;
+            opacity: 0.7;
         }
 
         .brand {
@@ -362,6 +494,68 @@
             transform: scale(0.98);
         }
 
+        .btn-element:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .btn-ai-wizard {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #a855f7, #38bdf8, #ec4899);
+            background-size: 220% 220%;
+            animation: textGradient 5s linear infinite;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
+            margin-bottom: 6px;
+        }
+
+        #ai-wizard-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 15, 0.72);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .ai-wizard-box {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            max-width: 420px;
+            width: 100%;
+            padding: 22px;
+            color: #f8fafc;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+
+        .ai-wizard-checks label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #f8fafc;
+            font-size: 12px;
+            padding: 2px 0;
+        }
+
+        .inner-link-block {
+            border-top: 1px dashed #334155;
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+
         .btn-ai {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3));
             border-color: #a855f7;
@@ -397,7 +591,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+            background:
+                radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.22), transparent 45%),
+                radial-gradient(circle at 85% 0%, rgba(168, 85, 247, 0.20), transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.16), transparent 55%),
+                radial-gradient(circle at 70% 40%, rgba(16, 185, 129, 0.08), transparent 40%),
+                radial-gradient(circle at center, #1a2332 0%, #070b14 100%);
             min-height: calc(100vh - 60px);
             overflow-x: auto;
         }
@@ -652,6 +851,7 @@
         }
 
         body.preview-mode #exit-preview-btn { display: block; }
+        body.preview-mode #ai-wizard-overlay { display: none !important; }
 
         @media (max-width: 1024px) {
             .main-container { flex-direction: column; }
@@ -668,20 +868,46 @@
             .sidebar.active-tab { display: flex; }
             .workspace { display: flex; width: 100%; padding: 8px; }
             .workspace.hidden-tab { display: none; }
-            .device-toggle, .zoom-controls { display: none; }
+            .zoom-controls { display: none; }
             .top-bar { justify-content: space-between; gap: 5px; padding: 6px 10px; }
-            .btn-element { padding: 12px; font-size: 14px; }
-            .control-group input, .control-group select, .control-group textarea { padding: 10px; font-size: 14px; }
+            .btn-element { padding: 13px 12px; font-size: 14px; min-height: 44px; }
+            .control-group input, .control-group select, .control-group textarea { padding: 11px; font-size: 15px; }
+            .canvas-item .delete-btn { width: 30px; height: 30px; font-size: 14px; }
+            .drag-handle { padding: 6px 10px; font-size: 12px; }
+            .device-toggle { gap: 3px; }
+            .device-toggle .toggle-btn { padding: 8px; }
+        }
+
+        @media (max-width: 820px) {
+            .device-toggle #btn-device-tablet span, .device-toggle #btn-device-mobile span { display: none; }
         }
 
         @media (max-width: 600px) {
             .brand span { font-size: 14px; }
             .tg-banner-link span { display: none; }
             .top-actions { width: 100%; justify-content: space-between; margin-top: 5px; }
-            .action-btn { flex: 1; text-align: center; padding: 10px; }
+            .action-btn { flex: 1; text-align: center; padding: 12px 8px; font-size: 13px; }
             .canvas { padding: 10px; min-height: 500px; }
             .save-badge { display: none; }
-            .page-manager { max-width: 140px; }
+            .page-manager { max-width: 130px; }
+            .device-toggle { display: none; }
+            .history-toggle .toggle-btn { padding: 8px 10px; }
+            .btn-row-controls button { padding: 10px 6px; font-size: 12px; }
+            .mobile-tab-btn { padding: 14px 8px; font-size: 12px; }
+            .ai-wizard-box { padding: 16px; max-width: 100%; }
+        }
+
+        @media (max-width: 380px) {
+            .brand span { display: none; }
+            .top-bar { padding: 6px 8px; }
+            .page-manager { max-width: 100px; }
+            .page-select { font-size: 11px; }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .btn-element, .toggle-btn, .action-btn, .delete-btn { touch-action: manipulation; }
+            .canvas-item { padding: 6px; }
+            .canvas-item .delete-btn { width: 32px; height: 32px; font-size: 15px; top: -12px; right: -12px; }
         }
     </style>
 </head>
@@ -690,9 +916,7 @@
     <div class="top-bar">
         <div class="brand">
             <div class="brand-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                </svg>
+                <span>&lt;/&gt;</span>
             </div>
             <span class="animated-site-title">Programist-studio</span>
         </div>
@@ -730,8 +954,8 @@
 
         <div class="device-toggle">
             <button class="toggle-btn active" id="btn-device-desktop" onclick="setDeviceMode('desktop')">🖥️</button>
-            <button class="toggle-btn" id="btn-device-tablet" onclick="setDeviceMode('tablet')">📱 Tablet</button>
-            <button class="toggle-btn" id="btn-device-mobile" onclick="setDeviceMode('mobile')">📱 Phone</button>
+            <button class="toggle-btn" id="btn-device-tablet" onclick="setDeviceMode('tablet')">📱 <span>Tablet</span></button>
+            <button class="toggle-btn" id="btn-device-mobile" onclick="setDeviceMode('mobile')">📱 <span>Phone</span></button>
         </div>
 
         <div class="view-toggle">
@@ -754,6 +978,8 @@
     <div class="main-container">
         
         <div class="sidebar" id="sidebar-left">
+            <button class="btn-ai-wizard" onclick="openAIWizard()">🤖 AI-Помощник: создать сайт целиком</button>
+
             <h2>AI Дизайн & Цвета</h2>
             <button class="btn-element btn-ai" onclick="generateAIPalette()">🎨 Сгенерировать AI-палитру <span>★</span></button>
             <button class="btn-element btn-ai" onclick="enhanceCanvasDesignAI()">✨ Улучшить стиль (AI) <span>★</span></button>
@@ -770,6 +996,12 @@
             <button class="btn-element btn-preset" onclick="loadPreset('education')">🎓 Курс / Инфопродукт <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('restaurant')">🍕 Еда & Ресторан <span>★</span></button>
             <button class="btn-element btn-preset" onclick="loadPreset('corporate')">🏢 Корпоративный сайт <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('beauty')">💅 Салон красоты <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('fitness')">🏋️ Фитнес-клуб <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('realestate')">🏠 Недвижимость <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('medical')">🩺 Медицинский центр <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('travel')">✈️ Туристическое агентство <span>★</span></button>
+            <button class="btn-element btn-preset" onclick="loadPreset('wedding')">💍 Свадьбы & Праздники <span>★</span></button>
 
             <h2>Анимированные и Интерактивные</h2>
             <button class="btn-element" onclick="addElement('site-theme-toggle')">Переключатель темы (☀️/🌙) <span>+</span></button>
@@ -793,7 +1025,7 @@
 
             <h2>Сложные блоки & Маркетинг</h2>
             <button class="btn-element" onclick="addElement('promo-banner')">🏷️ Баннер Акции <span>+</span></button>
-            <button class="btn-element" onclick="addElement('pricing')">Тарифы (2-3 млн сум) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('pricing')">Тарифы / Цены (редактируемые) <span>+</span></button>
             <button class="btn-element" onclick="addElement('form')">Форма заявки <span>+</span></button>
             <button class="btn-element" onclick="addElement('star-reviews')">Отзывы со звездами (5★) <span>+</span></button>
             <button class="btn-element" onclick="addElement('social-share')">Соцсети & Поделиться <span>+</span></button>
@@ -808,22 +1040,38 @@
             <button class="btn-element" onclick="addElement('faq')">Блок FAQ <span>+</span></button>
             <button class="btn-element" onclick="addElement('map')">📍 Карта / Геолокация <span>+</span></button>
 
+            <h2>Новые конструкторы</h2>
+            <button class="btn-element" onclick="addElement('hero-split')">🖼️ Герой (Текст + Фото) <span>+</span></button>
+            <button class="btn-element" onclick="addElement('cta-banner')">📣 CTA-баннер <span>+</span></button>
+            <button class="btn-element" onclick="addElement('team')">👥 Команда <span>+</span></button>
+            <button class="btn-element" onclick="addElement('newsletter')">📩 Подписка на новости <span>+</span></button>
+            <button class="btn-element" onclick="addElement('logos-strip')">🏷️ Логотипы клиентов <span>+</span></button>
+            <button class="btn-element" onclick="addElement('timeline')">🧭 Этапы работы (Таймлайн) <span>+</span></button>
+
             <h2>Настройки страницы</h2>
             <div class="control-group">
                 <label>Размер холста (Ширина):</label>
                 <select id="canvas-width-select" onchange="changeCanvasWidth(this.value)">
+                    <option value="900px">900px (Узкий)</option>
+                    <option value="1100px">1100px</option>
                     <option value="1200px">1200px (Стандарт)</option>
                     <option value="1400px">1400px (Широкий)</option>
+                    <option value="1600px">1600px (Очень широкий)</option>
                     <option value="100%">100% (Во весь экран)</option>
                 </select>
             </div>
             <div class="control-group">
                 <label>Мин. высота холста:</label>
                 <select id="canvas-height-select" onchange="changeCanvasHeight(this.value)">
+                    <option value="500px">500px (Компактный)</option>
                     <option value="700px">700px (Авто)</option>
+                    <option value="900px">900px</option>
                     <option value="1000px">1000px</option>
+                    <option value="1200px">1200px</option>
                     <option value="1500px">1500px (Длинный лендинг)</option>
                     <option value="2000px">2000px</option>
+                    <option value="2500px">2500px (Очень длинный)</option>
+                    <option value="3000px">3000px</option>
                 </select>
             </div>
             <div class="control-group">
@@ -834,11 +1082,17 @@
                     <option value="Poppins">Poppins</option>
                     <option value="Roboto">Roboto</option>
                     <option value="Open Sans">Open Sans</option>
+                    <option value="Nunito">Nunito</option>
+                    <option value="Raleway">Raleway</option>
+                    <option value="Source Sans 3">Source Sans 3</option>
                     <option value="Oswald">Oswald</option>
+                    <option value="Exo 2">Exo 2</option>
                     <option value="Playfair Display">Playfair Display</option>
                     <option value="Lora">Lora</option>
+                    <option value="Comfortaa">Comfortaa</option>
                     <option value="Caveat">Caveat (Рукописный)</option>
                     <option value="Pacifico">Pacifico (Декоративный)</option>
+                    <option value="JetBrains Mono">JetBrains Mono (Код)</option>
                 </select>
             </div>
             <div class="control-group">
@@ -885,6 +1139,60 @@
     </div>
 
     <button id="exit-preview-btn" onclick="togglePreviewMode()">✕ Выйти</button>
+
+    <div id="ai-wizard-overlay">
+        <div class="ai-wizard-box">
+            <h2 style="font-size:18px; margin-bottom:4px;">🤖 AI-Помощник создания сайта</h2>
+            <p style="font-size:12px; color:#94a3b8; margin-bottom:16px;">Ответьте на несколько вопросов — и я соберу для вас готовый сайт из блоков и текстов.</p>
+
+            <div class="control-group">
+                <label>Название бизнеса/проекта:</label>
+                <input type="text" id="ai-wizard-name" placeholder="Например: Programist-studio">
+            </div>
+
+            <div class="control-group">
+                <label>Сфера деятельности:</label>
+                <select id="ai-wizard-category">
+                    <option value="it">💻 IT-Студия / Разработка</option>
+                    <option value="restaurant">🍕 Ресторан / Доставка</option>
+                    <option value="courses">🎓 Курсы / Обучение</option>
+                    <option value="shop">🛒 Магазин / Товары</option>
+                    <option value="beauty">💅 Салон красоты</option>
+                    <option value="fitness">🏋️ Фитнес-клуб</option>
+                    <option value="realestate">🏠 Недвижимость</option>
+                    <option value="medical">🩺 Медицина</option>
+                    <option value="travel">✈️ Путешествия</option>
+                    <option value="wedding">💍 Свадьбы & Праздники</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Стиль оформления:</label>
+                <select id="ai-wizard-style">
+                    <option value="dark">🌌 Тёмный премиум</option>
+                    <option value="light">☀️ Светлый минимализм</option>
+                    <option value="vibrant">🌈 Яркий RGB</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Какие блоки включить:</label>
+                <div class="ai-wizard-checks">
+                    <label><input type="checkbox" id="aiw-hero" checked> Шапка + заголовок + текст</label>
+                    <label><input type="checkbox" id="aiw-features" checked> Преимущества</label>
+                    <label><input type="checkbox" id="aiw-pricing" checked> Тарифы / Цены</label>
+                    <label><input type="checkbox" id="aiw-reviews" checked> Отзывы</label>
+                    <label><input type="checkbox" id="aiw-faq" checked> FAQ</label>
+                    <label><input type="checkbox" id="aiw-contact" checked> Форма заявки</label>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top:16px;">
+                <button class="action-btn" style="flex:1; background:#334155; color:#f8fafc;" onclick="closeAIWizard()">Отмена</button>
+                <button class="btn-gen-ai" style="flex:1; padding:10px;" onclick="aiWizardGenerate()">✨ Сгенерировать сайт</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const canvas = document.getElementById('canvas');
@@ -938,6 +1246,42 @@
                 texts: ["Быстрая доставка по всей стране. Гарантия качества на всю продукцию.", "Оформите заказ сегодня и получите подарок в каждом комплекте.", "Удобная оплата при получении или картой на сайте."],
                 buttons: ["В каталог", "Купить со скидкой", "Оформить заказ", "Перейти в магазин"],
                 cards: ["Беспроводные наушники\nЧистый звук и мощный бас. До 24 часов работы.", "Смарт-часы 2026\nСпортивные функции и мониторинг здоровья."]
+            },
+            beauty: {
+                headers: ["Красота и уход, которым доверяют", "Преображение начинается здесь", "Салон красоты премиум-класса", "Ваша лучшая версия — уже сегодня"],
+                texts: ["Профессиональные мастера, премиальная косметика и индивидуальный подход к каждому клиенту.", "Запишитесь на процедуру и получите скидку на первое посещение.", "Более 10 лет создаём безупречный образ для наших клиентов."],
+                buttons: ["Записаться на процедуру", "Выбрать мастера", "Узнать цены", "Забронировать время"],
+                cards: ["Маникюр и педикюр\nАккуратный уход за руками и ногами с долговременным покрытием.", "Стрижка и укладка\nСоздание образа с учётом типа лица и структуры волос."]
+            },
+            fitness: {
+                headers: ["Тренируйтесь с удовольствием и результатом", "Фитнес-клуб мирового уровня", "Ваша форма мечты — реальность", "Спорт, который меняет жизнь"],
+                texts: ["Современное оборудование, персональные тренеры и групповые программы для любого уровня.", "Первое занятие — бесплатно! Приходите и убедитесь сами.", "Гибкие абонементы и удобное расписание для вашего образа жизни."],
+                buttons: ["Записаться на тренировку", "Купить абонемент", "Пробное занятие", "Выбрать программу"],
+                cards: ["Персональные тренировки\nИндивидуальная программа с личным тренером.", "Групповые занятия\nЙога, кроссфит, бокс и другие направления."]
+            },
+            realestate: {
+                headers: ["Недвижимость вашей мечты", "Квартиры и дома от надёжного застройщика", "Инвестируйте в качественную недвижимость", "Найдите свой идеальный дом"],
+                texts: ["Широкий выбор объектов, юридическое сопровождение сделки и выгодные условия рассрочки.", "Более 500 довольных клиентов и безупречная репутация на рынке.", "Помогаем подобрать недвижимость под любой бюджет и цели."],
+                buttons: ["Смотреть объекты", "Записаться на просмотр", "Получить консультацию", "Узнать цену"],
+                cards: ["3-комнатная квартира\nСовременная планировка, развитая инфраструктура района.", "Загородный дом\nПросторный дом с участком в экологически чистом районе."]
+            },
+            medical: {
+                headers: ["Ваше здоровье — наш приоритет", "Медицинский центр нового поколения", "Качественная диагностика и лечение", "Забота о здоровье каждый день"],
+                texts: ["Опытные врачи, современное оборудование и индивидуальный подход к каждому пациенту.", "Запишитесь на приём онлайн в удобное для вас время.", "Полный спектр медицинских услуг под одной крышей."],
+                buttons: ["Записаться на приём", "Пройти диагностику", "Получить консультацию", "Выбрать врача"],
+                cards: ["Терапевт\nОбщая диагностика и консультация по вопросам здоровья.", "Стоматология\nЛечение и профилактика заболеваний зубов и дёсен."]
+            },
+            travel: {
+                headers: ["Путешествия вашей мечты", "Откройте мир вместе с нами", "Лучшие туры по доступным ценам", "Незабываемый отдых начинается здесь"],
+                texts: ["Индивидуальные и групповые туры, помощь с визами и полное сопровождение поездки.", "Забронируйте тур сейчас и получите скидку на раннее бронирование.", "Более 50 направлений по всему миру для любого бюджета."],
+                buttons: ["Выбрать тур", "Забронировать поездку", "Получить консультацию", "Смотреть направления"],
+                cards: ["Тур на Бали\n7 ночей на берегу океана, завтраки включены.", "Экскурсия по Европе\nПосещение 5 стран за 10 дней с русскоговорящим гидом."]
+            },
+            wedding: {
+                headers: ["Свадьба вашей мечты", "Организация праздников под ключ", "Незабываемый день для двоих", "Создаём идеальные торжества"],
+                texts: ["Полная организация свадьбы: от декора до банкета, с вниманием к каждой детали.", "Индивидуальный подход и учёт всех пожеланий молодожёнов.", "Более 200 свадеб организовано с любовью и заботой."],
+                buttons: ["Заказать организацию", "Получить смету", "Обсудить детали", "Записаться на консультацию"],
+                cards: ["Оформление зала\nСтильный декор в выбранной цветовой гамме и стиле.", "Выездная церемония\nОрганизация регистрации на природе или в уникальной локации."]
             }
         };
 
@@ -1213,11 +1557,18 @@
 
         function enhanceCanvasDesignAI() {
             const wrappers = canvas.querySelectorAll('.canvas-item');
+            const shadowStyles = [
+                '0 10px 25px rgba(0,0,0,0.10)',
+                '0 12px 30px rgba(56,189,248,0.15)',
+                '0 12px 30px rgba(168,85,247,0.15)',
+                '0 12px 30px rgba(236,72,153,0.12)'
+            ];
             wrappers.forEach(w => {
                 const el = w.firstElementChild;
                 if (!el) return;
-                el.style.borderRadius = '12px';
-                el.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+                el.style.borderRadius = (Math.floor(Math.random() * 10) + 10) + 'px';
+                el.style.boxShadow = shadowStyles[Math.floor(Math.random() * shadowStyles.length)];
+                el.style.transition = 'all 0.3s ease';
             });
             saveHistoryState();
         }
@@ -1227,19 +1578,60 @@
                 alert("Сначала выберите блок на холсте!");
                 return;
             }
-            const colors = ['#38bdf8', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#6366f1', '#14b8a6'];
+            const gradients = [
+                'linear-gradient(135deg, #38bdf8, #6366f1)',
+                'linear-gradient(135deg, #a855f7, #ec4899)',
+                'linear-gradient(135deg, #f59e0b, #ef4444)',
+                'linear-gradient(135deg, #10b981, #14b8a6)',
+                'linear-gradient(135deg, #0ea5e9, #22d3ee)',
+                'linear-gradient(135deg, #ec4899, #f43f5e)',
+                'linear-gradient(135deg, #6366f1, #a855f7, #ec4899)',
+                'linear-gradient(135deg, #f97316, #f59e0b)'
+            ];
+            const colors = ['#38bdf8', '#a855f7', '#ec4899', '#10b981', '#f59e0b', '#6366f1', '#14b8a6', '#f43f5e'];
+            const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             const randomRadius = Math.floor(Math.random() * 25) + 'px';
-            
+            const randomShadowSize = Math.floor(Math.random() * 20) + 15;
+
             selectedElement.style.borderRadius = randomRadius;
-            
+            selectedElement.style.transition = 'all 0.3s ease';
+
             const tag = selectedElement.tagName.toLowerCase();
             if (tag === 'a' || tag === 'button') {
-                selectedElement.style.backgroundColor = randomColor;
+                selectedElement.style.background = randomGradient;
                 selectedElement.style.color = '#ffffff';
+                selectedElement.style.border = 'none';
+                selectedElement.style.boxShadow = `0 6px ${randomShadowSize}px ${randomColor}66`;
             } else {
-                selectedElement.style.borderColor = randomColor;
-                selectedElement.style.boxShadow = `0 4px 20px ${randomColor}44`;
+                const useGradientBg = Math.random() > 0.5;
+                if (useGradientBg) {
+                    selectedElement.style.background = randomGradient;
+                    selectedElement.style.color = '#ffffff';
+                    selectedElement.style.border = 'none';
+                } else {
+                    selectedElement.style.borderColor = randomColor;
+                    selectedElement.style.borderWidth = '2px';
+                    selectedElement.style.borderStyle = 'solid';
+                }
+                selectedElement.style.boxShadow = `0 8px ${randomShadowSize}px ${randomColor}44`;
+            }
+            saveHistoryState();
+        }
+
+        function applyColorTheme(theme) {
+            if (!selectedElement) return;
+            const el = selectedElement;
+            const rgbThemes = ['rgb-theme-fire', 'rgb-theme-ocean', 'rgb-theme-neon', 'rgb-theme-rainbow', 'rgb-theme-emerald'];
+            const titleThemes = ['title-theme-fire', 'title-theme-ocean', 'title-theme-neon', 'title-theme-rainbow', 'title-theme-emerald'];
+            rgbThemes.forEach(c => el.classList.remove(c));
+            titleThemes.forEach(c => el.classList.remove(c));
+
+            if (el.classList.contains('rgb-card') || el.classList.contains('rgb-text-glow')) {
+                el.classList.add('rgb-theme-' + theme);
+            }
+            if (el.classList.contains('animated-site-title')) {
+                el.classList.add('title-theme-' + theme);
             }
             saveHistoryState();
         }
@@ -1426,6 +1818,10 @@
                     selectElement(wrapper, targetEl, type);
                 };
             });
+
+            canvas.querySelectorAll('[contenteditable="true"]').forEach(el => {
+                el.onblur = () => saveHistoryState();
+            });
         }
 
         window.onload = () => {
@@ -1533,6 +1929,78 @@
             }
         }
 
+        function openAIWizard() {
+            document.getElementById('ai-wizard-overlay').style.display = 'flex';
+        }
+
+        function closeAIWizard() {
+            document.getElementById('ai-wizard-overlay').style.display = 'none';
+        }
+
+        function aiWizardGenerate() {
+            const name = document.getElementById('ai-wizard-name').value.trim() || 'Ваш бизнес';
+            const category = document.getElementById('ai-wizard-category').value;
+            const style = document.getElementById('ai-wizard-style').value;
+            const data = aiTextDatabase[category] || aiTextDatabase.it;
+
+            if (canvas.querySelectorAll('.canvas-item').length > 0) {
+                if (!confirm('Текущий холст будет очищен и заменён сгенерированным сайтом. Продолжить?')) return;
+            }
+
+            canvas.innerHTML = '';
+            if (emptyMsg) emptyMsg.style.display = 'none';
+
+            addElement('navbar');
+            if (document.getElementById('aiw-hero').checked) {
+                addElement('site-title');
+                addElement('header');
+                addElement('text');
+            }
+            if (document.getElementById('aiw-features').checked) addElement('features');
+            if (document.getElementById('aiw-pricing').checked) addElement('pricing');
+            if (document.getElementById('aiw-reviews').checked) addElement('star-reviews');
+            if (document.getElementById('aiw-faq').checked) addElement('faq');
+            if (document.getElementById('aiw-contact').checked) addElement('form');
+            addElement('footer');
+
+            canvas.querySelectorAll('.canvas-item').forEach(wrapper => {
+                const el = wrapper.firstElementChild;
+                if (!el) return;
+
+                const navTitle = el.querySelector ? el.querySelector('.animated-site-title') : null;
+                if (navTitle) navTitle.innerText = name;
+
+                if (el.classList && el.classList.contains('animated-site-title')) {
+                    el.innerText = name;
+                } else if (el.tagName === 'H1') {
+                    el.innerText = data.headers[Math.floor(Math.random() * data.headers.length)];
+                } else if (el.tagName === 'P') {
+                    el.innerText = data.texts[Math.floor(Math.random() * data.texts.length)];
+                } else if (el.tagName === 'FOOTER') {
+                    el.innerText = `© 2026 ${name}. Все права защищены.`;
+                }
+            });
+
+            let palette;
+            if (style === 'dark') palette = aiPalettes[0];
+            else if (style === 'vibrant') palette = aiPalettes[9];
+            else palette = aiPalettes[1];
+
+            canvas.style.backgroundColor = palette.bg;
+            canvas.style.color = palette.text;
+            document.getElementById('page-bg-color').value = palette.bg;
+            canvas.querySelectorAll('.dark-card').forEach(el => {
+                el.style.backgroundColor = palette.cardBg;
+                el.style.color = palette.text;
+                el.style.borderColor = palette.accent;
+            });
+
+            closeAIWizard();
+            clearSelection();
+            if (window.innerWidth <= 1024) switchMobileTab('canvas');
+            saveHistoryState();
+        }
+
         function loadPreset(presetName) {
             canvas.innerHTML = '';
             if (emptyMsg) emptyMsg.style.display = 'none';
@@ -1627,6 +2095,32 @@
                 addElement('grid2');
                 addElement('form');
                 addElement('footer');
+            } else if (['beauty', 'fitness', 'realestate', 'medical', 'travel', 'wedding'].includes(presetName)) {
+                addElement('navbar');
+                addElement('site-title');
+                addElement('hero-split');
+                addElement('logos-strip');
+                addElement('features');
+                addElement('team');
+                addElement('timeline');
+                addElement('pricing');
+                addElement('star-reviews');
+                addElement('faq');
+                addElement('newsletter');
+                addElement('cta-banner');
+                addElement('form');
+                addElement('footer');
+
+                const data = aiTextDatabase[presetName] || aiTextDatabase.it;
+                canvas.querySelectorAll('.canvas-item').forEach(wrapper => {
+                    const el = wrapper.firstElementChild;
+                    if (!el) return;
+                    if (el.tagName === 'H1' && !el.classList.contains('animated-site-title')) {
+                        el.innerText = data.headers[Math.floor(Math.random() * data.headers.length)];
+                    } else if (el.tagName === 'H2') {
+                        el.innerText = data.headers[Math.floor(Math.random() * data.headers.length)];
+                    }
+                });
             }
 
             clearSelection();
@@ -1819,22 +2313,22 @@
                 el.style.gap = '10px';
                 el.innerHTML = `
                     <div class="dark-card" style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
-                        <h3 style="font-size:16px;">Старт</h3>
-                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 000 000 сум</p>
-                        <p style="font-size:11px; color:#64748b;">1 Страница<br>Поддержка 24/7</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;">Заказать</a>
+                        <h3 style="font-size:16px;" contenteditable="true">Название тарифа 1</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
+                        <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                     <div class="rgb-card dark-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
-                        <h3 style="font-size:16px;">Бизнес</h3>
-                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">2 500 000 сум</p>
-                        <p style="font-size:11px; color:#64748b;">До 5 Страниц<br>SEO оптимизация</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;">Заказать</a>
+                        <h3 style="font-size:16px;" contenteditable="true">Название тарифа 2</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
+                        <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                     <div class="dark-card" style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
-                        <h3 style="font-size:16px;">Премиум</h3>
-                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;">3 000 000 сум</p>
-                        <p style="font-size:11px; color:#64748b;">Индивидуальный дизайн<br>Интеграция с ИИ</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;">Заказать</a>
+                        <h3 style="font-size:16px;" contenteditable="true">Название тарифа 3</h3>
+                        <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
+                        <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                 `;
             } else if (type === 'features') {
@@ -2032,6 +2526,106 @@
                 el.style.color = '#94a3b8';
                 el.style.fontSize = '11px';
                 el.innerText = '© 2026 Programist-studio. Все права защищены.';
+            } else if (type === 'hero-split') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+                el.style.gap = '20px';
+                el.style.alignItems = 'center';
+                el.innerHTML = `
+                    <div>
+                        <h2 style="font-size:24px; margin-bottom:8px;">Заголовок вашего предложения</h2>
+                        <p style="font-size:13px; color:#64748b; margin-bottom:14px;">Краткое описание преимуществ продукта или услуги в одном-двух предложениях.</p>
+                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; padding:10px 20px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:6px; font-weight:bold; font-size:13px;">Начать сейчас</a>
+                    </div>
+                    <img src="https://via.placeholder.com/500x350/38bdf8/ffffff?text=Ваше+фото" style="width:100%; border-radius:10px;">
+                `;
+            } else if (type === 'cta-banner') {
+                el = document.createElement('div');
+                el.className = 'rgb-card';
+                el.style.padding = '24px';
+                el.style.borderRadius = '12px';
+                el.style.textAlign = 'center';
+                el.style.background = 'linear-gradient(135deg, #1e293b, #0f172a)';
+                el.style.color = '#ffffff';
+                el.innerHTML = `
+                    <h2 style="font-size:22px; margin-bottom:8px;">Готовы начать свой проект?</h2>
+                    <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Оставьте заявку и получите бесплатную консультацию уже сегодня.</p>
+                    <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; padding:12px 26px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:30px; font-weight:bold; font-size:14px;">Связаться с нами</a>
+                `;
+            } else if (type === 'team') {
+                el = document.createElement('div');
+                el.style.display = 'grid';
+                el.style.gridTemplateColumns = 'repeat(auto-fit, minmax(140px, 1fr))';
+                el.style.gap = '12px';
+                el.innerHTML = `
+                    <div class="dark-card" style="text-align:center; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                        <img src="https://via.placeholder.com/80" style="width:70px; height:70px; border-radius:50%; margin-bottom:8px;">
+                        <strong style="font-size:13px; display:block;">Алишер Валиев</strong>
+                        <span style="font-size:11px; color:#64748b;">Основатель</span>
+                    </div>
+                    <div class="dark-card" style="text-align:center; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                        <img src="https://via.placeholder.com/80" style="width:70px; height:70px; border-radius:50%; margin-bottom:8px;">
+                        <strong style="font-size:13px; display:block;">Диана Ким</strong>
+                        <span style="font-size:11px; color:#64748b;">Менеджер проекта</span>
+                    </div>
+                    <div class="dark-card" style="text-align:center; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                        <img src="https://via.placeholder.com/80" style="width:70px; height:70px; border-radius:50%; margin-bottom:8px;">
+                        <strong style="font-size:13px; display:block;">Тимур Расулов</strong>
+                        <span style="font-size:11px; color:#64748b;">Разработчик</span>
+                    </div>
+                `;
+            } else if (type === 'newsletter') {
+                el = document.createElement('div');
+                el.className = 'dark-card';
+                el.style.padding = '18px';
+                el.style.background = 'linear-gradient(135deg, #0f172a, #1e293b)';
+                el.style.borderRadius = '10px';
+                el.style.textAlign = 'center';
+                el.style.color = '#ffffff';
+                el.innerHTML = `
+                    <h3 style="margin-bottom:6px; font-size:16px;">📩 Подпишитесь на новости</h3>
+                    <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Будьте в курсе акций и новых предложений первыми.</p>
+                    <form onsubmit="return false;" style="display:flex; gap:8px; max-width:360px; margin:0 auto; flex-wrap:wrap;">
+                        <input type="email" placeholder="Ваш email" style="flex:1; min-width:160px; padding:9px; border-radius:6px; border:none; font-size:13px;">
+                        <button style="padding:9px 16px; background:#38bdf8; color:#0f172a; border:none; border-radius:6px; font-weight:bold; font-size:13px; cursor:pointer;">Подписаться</button>
+                    </form>
+                `;
+            } else if (type === 'logos-strip') {
+                el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.justifyContent = 'space-around';
+                el.style.alignItems = 'center';
+                el.style.flexWrap = 'wrap';
+                el.style.gap = '16px';
+                el.style.padding = '10px 0';
+                el.style.opacity = '0.8';
+                el.innerHTML = `
+                    <strong style="font-size:16px; color:#94a3b8;">ACME</strong>
+                    <strong style="font-size:16px; color:#94a3b8;">NovaTech</strong>
+                    <strong style="font-size:16px; color:#94a3b8;">Orbit</strong>
+                    <strong style="font-size:16px; color:#94a3b8;">Vertex</strong>
+                    <strong style="font-size:16px; color:#94a3b8;">Prisma</strong>
+                `;
+            } else if (type === 'timeline') {
+                el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.flexDirection = 'column';
+                el.style.gap = '14px';
+                el.innerHTML = `
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                        <div style="width:28px; height:28px; border-radius:50%; background:#38bdf8; color:#0f172a; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">1</div>
+                        <div><strong style="font-size:13px;">Заявка и брифинг</strong><p style="font-size:12px; color:#64748b;">Обсуждаем детали и цели проекта.</p></div>
+                    </div>
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                        <div style="width:28px; height:28px; border-radius:50%; background:#a855f7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">2</div>
+                        <div><strong style="font-size:13px;">Дизайн и разработка</strong><p style="font-size:12px; color:#64748b;">Создаём макет и воплощаем в коде.</p></div>
+                    </div>
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                        <div style="width:28px; height:28px; border-radius:50%; background:#ec4899; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">3</div>
+                        <div><strong style="font-size:13px;">Запуск проекта</strong><p style="font-size:12px; color:#64748b;">Тестируем и публикуем готовый сайт.</p></div>
+                    </div>
+                `;
             }
 
             wrapper.appendChild(el);
@@ -2115,7 +2709,7 @@
                 `;
             }
 
-            if (['site-title', 'header', 'text', 'button', 'footer', 'card', 'promo-banner'].includes(type)) {
+            if (['site-title', 'header', 'text', 'button', 'footer', 'card', 'promo-banner', 'cta-banner', 'hero-split'].includes(type)) {
                 html += `
                     <div class="control-group">
                         <label>Тематика для AI-генерации:</label>
@@ -2124,6 +2718,12 @@
                             <option value="restaurant">🍕 Ресторан / Доставка</option>
                             <option value="courses">🎓 Курсы / Обучение</option>
                             <option value="shop">🛒 Магазин / Товары</option>
+                            <option value="beauty">💅 Салон красоты</option>
+                            <option value="fitness">🏋️ Фитнес-клуб</option>
+                            <option value="realestate">🏠 Недвижимость</option>
+                            <option value="medical">🩺 Медицина</option>
+                            <option value="travel">✈️ Путешествия</option>
+                            <option value="wedding">💍 Свадьбы & Праздники</option>
                         </select>
                         <button class="btn-gen-ai" onclick="generateAIText(document.getElementById('ai-topic-select').value, '${type}')">✨ Сгенерировать текст (AI)</button>
                     </div>
@@ -2149,11 +2749,17 @@
                         <option value="Poppins" ${targetEl.style.fontFamily.includes('Poppins') ? 'selected' : ''}>Poppins</option>
                         <option value="Roboto" ${targetEl.style.fontFamily.includes('Roboto') ? 'selected' : ''}>Roboto</option>
                         <option value="Open Sans" ${targetEl.style.fontFamily.includes('Open Sans') ? 'selected' : ''}>Open Sans</option>
+                        <option value="Nunito" ${targetEl.style.fontFamily.includes('Nunito') ? 'selected' : ''}>Nunito</option>
+                        <option value="Raleway" ${targetEl.style.fontFamily.includes('Raleway') ? 'selected' : ''}>Raleway</option>
+                        <option value="Source Sans 3" ${targetEl.style.fontFamily.includes('Source Sans 3') ? 'selected' : ''}>Source Sans 3</option>
                         <option value="Oswald" ${targetEl.style.fontFamily.includes('Oswald') ? 'selected' : ''}>Oswald</option>
+                        <option value="Exo 2" ${targetEl.style.fontFamily.includes('Exo 2') ? 'selected' : ''}>Exo 2</option>
                         <option value="Playfair Display" ${targetEl.style.fontFamily.includes('Playfair Display') ? 'selected' : ''}>Playfair Display</option>
                         <option value="Lora" ${targetEl.style.fontFamily.includes('Lora') ? 'selected' : ''}>Lora</option>
+                        <option value="Comfortaa" ${targetEl.style.fontFamily.includes('Comfortaa') ? 'selected' : ''}>Comfortaa</option>
                         <option value="Caveat" ${targetEl.style.fontFamily.includes('Caveat') ? 'selected' : ''}>Caveat</option>
                         <option value="Pacifico" ${targetEl.style.fontFamily.includes('Pacifico') ? 'selected' : ''}>Pacifico</option>
+                        <option value="JetBrains Mono" ${targetEl.style.fontFamily.includes('JetBrains Mono') ? 'selected' : ''}>JetBrains Mono</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -2184,15 +2790,37 @@
                         <option value="">Без анимации</option>
                         <option value="anim-fade" ${wrapper.classList.contains('anim-fade') ? 'selected' : ''}>Плавная (Fade)</option>
                         <option value="anim-slide-up" ${wrapper.classList.contains('anim-slide-up') ? 'selected' : ''}>Снизу (Slide Up)</option>
+                        <option value="anim-slide-down" ${wrapper.classList.contains('anim-slide-down') ? 'selected' : ''}>Сверху (Slide Down)</option>
                         <option value="anim-slide-left" ${wrapper.classList.contains('anim-slide-left') ? 'selected' : ''}>Слева (Slide Left)</option>
-                        <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Zoom</option>
+                        <option value="anim-slide-right" ${wrapper.classList.contains('anim-slide-right') ? 'selected' : ''}>Справа (Slide Right)</option>
+                        <option value="anim-zoom" ${wrapper.classList.contains('anim-zoom') ? 'selected' : ''}>Zoom In</option>
+                        <option value="anim-zoom-out" ${wrapper.classList.contains('anim-zoom-out') ? 'selected' : ''}>Zoom Out</option>
+                        <option value="anim-blur-in" ${wrapper.classList.contains('anim-blur-in') ? 'selected' : ''}>Размытие (Blur In)</option>
                         <option value="anim-float" ${wrapper.classList.contains('anim-float') ? 'selected' : ''}>Парение (Floating)</option>
                         <option value="anim-pulse" ${wrapper.classList.contains('anim-pulse') ? 'selected' : ''}>Пульсация (Pulse Glow)</option>
+                        <option value="anim-heartbeat" ${wrapper.classList.contains('anim-heartbeat') ? 'selected' : ''}>Сердцебиение (Heartbeat)</option>
                         <option value="anim-flip" ${wrapper.classList.contains('anim-flip') ? 'selected' : ''}>Переворот (3D Flip)</option>
+                        <option value="anim-flip-y" ${wrapper.classList.contains('anim-flip-y') ? 'selected' : ''}>Переворот Y (Flip Y)</option>
                         <option value="anim-bounce" ${wrapper.classList.contains('anim-bounce') ? 'selected' : ''}>Прыжки (Bounce)</option>
                         <option value="anim-shake" ${wrapper.classList.contains('anim-shake') ? 'selected' : ''}>Тряска (Shake)</option>
                         <option value="anim-rotate" ${wrapper.classList.contains('anim-rotate') ? 'selected' : ''}>Вращение (Rotate)</option>
                         <option value="anim-sparkle" ${wrapper.classList.contains('anim-sparkle') ? 'selected' : ''}>Сияние (Sparkle)</option>
+                        <option value="anim-swing" ${wrapper.classList.contains('anim-swing') ? 'selected' : ''}>Качание (Swing)</option>
+                        <option value="anim-wobble" ${wrapper.classList.contains('anim-wobble') ? 'selected' : ''}>Колыхание (Wobble)</option>
+                        <option value="anim-glow-pulse" ${wrapper.classList.contains('anim-glow-pulse') ? 'selected' : ''}>Цветное свечение (Glow Pulse)</option>
+                    </select>
+                </div>
+            `;
+
+            html += `
+                <div class="control-group">
+                    <label>Тема переливания цвета (RGB/Градиент):</label>
+                    <select id="prop-color-theme" onchange="applyColorTheme(this.value)">
+                        <option value="rainbow">🌈 Радуга (по умолчанию)</option>
+                        <option value="fire">🔥 Огонь</option>
+                        <option value="ocean">🌊 Океан</option>
+                        <option value="neon">💜 Неон</option>
+                        <option value="emerald">💚 Изумруд</option>
                     </select>
                 </div>
             `;
@@ -2219,7 +2847,7 @@
                 `;
             }
 
-            if (['card', 'navbar', 'form', 'faq', 'countdown', 'star-reviews', 'social-share', 'promo-banner', 'features', 'stats', 'audio'].includes(type)) {
+            if (['card', 'navbar', 'form', 'faq', 'countdown', 'star-reviews', 'social-share', 'promo-banner', 'features', 'stats', 'audio', 'cta-banner', 'team', 'newsletter', 'logos-strip', 'timeline'].includes(type)) {
                 html += `
                     <div class="control-group">
                         <label>Фон блока:</label>
@@ -2228,7 +2856,70 @@
                 `;
             }
 
+            const nestedLinks = targetEl.querySelectorAll ? targetEl.querySelectorAll('a') : [];
+            if (nestedLinks.length) {
+                html += `<h2 style="margin-top:14px;">🔗 Ссылки внутри блока</h2>`;
+                nestedLinks.forEach((linkEl, idx) => {
+                    html += `
+                        <div class="control-group inner-link-block">
+                            <label>Текст ссылки ${idx + 1}:</label>
+                            <input type="text" class="inner-link-text" data-idx="${idx}" value="${(linkEl.innerText || '').replace(/"/g, '&quot;')}">
+                            <label>URL ссылки ${idx + 1}:</label>
+                            <input type="text" class="inner-link-href" data-idx="${idx}" value="${(linkEl.getAttribute('href') || '').replace(/"/g, '&quot;')}">
+                        </div>
+                    `;
+                });
+            }
+
+            const nestedImgs = targetEl.querySelectorAll ? targetEl.querySelectorAll('img') : [];
+            if (nestedImgs.length) {
+                html += `<h2 style="margin-top:14px;">🖼️ Изображения внутри блока</h2>`;
+                nestedImgs.forEach((imgEl, idx) => {
+                    html += `
+                        <div class="control-group inner-link-block">
+                            <label>URL картинки ${idx + 1}:</label>
+                            <input type="text" class="inner-img-src" data-idx="${idx}" value="${(imgEl.getAttribute('src') || '').replace(/"/g, '&quot;')}">
+                        </div>
+                    `;
+                });
+            }
+
             editorControls.innerHTML = html;
+
+            editorControls.querySelectorAll('.inner-link-text').forEach(inp => {
+                inp.oninput = (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    const linkEl = targetEl.querySelectorAll('a')[idx];
+                    if (linkEl) linkEl.innerText = e.target.value;
+                    saveHistoryState();
+                };
+            });
+
+            editorControls.querySelectorAll('.inner-link-href').forEach(inp => {
+                inp.oninput = (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    const linkEl = targetEl.querySelectorAll('a')[idx];
+                    if (linkEl) linkEl.setAttribute('href', e.target.value);
+                    saveHistoryState();
+                };
+                inp.onblur = (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    const linkEl = targetEl.querySelectorAll('a')[idx];
+                    const normalized = normalizeUrl(e.target.value);
+                    e.target.value = normalized;
+                    if (linkEl) linkEl.setAttribute('href', normalized);
+                    saveHistoryState();
+                };
+            });
+
+            editorControls.querySelectorAll('.inner-img-src').forEach(inp => {
+                inp.oninput = (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    const imgEl = targetEl.querySelectorAll('img')[idx];
+                    if (imgEl) imgEl.setAttribute('src', e.target.value);
+                    saveHistoryState();
+                };
+            });
 
             const propIconSelect = document.getElementById('prop-icon-select');
             if (propIconSelect) propIconSelect.onchange = (e) => { targetEl.innerText = e.target.value; saveHistoryState(); };
@@ -2282,20 +2973,37 @@
             const propAnim = document.getElementById('prop-animation');
             if (propAnim) {
                 propAnim.onchange = (e) => {
-                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-left', 'anim-zoom', 'anim-float', 'anim-pulse', 'anim-flip', 'anim-bounce', 'anim-shake', 'anim-rotate', 'anim-sparkle');
+                    wrapper.classList.remove('anim-fade', 'anim-slide-up', 'anim-slide-down', 'anim-slide-left', 'anim-slide-right', 'anim-zoom', 'anim-zoom-out', 'anim-blur-in', 'anim-float', 'anim-pulse', 'anim-heartbeat', 'anim-flip', 'anim-flip-y', 'anim-bounce', 'anim-shake', 'anim-rotate', 'anim-sparkle', 'anim-swing', 'anim-wobble', 'anim-glow-pulse');
                     if (e.target.value) wrapper.classList.add(e.target.value);
                     saveHistoryState();
                 };
             }
 
             const propHref = document.getElementById('prop-href');
-            if (propHref) propHref.oninput = (e) => { targetEl.setAttribute('href', e.target.value); saveHistoryState(); };
+            if (propHref) {
+                propHref.oninput = (e) => { targetEl.setAttribute('href', e.target.value); saveHistoryState(); };
+                propHref.onblur = (e) => {
+                    const normalized = normalizeUrl(e.target.value);
+                    e.target.value = normalized;
+                    targetEl.setAttribute('href', normalized);
+                    saveHistoryState();
+                };
+            }
 
             const propBg = document.getElementById('prop-bg');
             if (propBg) propBg.oninput = (e) => { targetEl.style.backgroundColor = e.target.value; saveHistoryState(); };
 
             const propSrc = document.getElementById('prop-src');
-            if (propSrc) propSrc.oninput = (e) => { targetEl.src = e.target.value; saveHistoryState(); };
+            if (propSrc) {
+                propSrc.oninput = (e) => { targetEl.src = e.target.value; saveHistoryState(); };
+                propSrc.onblur = (e) => {
+                    let val = e.target.value.trim();
+                    if (val && !/^(https?:\/\/|data:|\/)/i.test(val)) val = 'https://' + val;
+                    e.target.value = val;
+                    targetEl.src = val;
+                    saveHistoryState();
+                };
+            }
         }
 
         function updateCodeEditorFromCanvas() {
@@ -2356,6 +3064,14 @@
             saveHistoryState();
         }
 
+        function normalizeUrl(url) {
+            if (!url) return '#';
+            url = url.trim();
+            if (url === '') return '#';
+            if (/^(https?:\/\/|mailto:|tel:|#|\/)/i.test(url)) return url;
+            return 'https://' + url;
+        }
+
         function rgbToHex(rgb) {
             if (!rgb) return '#ffffff';
             if (rgb.startsWith('#')) return rgb;
@@ -2368,10 +3084,21 @@
             const cloneCanvas = canvas.cloneNode(true);
             cloneCanvas.querySelectorAll('.delete-btn, .drag-handle').forEach(b => b.remove());
             cloneCanvas.querySelectorAll('#empty-msg').forEach(m => m.remove());
+            cloneCanvas.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            const items = Array.from(cloneCanvas.querySelectorAll('.canvas-item'));
+            items.forEach(item => {
+                const child = item.firstElementChild;
+                if (child) {
+                    Array.from(item.classList).filter(c => c.startsWith('anim-')).forEach(c => child.classList.add(c));
+                    item.replaceWith(child);
+                } else item.remove();
+            });
 
             const isDark = canvas.classList.contains('dark-theme');
             const bg = canvas.style.backgroundColor || (isDark ? '#0d1117' : '#ffffff');
-            const font = canvas.style.fontFamily || 'Inter';
+            const font = (canvas.style.fontFamily || 'Inter').replace(/['"]/g, '');
+            const padding = canvas.style.padding || '20px';
+            const textColor = isDark ? '#ffffff' : '#1e293b';
 
             const fullPageCode = `<!DOCTYPE html>
 <html lang="ru">
@@ -2379,32 +3106,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${currentPage.toUpperCase()} — Сгенерировано в Programist-studio</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;600;800&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Roboto:wght@400;600;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;600;700&family=Exo+2:wght@400;600;800&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Nunito:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Raleway:wght@400;600;800&family=Roboto:wght@400;600;800&family=Source+Sans+3:wght@400;600;800&display=swap">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: ${bg}; font-family: '${font}', sans-serif; padding: ${canvas.style.padding || '20px'}; color: ${isDark ? '#ffffff' : '#1e293b'}; min-height: 100vh; }
-        .canvas-item { margin-bottom: 12px; }
+        body { background-color: ${bg}; font-family: '${font}', system-ui, sans-serif; padding: ${padding}; color: ${textColor}; min-height: 100vh; line-height: 1.5; }
+        img { max-width: 100%; height: auto; }
+        .dark-card { background-color: ${isDark ? '#161b22' : '#f8fafc'}; color: ${isDark ? '#f0f6fc' : 'inherit'}; }
         @keyframes textGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes titlePulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
         @keyframes floatAnim { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); } }
-        @keyframes rgbBorder { 0% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); } 33% { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); } 66% { border-color: #9900ff; box-shadow: 0 0 15px rgba(153, 0, 255, 0.6); } 100% { border-color: #ff0055; box-shadow: 0 0 15px rgba(255, 0, 85, 0.6); } }
-        @keyframes rgbGlowText { 0% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; } 33% { text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc; color: #fff; } 66% { text-shadow: 0 0 8px #9900ff, 0 0 15px #9900ff; color: #fff; } 100% { text-shadow: 0 0 8px #ff0055, 0 0 15px #ff0055; color: #fff; } }
+        @keyframes rotateAnim { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes bounceAnim { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
+        @keyframes shakeAnim { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+        @keyframes flipIn { 0% { transform: rotateY(-90deg); opacity: 0; } 100% { transform: rotateY(0deg); opacity: 1; } }
+        @keyframes sparkleGlow { 0% { filter: drop-shadow(0 0 2px #38bdf8); } 50% { filter: drop-shadow(0 0 12px #ec4899); } 100% { filter: drop-shadow(0 0 2px #38bdf8); } }
+        @keyframes swingAnim { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(6deg); } 40% { transform: rotate(-5deg); } 60% { transform: rotate(3deg); } 80% { transform: rotate(-2deg); } }
+        @keyframes wobbleAnim { 0%, 100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-4px) rotate(-1.5deg); } 75% { transform: translateX(4px) rotate(1.5deg); } }
+        @keyframes glowPulseColor { 0% { box-shadow: 0 0 12px rgba(56,189,248,0.6); } 33% { box-shadow: 0 0 18px rgba(168,85,247,0.6); } 66% { box-shadow: 0 0 18px rgba(236,72,153,0.6); } 100% { box-shadow: 0 0 12px rgba(56,189,248,0.6); } }
+        @keyframes rgbBorder { 0% { border-color: #ff0055; box-shadow: 0 0 18px rgba(255, 0, 85, 0.7); } 20% { border-color: #ff8800; box-shadow: 0 0 18px rgba(255, 136, 0, 0.7); } 40% { border-color: #00ffcc; box-shadow: 0 0 18px rgba(0, 255, 204, 0.7); } 60% { border-color: #3388ff; box-shadow: 0 0 18px rgba(51, 136, 255, 0.7); } 80% { border-color: #9900ff; box-shadow: 0 0 18px rgba(153, 0, 255, 0.7); } 100% { border-color: #ff0055; box-shadow: 0 0 18px rgba(255, 0, 85, 0.7); } }
+        @keyframes rgbGlowText { 0% { text-shadow: 0 0 8px #ff0055, 0 0 16px #ff0055; color: #fff; } 20% { text-shadow: 0 0 8px #ff8800, 0 0 16px #ff8800; color: #fff; } 40% { text-shadow: 0 0 8px #00ffcc, 0 0 16px #00ffcc; color: #fff; } 60% { text-shadow: 0 0 8px #3388ff, 0 0 16px #3388ff; color: #fff; } 80% { text-shadow: 0 0 8px #9900ff, 0 0 16px #9900ff; color: #fff; } 100% { text-shadow: 0 0 8px #ff0055, 0 0 16px #ff0055; color: #fff; } }
+        @keyframes rgbBorderFire { 0% { border-color: #ff0000; box-shadow: 0 0 18px rgba(255,0,0,0.7);} 50% { border-color: #ffcc00; box-shadow: 0 0 18px rgba(255,204,0,0.7);} 100% { border-color: #ff0000; box-shadow: 0 0 18px rgba(255,0,0,0.7);} }
+        @keyframes rgbGlowTextFire { 0% { text-shadow:0 0 8px #ff3300,0 0 16px #ff3300; color:#fff;} 50% { text-shadow:0 0 8px #ffcc00,0 0 16px #ffcc00; color:#fff;} 100% { text-shadow:0 0 8px #ff3300,0 0 16px #ff3300; color:#fff;} }
+        @keyframes rgbBorderOcean { 0% { border-color: #0ea5e9; box-shadow: 0 0 18px rgba(14,165,233,0.7);} 50% { border-color: #22d3ee; box-shadow: 0 0 18px rgba(34,211,238,0.7);} 100% { border-color: #0ea5e9; box-shadow: 0 0 18px rgba(14,165,233,0.7);} }
+        @keyframes rgbGlowTextOcean { 0% { text-shadow:0 0 8px #0ea5e9,0 0 16px #0ea5e9; color:#fff;} 50% { text-shadow:0 0 8px #22d3ee,0 0 16px #22d3ee; color:#fff;} 100% { text-shadow:0 0 8px #0ea5e9,0 0 16px #0ea5e9; color:#fff;} }
+        @keyframes rgbBorderNeon { 0% { border-color: #ec4899; box-shadow: 0 0 18px rgba(236,72,153,0.7);} 50% { border-color: #a855f7; box-shadow: 0 0 18px rgba(168,85,247,0.7);} 100% { border-color: #ec4899; box-shadow: 0 0 18px rgba(236,72,153,0.7);} }
+        @keyframes rgbGlowTextNeon { 0% { text-shadow:0 0 8px #ec4899,0 0 16px #ec4899; color:#fff;} 50% { text-shadow:0 0 8px #a855f7,0 0 16px #a855f7; color:#fff;} 100% { text-shadow:0 0 8px #ec4899,0 0 16px #ec4899; color:#fff;} }
+        @keyframes rgbBorderEmerald { 0% { border-color: #10b981; box-shadow: 0 0 18px rgba(16,185,129,0.7);} 50% { border-color: #a3e635; box-shadow: 0 0 18px rgba(163,230,53,0.7);} 100% { border-color: #10b981; box-shadow: 0 0 18px rgba(16,185,129,0.7);} }
+        @keyframes rgbGlowTextEmerald { 0% { text-shadow:0 0 8px #10b981,0 0 16px #10b981; color:#fff;} 50% { text-shadow:0 0 8px #a3e635,0 0 16px #a3e635; color:#fff;} 100% { text-shadow:0 0 8px #10b981,0 0 16px #10b981; color:#fff;} }
         .animated-site-title { background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #38bdf8); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: textGradient 3s linear infinite, titlePulse 2.5s ease-in-out infinite; display: inline-block; font-weight: 800; }
+        .title-theme-fire { background: linear-gradient(90deg, #ff3300, #ff8800, #ffcc00, #ff3300) !important; background-size: 300% 300% !important; }
+        .title-theme-ocean { background: linear-gradient(90deg, #0ea5e9, #22d3ee, #38bdf8, #0ea5e9) !important; background-size: 300% 300% !important; }
+        .title-theme-neon { background: linear-gradient(90deg, #ec4899, #a855f7, #6366f1, #ec4899) !important; background-size: 300% 300% !important; }
+        .title-theme-rainbow { background: linear-gradient(90deg, #ff0055, #ff8800, #ffee00, #00ffcc, #3388ff, #9900ff, #ff0055) !important; background-size: 400% 400% !important; }
+        .title-theme-emerald { background: linear-gradient(90deg, #10b981, #22c55e, #a3e635, #10b981) !important; background-size: 300% 300% !important; }
         .rgb-card { border: 2px solid #ff0055 !important; animation: rgbBorder 4s linear infinite !important; }
         .rgb-text-glow { animation: rgbGlowText 3s linear infinite !important; }
+        .rgb-theme-fire.rgb-card { animation: rgbBorderFire 2.6s ease-in-out infinite !important; }
+        .rgb-theme-fire.rgb-text-glow { animation: rgbGlowTextFire 2.2s ease-in-out infinite !important; }
+        .rgb-theme-ocean.rgb-card { animation: rgbBorderOcean 3s ease-in-out infinite !important; }
+        .rgb-theme-ocean.rgb-text-glow { animation: rgbGlowTextOcean 2.6s ease-in-out infinite !important; }
+        .rgb-theme-neon.rgb-card { animation: rgbBorderNeon 2.4s ease-in-out infinite !important; }
+        .rgb-theme-neon.rgb-text-glow { animation: rgbGlowTextNeon 2s ease-in-out infinite !important; }
+        .rgb-theme-emerald.rgb-card { animation: rgbBorderEmerald 2.8s ease-in-out infinite !important; }
+        .rgb-theme-emerald.rgb-text-glow { animation: rgbGlowTextEmerald 2.4s ease-in-out infinite !important; }
         .anim-fade { animation: fadeIn 0.8s ease forwards; }
         .anim-slide-up { animation: slideUp 0.8s ease forwards; }
+        .anim-slide-down { animation: slideDown 0.8s ease forwards; }
+        .anim-slide-left { animation: slideInLeft 0.8s ease forwards; }
+        .anim-slide-right { animation: slideInRight 0.8s ease forwards; }
         .anim-zoom { animation: zoomIn 0.6s ease forwards; }
+        .anim-zoom-out { animation: zoomOut 0.6s ease forwards; }
+        .anim-blur-in { animation: blurIn 0.9s ease forwards; }
         .anim-float { animation: floatAnim 3s ease-in-out infinite; }
         .anim-pulse { animation: pulseGlow 2s infinite; }
+        .anim-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        .anim-flip { animation: flipIn 0.8s ease forwards; }
+        .anim-flip-y { animation: flipY 0.9s ease forwards; }
+        .anim-bounce { animation: bounceAnim 2s infinite; }
+        .anim-shake { animation: shakeAnim 2s infinite; }
+        .anim-rotate { animation: rotateAnim 10s linear infinite; }
+        .anim-sparkle { animation: sparkleGlow 2s ease-in-out infinite; }
+        .anim-swing { animation: swingAnim 2.5s ease-in-out infinite; transform-origin: top center; }
+        .anim-wobble { animation: wobbleAnim 2s ease-in-out infinite; }
+        .anim-glow-pulse { animation: glowPulseColor 3s ease-in-out infinite; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes zoomOut { from { opacity: 0; transform: scale(1.2); } to { opacity: 1; transform: scale(1); } }
+        @keyframes blurIn { from { opacity: 0; filter: blur(8px); } to { opacity: 1; filter: blur(0); } }
+        @keyframes flipY { 0% { transform: perspective(400px) rotateY(90deg); opacity: 0; } 100% { transform: perspective(400px) rotateY(0); opacity: 1; } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.08); } 28% { transform: scale(1); } 42% { transform: scale(1.08); } 70% { transform: scale(1); } }
     </style>
 </head>
 <body>
-    ${cloneCanvas.innerHTML}
+${cloneCanvas.innerHTML}
 </body>
 </html>`;
 
