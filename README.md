@@ -2,9 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Programist-studio — Конструктор Сайтов с AI, RGB & Drag-and-Drop</title>
+    <title>AzDev-Studio — Конструктор Сайтов с AI, RGB & Drag-and-Drop</title>
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;600;700&family=Exo+2:wght@400;600;800&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Nunito:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Raleway:wght@400;600;800&family=Roboto:wght@400;600;800&family=Roboto+Mono:wght@700&family=Source+Sans+3:wght@400;600;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;600;700&family=Exo+2:wght@400;600;800&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;600;800&family=Nunito:wght@400;600;800&family=Open+Sans:wght@400;600;800&family=Oswald:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@400;600;800&family=Poppins:wght@400;600;800&family=Raleway:wght@400;600;800&family=Roboto:wght@400;600;800&family=Roboto+Mono:wght@700&family=Source+Sans+3:wght@4<PASSWORD>;6<PASSWORD>;8<PASSWORD>&display=swap">
     <style>
         * {
             box-sizing: border-box;
@@ -917,10 +917,10 @@
             <div class="brand-icon">
                 <span>&lt;/&gt;</span>
             </div>
-            <span class="animated-site-title">Programist-studio</span>
+            <span class="animated-site-title">AzDev-Studio</span>
         </div>
 
-        <a href="https://t.me/programisstuz" target="_blank" class="tg-banner-link">
+        <a href="https://t.me/azdevuzz" target="_blank" class="tg-banner-link">
             🚀 <span>Telegram</span>
         </a>
 
@@ -2277,7 +2277,7 @@
                 el.innerHTML = `
                     <p style="font-size:12px; font-weight:bold; color:#475569; margin-bottom:8px;">Мы в соцсетях & Поделиться:</p>
                     <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
-                        <a href="https://t.me/programisstuz" target="_blank" style="padding:6px 12px; background:#0088cc; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">Telegram</a>
+                        <a href="https://t.me/azdevuzz" target="_blank" style="padding:6px 12px; background:#0088cc; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">Telegram</a>
                         <a href="#" onclick="alert('Ссылка скопирована!'); return false;" style="padding:6px 12px; background:#6366f1; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">🔗 Поделиться</a>
                         <a href="https://vk.com" target="_blank" style="padding:6px 12px; background:#0077ff; color:white; text-decoration:none; border-radius:6px; font-size:11px; font-weight:bold;">ВКонтакте</a>
                     </div>
@@ -2285,7 +2285,7 @@
             } else if (type === 'site-title') {
                 el = document.createElement('h1');
                 el.className = 'animated-site-title';
-                el.innerText = 'Programist-studio';
+                el.innerText = 'azDev-Studio';
                 el.style.fontSize = '28px';
                 el.style.textAlign = 'center';
                 el.style.width = '100%';
@@ -2315,19 +2315,19 @@
                         <h3 style="font-size:16px;" contenteditable="true">Название тарифа 1</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
                         <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
+                        <a href="https://t.me/azdevuzz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                     <div class="rgb-card dark-card" style="padding:15px; border-radius:8px; text-align:center; background:#f0f9ff;">
                         <h3 style="font-size:16px;" contenteditable="true">Название тарифа 2</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
                         <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;" contenteditable="true">Кнопка заказа</a>
+                        <a href="https://t.me/azdevuzz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:4px; font-weight:bold; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                     <div class="dark-card" style="border:1px solid #e2e8f0; padding:15px; border-radius:8px; text-align:center; background:#f8fafc;">
                         <h3 style="font-size:16px;" contenteditable="true">Название тарифа 3</h3>
                         <p style="font-size:20px; font-weight:bold; color:#0284c7; margin:6px 0;" contenteditable="true">Ваша цена</p>
                         <p style="font-size:11px; color:#64748b;" contenteditable="true">Описание тарифа<br>Что входит в пакет</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
+                        <a href="https://t.me/azdevuzz" target="_blank" style="display:inline-block; margin-top:10px; padding:6px 12px; background:#0284c7; color:white; text-decoration:none; border-radius:4px; font-size:12px;" contenteditable="true">Кнопка заказа</a>
                     </div>
                 `;
             } else if (type === 'features') {
@@ -2402,7 +2402,7 @@
                 el.style.justifyContent = 'center';
                 el.style.flexWrap = 'wrap';
                 el.innerHTML = `
-                    <a href="https://t.me/programisstuz" target="_blank" style="padding:8px 14px; background:#229ED9; color:white; text-decoration:none; border-radius:20px; font-size:11px; font-weight:bold;">Telegram</a>
+                    <a href="https://t.me/azdevuzz" target="_blank" style="padding:8px 14px; background:#229ED9; color:white; text-decoration:none; border-radius:20px; font-size:11px; font-weight:bold;">Telegram</a>
                     <a href="https://whatsapp.com" target="_blank" style="padding:8px 14px; background:#25D366; color:white; text-decoration:none; border-radius:20px; font-size:11px; font-weight:bold;">WhatsApp</a>
                 `;
             } else if (type === 'navbar') {
@@ -2414,7 +2414,7 @@
                 el.style.padding = '10px';
                 el.style.backgroundColor = '#f1f5f9';
                 el.style.borderRadius = '6px';
-                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">Programist-studio</strong><div style="font-size:12px;"><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Главная</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Услуги</a><a href="https://t.me/programisstuz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Контакты</a></div>';
+                el.innerHTML = '<strong style="font-size:14px;" class="animated-site-title">azDev</strong><div style="font-size:12px;"><a href="https://t.me/azdevuzz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Главная</a><a href="https://t.me/azdevuzz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Услуги</a><a href="https://t.me/azdevuzz" target="_blank" style="margin-left:8px; text-decoration:none; color:inherit;">Контакты</a></div>';
             } else if (type === 'header') {
                 el = document.createElement('h1');
                 el.innerText = 'Заголовок страницы';
@@ -2426,7 +2426,7 @@
             } else if (type === 'button') {
                 el = document.createElement('a');
                 el.innerText = 'Узнать больше';
-                el.href = "https://t.me/programisstuz";
+                el.href = "https://t.me/azdevuzz";
                 el.target = "_blank";
                 el.style.display = 'inline-block';
                 el.style.padding = '10px 18px';
@@ -2535,7 +2535,7 @@
                     <div>
                         <h2 style="font-size:24px; margin-bottom:8px;">Заголовок вашего предложения</h2>
                         <p style="font-size:13px; color:#64748b; margin-bottom:14px;">Краткое описание преимуществ продукта или услуги в одном-двух предложениях.</p>
-                        <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; padding:10px 20px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:6px; font-weight:bold; font-size:13px;">Начать сейчас</a>
+                        <a href="https://t.me/azdevuzz" target="_blank" style="display:inline-block; padding:10px 20px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:6px; font-weight:bold; font-size:13px;">Начать сейчас</a>
                     </div>
                     <img src="https://via.placeholder.com/500x350/38bdf8/ffffff?text=Ваше+фото" style="width:100%; border-radius:10px;">
                 `;
@@ -2550,7 +2550,7 @@
                 el.innerHTML = `
                     <h2 style="font-size:22px; margin-bottom:8px;">Готовы начать свой проект?</h2>
                     <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Оставьте заявку и получите бесплатную консультацию уже сегодня.</p>
-                    <a href="https://t.me/programisstuz" target="_blank" style="display:inline-block; padding:12px 26px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:30px; font-weight:bold; font-size:14px;">Связаться с нами</a>
+                    <a href="https://t.me/azdevuzz" target="_blank" style="display:inline-block; padding:12px 26px; background:#38bdf8; color:#0f172a; text-decoration:none; border-radius:30px; font-weight:bold; font-size:14px;">Связаться с нами</a>
                 `;
             } else if (type === 'team') {
                 el = document.createElement('div');
